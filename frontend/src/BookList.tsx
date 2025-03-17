@@ -68,15 +68,15 @@ function BookList() {
               <div className="card-body">
                 <h5 className="card-title">{b.title}</h5>
                 <ul className="list-group list-group-flush">
-                  <li className="list-group-item">Author: {b.author}</li>
-                  <li className="list-group-item">Publisher: {b.publisher}</li>
-                  <li className="list-group-item">ISBN: {b.isbn}</li>
+                  <li className="list-group-item"><strong>Author: </strong>.{b.author}</li>
+                  <li className="list-group-item"><strong>Publisher: </strong>.{b.publisher}</li>
+                  <li className="list-group-item"><strong>ISBN: </strong>.{b.isbn}</li>
                   <li className="list-group-item">
-                    Classification: {b.classification}
+                    <strong>Classification: </strong>.{b.classification}
                   </li>
-                  <li className="list-group-item">Category: {b.category}</li>
-                  <li className="list-group-item">Page Count: {b.pageCount}</li>
-                  <li className="list-group-item">Price: ${b.price}</li>
+                  <li className="list-group-item"><strong>Category: </strong>.{b.category}</li>
+                  <li className="list-group-item"><strong>Page Count: </strong>{b.pageCount}</li>
+                  <li className="list-group-item"><strong>Price: </strong>.${b.price}</li>
                 </ul>
               </div>
             </div>
