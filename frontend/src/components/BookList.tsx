@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import { Book } from "../types/book";
 import { useNavigate } from "react-router-dom";
+import {fetchBooks} from "../api/BooksAPI.ts";
 import './BookList.css'
+import Pagination from "./Pagination.tsx";
 
 
 function BookList({selectedCategories}: {selectedCategories: string[]}) {
@@ -10,51 +12,36 @@ function BookList({selectedCategories}: {selectedCategories: string[]}) {
 
     const [pageSize, setPageSize]=useState<number>(10);
     const [pageNum, setPageNum]=useState<number>(1);
-    const [totalItems, setTotalItems]=useState<number>(0);
+    
     const [totalPages, setTotalPages] = useState<number>(0);
 
-    const navigate=useNavigate();   
+    const navigate=useNavigate();
+    const [error, setError] = useState<string| null>(null);
+
+    const [loading, setLoading] = useState(true);
     useEffect(() => {
-      const fetchBooks = async () => {
-        const categoryParams = selectedCategories
-            .map((cat) => `categories=${encodeURIComponent(cat)}`)
-            .join('&');
-    
-        const url = `https://localhost:5000/Books/AllBooks?bookCount=${pageSize}&pageNum=${pageNum}${selectedCategories.length ? `&${categoryParams}` : ''}`;
-        
-        console.log("Fetching from URL:", url);
-    
-        try {
-            const response = await fetch(url, {
-                credentials: "include",
-            });
-    
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
+        const loadBooks= async () => {
+
+            try {
+                setLoading(true);
+                const data = await fetchBooks(pageSize, pageNum, selectedCategories);
+
+                setBooks(data.books);
+
+                setTotalPages(Math.ceil(data.totalNumBooks / pageSize))
+            } catch (error) {
+                setError((error as Error).message)
+            } finally {
+                setLoading(false);
             }
-    
-            const data = await response.json();
-    
-            console.log("Fetched data:", data); // 🔍 Debugging API response
-    
-            if (!data || !Array.isArray(data.books)) {
-                throw new Error("Invalid API response: 'books' is not an array");
-            }
-    
-            setBooks(data.books);
-            setTotalItems(data.totalNumBooks);
-            setTotalPages(Math.max(1, Math.ceil((data.totalNumBooks || 0) / pageSize)));
+        };
 
+        loadBooks();
 
-        } catch (error) {
-            console.error("Error fetching books:", error);
-        }
-    };
-    
-  
-      fetchBooks();
-  }, [pageSize, pageNum, totalItems,selectedCategories]); // if there's no data, returns an empty array so there's no error
+    }, [pageSize, pageNum, selectedCategories]); // if there's no data, returns an empty array so there's no error
 
+    if (loading) return <p>Loading books...</p>
+    if (error) return <p className="text-red-500"> Error: {error}</p>
 
     
     return (
@@ -88,46 +75,21 @@ function BookList({selectedCategories}: {selectedCategories: string[]}) {
                 </div>
               </div>
             ))}
+              <Pagination
+                  currentPage={pageNum}
+                  totalPages={totalPages}
+                  pageSize={pageSize}
+                  onPageChange={setPageNum}
+                  onPageSizeChange={(newSize) => {
+                      setPageSize(newSize);
+                      setPageNum(1);
+                  }}
+              />
           </div>
         </div>
 
 
-
-
-<nav aria-label="Page navigation">
-  <ul className="pagination justify-content-center">
-    <li className={`page-item ${pageNum === 1 ? "disabled" : ""}`}>
-      <button className="page-link" onClick={() => setPageNum(pageNum - 1)}>Previous</button>
-    </li>
-    {[...Array(totalPages)].map((_, i) => (
-      <li className={`page-item ${pageNum === i + 1 ? "active" : ""}`} key={i}>
-        <button className="page-link" onClick={() => setPageNum(i + 1)}>{i + 1}</button>
-      </li>
-    ))}
-    <li className={`page-item ${pageNum >= totalPages ? "disabled" : ""}`}>
-      <button className="page-link" onClick={() => setPageNum(pageNum + 1)}>Next</button>
-    </li>
-  </ul>
-</nav>
-
-
-<br />
-<br />
-
-<label>
-    Results per page:
-    <select 
-        value={pageSize} 
-        onChange={(p) => {
-            const newSize = Number(p.target.value);
-            setPageSize(newSize);
-            setPageNum(1); // Reset to first page
-        }}>
-        <option value="5">5</option>
-        <option value="10">10</option>
-        <option value="20">20</option>
-    </select>
-</label>
+            
 
 <button className="btn btn-dark" onClick={() => document.body.classList.toggle("bg-dark")}>
   Toggle Dark Mode 🌙

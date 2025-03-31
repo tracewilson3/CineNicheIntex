@@ -6,6 +6,7 @@ import { CartProvider } from './context/CartContext';
 import './App.css'
 import CartPage from './pages/CartPage';
 import BuyPage from './pages/BuyPage';
+import AdminBookPage from './pages/AdminBookPage';
 
 function App() {
   
@@ -19,6 +20,7 @@ function App() {
         <Route path="/books" element={<BooksPage />} />
         <Route path="/buy/:title/:bookID/:price" element={<BuyPage />} />
         <Route path="/cart" element={<CartPage />} />
+        <Route path="/AdminBookPage" element={<AdminBookPage />} />
       </Routes>
     </Router>
     </CartProvider>
