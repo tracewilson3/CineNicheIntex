@@ -15,7 +15,7 @@ export const fetchBooks = async (
 ): Promise <FetchBooksResponse> => {
     try {
         const categoryParams = selectedCategories
-            .map((cat)=> `bookTypes=${encodeURIComponent(cat)}`)
+            .map((cat)=> `categories=${encodeURIComponent(cat)}`)
             .join('&');
 
         const response = await fetch(
