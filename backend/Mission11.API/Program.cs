@@ -23,7 +23,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-app.UseCors(x=> x.WithOrigins("http://localhost:3000").AllowAnyMethod().AllowAnyHeader().AllowCredentials());
+app.UseCors(x=> x.WithOrigins("https://happy-mushroom-05102271e.6.azurestaticapps.net").AllowAnyMethod().AllowAnyHeader().AllowCredentials());
 
 
 app.UseHttpsRedirection();
