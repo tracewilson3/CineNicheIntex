@@ -13,7 +13,17 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<BooksDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("BooksConnection")));
 
-builder.Services.AddCors();
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFrontend", policy =>
+    {
+        policy.WithOrigins("https://happy-mushroom-05102271e.6.azurestaticapps.net") // ✅ Exact origin required
+              .AllowAnyMethod()
+              .AllowAnyHeader()
+              .AllowCredentials(); // ✅ This tells ASP.NET to add Access-Control-Allow-Credentials
+    });
+});
+
 
 var app = builder.Build();
 
@@ -23,8 +33,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-app.UseCors(x=> x.WithOrigins("https://happy-mushroom-05102271e.6.azurestaticapps.net").AllowAnyMethod().AllowAnyHeader().AllowCredentials());
 
+app.UseCors("AllowFrontend");
 
 app.UseHttpsRedirection();
 
