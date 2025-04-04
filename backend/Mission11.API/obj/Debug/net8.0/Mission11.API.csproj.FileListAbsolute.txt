@@ -66,6 +66,4 @@
 /Users/tracewilson/Desktop/Mission11/backend/Mission11.API/obj/Debug/net8.0/Mission11.API.genruntimeconfig.cache
 /Users/tracewilson/Desktop/Mission11/backend/Mission11.API/obj/Debug/net8.0/ref/Mission11.API.dll
 /Users/tracewilson/Desktop/Mission11/backend/Mission11.API/obj/Debug/net8.0/Mission11.API.sourcelink.json
-/Users/tracewilson/Desktop/Mission11/backend/Mission11.API/bin/Debug/net8.0/Mission11.API.staticwebassets.endpoints.json
-/Users/tracewilson/Desktop/Mission11/backend/Mission11.API/obj/Debug/net8.0/staticwebassets.build.endpoints.json
-/Users/tracewilson/Desktop/Mission11/backend/Mission11.API/obj/Debug/net8.0/staticwebassets/msbuild.Mission11.API.Microsoft.AspNetCore.StaticWebAssetEndpoints.props
+/Users/tracewilson/Desktop/Mission11/backend/Mission11.API/bin/Debug/net8.0/Bookstore.sqlite
