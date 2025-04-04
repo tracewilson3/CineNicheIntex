@@ -19,8 +19,8 @@ builder.Services.AddCors(options =>
     {
         policy.WithOrigins("https://happy-mushroom-05102271e.6.azurestaticapps.net") // ✅ Exact origin required
               .AllowAnyMethod()
-              .AllowAnyHeader()
-              .AllowCredentials(); // ✅ This tells ASP.NET to add Access-Control-Allow-Credentials
+              .AllowAnyHeader();
+              
     });
 });
 
