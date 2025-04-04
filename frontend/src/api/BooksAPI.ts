@@ -21,7 +21,11 @@ export const fetchBooks = async (
         const response = await fetch(
             `${API_URL}/AllBooks?bookCount=${pageSize}&pageNum=${pageNum}${selectedCategories.length ? `&${categoryParams}` : ''}`,
             {
+                method: "Get",
                 credentials: `include`,
+                headers: {
+                    "Content-Type": "application/json"
+                  }
             });
 
         if (!response.ok) {
