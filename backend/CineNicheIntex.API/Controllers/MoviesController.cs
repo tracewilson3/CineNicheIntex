@@ -1,5 +1,6 @@
 using CineNicheIntex.API.Data;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace CineNicheIntex.API.Controllers
 {
@@ -10,75 +11,103 @@ namespace CineNicheIntex.API.Controllers
     [ApiController]
     public class MoviesController : ControllerBase
     {
-        private BooksDbContext _moviesContext;
+        private MoviesDbContext _moviesContext;
 
-        public MoviesController(BooksDbContext temp)
+        public MoviesController(MoviesDbContext temp)
         {
             _moviesContext = temp;
         }
-        [HttpGet("AllMovies")]
-        public IActionResult GetMovies(int movieCount = 5,int pageNum=1, [FromQuery] List<string>? categories = null)
-        {
-            var query = _moviesContext.Movies.AsQueryable();
 
-            if (categories != null && categories.Any())
-            {
-                query = query.Where(b => categories.Contains(b.Category));
-            }
-                
-            var something = query
-                .Skip((pageNum-1)*movieCount)
-                .Take(movieCount)
-                .ToList();
-                
-            var TotalNumMovies = query.Count();
-            var someObject = new
-            {
-                movies = something,
-                totalNumMovies = TotalNumMovies
-            };
-            return Ok(someObject);
-        }
-        
-        [HttpPost("AddMovie")]
-        public IActionResult AddMovie([FromBody] Movie newMovie)
+        [HttpGet("AllMovies")]
+        public IActionResult GetMovies()
         {
-            _moviesContext.Movies.Add(newMovie);
-            _moviesContext.SaveChanges();
-            return Ok(newMovie);
+            // parameters: int bookCount = 5,int pageNum=1, [FromQuery] List<string>? categories = null
+
+            var movies = _moviesContext.Movies.Take(20).ToList();
+
+            return Ok(movies);
+            // var query = _moviesContext.Movies.AsQueryable();
+
+            // if (categories != null && categories.Any())
+            // {
+            //     query = query.Where(b => categories.Contains(b.Category));
+            // }
+
+            // var something = query
+            //     .Skip((pageNum-1)*bookCount)
+            //     .Take(bookCount)
+            //     .ToList();
+
+            // var TotalNumBooks = query.Count();
+            // var someObject = new
+            // {
+            //     books = something,
+            //     totalNumBooks = TotalNumBooks
+            // };
+            // return Ok(someObject);
         }
-        [HttpPut("UpdateMovie/{movieId}")]
-        public IActionResult UpdateMovie(int movieId, [FromBody] Movie updatedMovie)
-        {
-            var existingMovie= _moviesContext.Movie.Find(movieId);
-                
-            existingMovie.Title = updatedMovie.Title; // change all this
-            existingMovie.Author = updatedMovie.Author;
-            existingMovie.Publisher = updatedMovie.Publisher;
-            existingMovie.ISBN = updatedMovie.ISBN;
-            existingMovie.Classification = updatedMovie.Classification;
-            existingMovie.Category = updatedMovie.Category;
-            existingMovie.PageCount = updatedMovie.PageCount;
-            existingMovie.Price = updatedMovie.Price;
-            
-            _moviesContext.Update(existingMovie);
-            _moviesContext.SaveChanges();
-            
-            return Ok(existingMovie);
-        }
-            
-        [HttpDelete("DeleteMovie/{MovieId}")]
-        public IActionResult DeleteMovie(int MovieId)
-        {
-            var movie = _moviesContext.Movies.Find(movieId);
-            if (movie == null)
-            {
-                return NotFound(new {message = "Not found"});
-            }
-                
-            _moviesContext.Movies.Remove(movie);
-            _moviesContext.SaveChanges();
-            return NoContent();
-        }
+
+        //[HttpPost("AddMovie")]
+        //public IActionResult AddMovie([FromBody] Movie newMovie)
+        //{
+        //    _moviesContext.Movies.Add(newMovie);
+        //    _moviesContext.SaveChanges();
+        //    return Ok(newMovie);
+        //}
     }
 }
+
+
+
+//         [HttpGet("GetCategories")]
+//         public IActionResult GetCategories()
+//         {
+//             var categories = _booksContext.Books
+//                 .Select(p => p.Category)
+//                 .Distinct()
+//                 .ToList();
+                
+//             return Ok(categories);
+//         }
+//         [HttpPost("AddBook")]
+//         public IActionResult AddBook([FromBody] Book newBook)
+//         {
+//             _booksContext.Books.Add(newBook);
+//             _booksContext.SaveChanges();
+//             return Ok(newBook);
+//         }
+//         [HttpPut("UpdateBook/{bookId}")]
+//         public IActionResult UpdateBook(int bookId, [FromBody] Book updatedBook)
+//         {
+//             var existingBook= _booksContext.Books.Find(bookId);
+                
+//             existingBook.Title = updatedBook.Title;
+//             existingBook.Author = updatedBook.Author;
+//             existingBook.Publisher = updatedBook.Publisher;
+//             existingBook.ISBN = updatedBook.ISBN;
+//             existingBook.Classification = updatedBook.Classification;
+//             existingBook.Category = updatedBook.Category;
+//             existingBook.PageCount = updatedBook.PageCount;
+//             existingBook.Price = updatedBook.Price;
+            
+//             _booksContext.Update(existingBook);
+//             _booksContext.SaveChanges();
+            
+//             return Ok(existingBook);
+//         }
+            
+//         [HttpDelete("DeleteBook/{bookId}")]
+//         public IActionResult DeleteBook(int bookId)
+//         {
+//             var book = _booksContext.Books.Find(bookId);
+//             if (book == null)
+//             {
+//                 return NotFound(new {message = "Not found"});
+//             }
+                
+//             _booksContext.Books.Remove(book);
+//             _booksContext.SaveChanges();
+//             return NoContent();
+//         }
+//     }
+// }

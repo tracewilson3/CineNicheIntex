@@ -1,5 +1,9 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import './App.css';
+
+
+import './App.css'
+import SavedPage from './pages/SavedPage';
+
 
 import LoginPage from './pages/login';
 import SignupPage from './pages/signup';
@@ -8,6 +12,7 @@ import TempleScene from './pages/templescene';
 
 function App() {
   return (
+
     
       <Router>
         <Routes>
