@@ -8,6 +8,7 @@ interface FetchMoviesResponse {
 }
 
 const API_URL = `https://localhost:5000/Movies`;
+// const API_URL = `https://localhost:5000/Movies`;
 
 export const fetchMovies = async (
   pageSize: number,

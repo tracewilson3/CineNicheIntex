@@ -1,5 +1,6 @@
 
 using CineNicheIntex.API.Data;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -22,30 +23,12 @@ namespace CineNicheIntex.API.Controllers
         [HttpGet("AllMovies")]
         public IActionResult GetMovies()
         {
-            // parameters: int bookCount = 5,int pageNum=1, [FromQuery] List<string>? categories = null
+            
 
             var movies = _moviesContext.Movies.Take(20).ToList();
 
             return Ok(movies);
-            // var query = _moviesContext.Movies.AsQueryable();
-
-            // if (categories != null && categories.Any())
-            // {
-            //     query = query.Where(b => categories.Contains(b.Category));
-            // }
-
-            // var something = query
-            //     .Skip((pageNum-1)*bookCount)
-            //     .Take(bookCount)
-            //     .ToList();
-
-            // var TotalNumBooks = query.Count();
-            // var someObject = new
-            // {
-            //     books = something,
-            //     totalNumBooks = TotalNumBooks
-            // };
-            // return Ok(someObject);
+            
         }
 
         [HttpGet("AllUsers")]
@@ -62,68 +45,48 @@ namespace CineNicheIntex.API.Controllers
             var ratings = _moviesContext.Ratings.Take(20).ToList();
             return Ok(ratings);
         }
-        //[HttpPost("AddMovie")]
-        //public IActionResult AddMovie([FromBody] Movie newMovie)
-        //{
-        //    _moviesContext.Movies.Add(newMovie);
-        //    _moviesContext.SaveChanges();
-        //    return Ok(newMovie);
-        //}
+        [HttpGet("{id}")]
+        public async Task<ActionResult<User>> GetUserById(int id)
+        {
+            var user = await _moviesContext.Users.FindAsync(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+            return user;
+        }
+        [HttpPost("CreateUser")]
+        public async Task<IActionResult> CreateUser([FromBody] User newUser)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+                var passwordHasher = new PasswordHasher<User>();
+                newUser.hashed_password = passwordHasher.HashPassword(newUser, newUser.hashed_password); // Hashing the raw password
+
+                _moviesContext.Users.Add(newUser);
+                await _moviesContext.SaveChangesAsync();
+
+                return CreatedAtAction(nameof(GetUserById), new { id = newUser.user_id }, newUser);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("ERROR during CreateUser:");
+                Console.WriteLine(ex.ToString()); // full stack trace
+                return StatusCode(500, "An error occurred while creating the user.");
+            }
+
+        }
+
+        
+        }
+
     }
 
-}
 
 
 
-//         [HttpGet("GetCategories")]
-//         public IActionResult GetCategories()
-//         {
-//             var categories = _booksContext.Books
-//                 .Select(p => p.Category)
-//                 .Distinct()
-//                 .ToList();
-                
-//             return Ok(categories);
-//         }
-//         [HttpPost("AddBook")]
-//         public IActionResult AddBook([FromBody] Book newBook)
-//         {
-//             _booksContext.Books.Add(newBook);
-//             _booksContext.SaveChanges();
-//             return Ok(newBook);
-//         }
-//         [HttpPut("UpdateBook/{bookId}")]
-//         public IActionResult UpdateBook(int bookId, [FromBody] Book updatedBook)
-//         {
-//             var existingBook= _booksContext.Books.Find(bookId);
-                
-//             existingBook.Title = updatedBook.Title;
-//             existingBook.Author = updatedBook.Author;
-//             existingBook.Publisher = updatedBook.Publisher;
-//             existingBook.ISBN = updatedBook.ISBN;
-//             existingBook.Classification = updatedBook.Classification;
-//             existingBook.Category = updatedBook.Category;
-//             existingBook.PageCount = updatedBook.PageCount;
-//             existingBook.Price = updatedBook.Price;
-            
-//             _booksContext.Update(existingBook);
-//             _booksContext.SaveChanges();
-            
-//             return Ok(existingBook);
-//         }
-            
-//         [HttpDelete("DeleteBook/{bookId}")]
-//         public IActionResult DeleteBook(int bookId)
-//         {
-//             var book = _booksContext.Books.Find(bookId);
-//             if (book == null)
-//             {
-//                 return NotFound(new {message = "Not found"});
-//             }
-                
-//             _booksContext.Books.Remove(book);
-//             _booksContext.SaveChanges();
-//             return NoContent();
-//         }
-//     }
-// }
