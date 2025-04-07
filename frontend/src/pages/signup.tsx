@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import './login.css';
 import { useNavigate } from 'react-router-dom';
 
+
 const SignupPage = () => {
   const navigate = useNavigate();
 
@@ -28,22 +29,19 @@ const SignupPage = () => {
       return;
     }
 
+    // TODO: send formData to backend
     console.log('Form submitted:', formData);
+
+    // Optional: Navigate to login
     navigate('/');
   };
 
   return (
     <div className="login-background">
-      <div
-        className="react-carousel fade-in"
-        style={{
-          backgroundImage: 'url(https://image.tmdb.org/t/p/original/jTNYlTEijZ6c8Mn4gvINOeB2HWM.jpg)', // pick your fave
-        }}
-      />
+      <div className="react-carousel" />
       <div className="login-overlay" />
 
       <form className="login-box" onSubmit={handleSubmit}>
-        <img src="/src/images/logo.png" alt="CineNiche Logo" className="login-logo" />
         <h2 className="login-title">Create Account</h2>
 
         <input
@@ -97,8 +95,7 @@ const SignupPage = () => {
         <button type="submit" className="login-button">Create Account</button>
 
         <p className="login-footer">
-          Already have an account?{' '}
-          <span className="signup-link" onClick={() => navigate('/')}>Log in</span>
+          Already have an account? <span className="signup-link" onClick={() => navigate('/')}>Log in</span>
         </p>
       </form>
     </div>
