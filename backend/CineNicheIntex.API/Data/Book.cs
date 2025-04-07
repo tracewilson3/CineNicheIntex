@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Mission11.API.Data;
+namespace CineNicheIntex.API.Data;
 
 public class Book
 {

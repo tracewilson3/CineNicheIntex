@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 
-namespace Mission11.API.Data;
+namespace CineNicheIntex.API.Data;
 
 public class BooksDbContext : DbContext
 {
