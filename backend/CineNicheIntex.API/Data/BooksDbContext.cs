@@ -8,5 +8,5 @@ public class BooksDbContext : DbContext
     {
         
     }
-    public DbSet<Book> Books { get; set; }
+    public DbSet<Book> Movies { get; set; }
 }
