@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using Mission11.API.Data;
+using CineNicheIntex.API.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 

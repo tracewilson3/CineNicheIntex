@@ -1,7 +1,7 @@
+using CineNicheIntex.API.Data;
 using Microsoft.AspNetCore.Mvc;
-using Mission11.API.Data;
 
-namespace Mission11.API.Controllers
+namespace CineNicheIntex.API.Controllers
 {
 
 

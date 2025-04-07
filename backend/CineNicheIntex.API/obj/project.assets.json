@@ -1475,11 +1475,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/tracewilson/Desktop/Mission11/backend/Mission11.API/Mission11.API.csproj",
-      "projectName": "Mission11.API",
-      "projectPath": "/Users/tracewilson/Desktop/Mission11/backend/Mission11.API/Mission11.API.csproj",
+      "projectUniqueName": "/Users/tracewilson/Desktop/Mission11/backend/CineNicheIntex.API/CineNicheIntex.API.csproj",
+      "projectName": "CineNicheIntex.API",
+      "projectPath": "/Users/tracewilson/Desktop/Mission11/backend/CineNicheIntex.API/CineNicheIntex.API.csproj",
       "packagesPath": "/Users/tracewilson/.nuget/packages/",
-      "outputPath": "/Users/tracewilson/Desktop/Mission11/backend/Mission11.API/obj/",
+      "outputPath": "/Users/tracewilson/Desktop/Mission11/backend/CineNicheIntex.API/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "/Users/tracewilson/.nuget/NuGet/NuGet.Config"
@@ -1504,9 +1504,8 @@
       "restoreAuditProperties": {
         "enableAudit": "true",
         "auditLevel": "low",
-        "auditMode": "all"
-      },
-      "SdkAnalysisLevel": "9.0.100"
+        "auditMode": "direct"
+      }
     },
     "frameworks": {
       "net8.0": {
@@ -1544,7 +1543,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/Users/tracewilson/.dotnet/sdk/9.0.100/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/8.0.405/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

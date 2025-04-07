@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "Dd3nkQIH/aE=",
+  "dgSpecHash": "1sxsmuOahBo=",
   "success": true,
-  "projectFilePath": "/Users/tracewilson/Desktop/Mission11/backend/Mission11.API/Mission11.API.csproj",
+  "projectFilePath": "/Users/tracewilson/Desktop/Mission11/backend/CineNicheIntex.API/CineNicheIntex.API.csproj",
   "expectedPackageFiles": [
     "/Users/tracewilson/.nuget/packages/microsoft.data.sqlite.core/8.0.13/microsoft.data.sqlite.core.8.0.13.nupkg.sha512",
     "/Users/tracewilson/.nuget/packages/microsoft.entityframeworkcore/8.0.13/microsoft.entityframeworkcore.8.0.13.nupkg.sha512",
