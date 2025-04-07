@@ -1,3 +1,4 @@
+
 using CineNicheIntex.API.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -47,6 +48,20 @@ namespace CineNicheIntex.API.Controllers
             // return Ok(someObject);
         }
 
+        [HttpGet("AllUsers")]
+        public IActionResult GetUsers()
+        {
+            var users = _moviesContext.Users.Take(20).ToList();
+            return Ok(users);
+        }
+
+
+        [HttpGet("AllRatings")]
+        public IActionResult GetRatings()
+        {
+            var ratings = _moviesContext.Ratings.Take(20).ToList();
+            return Ok(ratings);
+        }
         //[HttpPost("AddMovie")]
         //public IActionResult AddMovie([FromBody] Movie newMovie)
         //{
@@ -55,6 +70,7 @@ namespace CineNicheIntex.API.Controllers
         //    return Ok(newMovie);
         //}
     }
+
 }
 
 
