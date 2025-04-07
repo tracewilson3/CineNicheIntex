@@ -35,4 +35,10 @@ namespace CineNicheIntex.API.Data
         public string? hashed_password { get; set; }
     }
 
+    public class LoginDto
+    {
+    public string email { get; set; }
+    public string password { get; set; }
+    }
+
 }
