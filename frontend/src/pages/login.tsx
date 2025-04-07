@@ -88,7 +88,7 @@ const LoginPage = () => {
           <label htmlFor="showPassword">Show password</label>
         </div>
 
-        <button type="submit" className="login-button">Sign In</button>
+        <button type="submit" className="login-button" onClick={() => navigate('/movies')}>Sign In</button>
 
         <p className="login-footer">
           New to CineNiche?{' '}
