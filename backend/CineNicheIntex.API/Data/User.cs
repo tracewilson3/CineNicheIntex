@@ -30,4 +30,5 @@ namespace CineNicheIntex.API.Data
         public string state { get; set; }
         public int zip { get; set; }
     }
+
 }

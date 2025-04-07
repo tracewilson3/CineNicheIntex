@@ -19,5 +19,6 @@ namespace CineNicheIntex.API.Data
             modelBuilder.Entity<User>().ToTable("movies_users");
             modelBuilder.Entity<Rating>().ToTable("movies_ratings");
         }
+
     }
 }

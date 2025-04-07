@@ -69,6 +69,7 @@ namespace CineNicheIntex.API.Controllers
         //    return Ok(newMovie);
         //}
     }
+
 }
 
 
