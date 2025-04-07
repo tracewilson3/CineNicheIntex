@@ -72,3 +72,6 @@
 /Users/tracewilson/Desktop/Mission11/backend/Mission11.API/bin/Debug/net8.0/publish/appsettings.json
 /Users/tracewilson/Desktop/Mission11/backend/Mission11.API/bin/Debug/net8.0/publish/Mission11.API.deps.json
 /Users/tracewilson/Desktop/Mission11/backend/Mission11.API/bin/Debug/net8.0/publish/Mission11.API.runtimeconfig.json
+/Users/tracewilson/Desktop/Mission11/backend/Mission11.API/bin/Debug/net8.0/Mission11.API.staticwebassets.endpoints.json
+/Users/tracewilson/Desktop/Mission11/backend/Mission11.API/obj/Debug/net8.0/staticwebassets.build.endpoints.json
+/Users/tracewilson/Desktop/Mission11/backend/Mission11.API/obj/Debug/net8.0/staticwebassets/msbuild.Mission11.API.Microsoft.AspNetCore.StaticWebAssetEndpoints.props

@@ -17,9 +17,10 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend", policy =>
     {
-        policy.WithOrigins("https://happy-mushroom-05102271e.6.azurestaticapps.net") // ✅ Exact origin required
+        policy.WithOrigins("http://localhost:3000") // ✅ Exact origin required
               .AllowAnyMethod()
-              .AllowAnyHeader();
+              .AllowAnyHeader()
+              .AllowCredentials();
               
     });
 });
