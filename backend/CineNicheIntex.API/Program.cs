@@ -10,8 +10,8 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddDbContext<BooksDbContext>(options =>
-    options.UseSqlite(builder.Configuration.GetConnectionString("BooksConnection")));
+builder.Services.AddDbContext<MoviesDbContext>(options =>
+    options.UseSqlite(builder.Configuration.GetConnectionString("MoviesConnection")));
 
 builder.Services.AddCors(options =>
 {
