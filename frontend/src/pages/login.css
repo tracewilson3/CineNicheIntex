@@ -16,19 +16,18 @@ html, body, #root {
     overflow: hidden;
     padding: 1rem;
   }
-
+  
   .react-carousel {
     position: absolute;
     inset: 0;
-    background-size: cover;           /* Fills entire screen */
-    background-position: center;      /* Keep it centered */
+    background-size: cover;
+    background-position: center;
     background-repeat: no-repeat;
     filter: blur(4px);
     z-index: 0;
     transition: opacity 0.5s ease-in-out;
     opacity: 1;
   }
-  
   
   .fade-out {
     opacity: 0;
@@ -51,17 +50,16 @@ html, body, #root {
     width: 90%;
     max-width: 380px;
     padding: 2.5rem 2rem;
-    background: rgba(0, 0, 0, 0.55); /* <-- semi-transparent black */
+    background: rgba(0, 0, 0, 0.55);
     border-radius: 12px;
     color: white;
-    box-shadow: 0 0 20px rgba(255, 255, 255, 0.05);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
     text-align: center;
     animation: popUp 0.5s ease-out;
-    backdrop-filter: blur(10px); /* <-- blur behind the box */
-    -webkit-backdrop-filter: blur(10px); /* Safari support */
-    border: 1px solid rgba(255, 255, 255, 0.1); /* subtle border */
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
   }
-  
   
   @keyframes popUp {
     from {
@@ -155,7 +153,59 @@ html, body, #root {
     text-decoration: underline;
   }
   
-  /* Responsive tweak for smaller screens */
+  .premium-popup {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background: rgba(0, 0, 0, 0.85);
+    padding: 1.5rem 2rem;
+    border-radius: 10px;
+    color: white;
+    z-index: 999;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.6);
+    animation: slideUp 0.5s ease-out;
+    max-width: 300px;
+    backdrop-filter: blur(10px);
+  }
+  
+  .popup-content h3 {
+    margin: 0 0 0.5rem;
+    font-size: 1.2rem;
+    color: #e50914;
+  }
+  
+  .popup-content p {
+    margin: 0 0 1rem;
+    font-size: 0.95rem;
+    color: #ddd;
+  }
+  
+  .popup-button {
+    padding: 8px 16px;
+    background: #e50914;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.2s ease;
+  }
+  
+  .popup-button:hover {
+    background: #f6121d;
+  }
+  
+  @keyframes slideUp {
+    from {
+      transform: translateY(100%);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0%);
+      opacity: 1;
+    }
+  }
+  
   @media (max-width: 500px) {
     .login-box {
       padding: 2rem 1.5rem;
