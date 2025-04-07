@@ -79,8 +79,41 @@ namespace CineNicheIntex.API.Controllers
                 Console.WriteLine(ex.ToString()); // full stack trace
                 return StatusCode(500, "An error occurred while creating the user.");
             }
-
         }
+
+        [HttpPost("LoginUser")]
+public async Task<IActionResult> LoginUser([FromBody] LoginDto loginDto)
+{
+    if (string.IsNullOrWhiteSpace(loginDto.email) || string.IsNullOrWhiteSpace(loginDto.password))
+    {
+        return BadRequest("Email and password are required.");
+    }
+
+    var user = await _moviesContext.Users.FirstOrDefaultAsync(u => u.email == loginDto.email);
+
+    if (user == null)
+    {
+        return Unauthorized("Invalid email or password.");
+    }
+
+    var passwordHasher = new PasswordHasher<User>();
+    var result = passwordHasher.VerifyHashedPassword(user, user.hashed_password, loginDto.password);
+
+    if (result == PasswordVerificationResult.Failed)
+    {
+        return Unauthorized("Invalid email or password.");
+    }
+
+    // Optional: create and return a token here
+    return Ok(new
+    {
+        message = "Login successful",
+        user_id = user.user_id,
+        name = user.name,
+        email = user.email
+    });
+}
+
 
         
         }
