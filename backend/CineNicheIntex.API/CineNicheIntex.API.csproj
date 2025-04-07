@@ -13,9 +13,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Bookstore.sqlite">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Update="Movies.db">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
