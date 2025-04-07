@@ -10,8 +10,16 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+var dbPath = Path.Combine(
+    Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+    "movies.db");
+
 builder.Services.AddDbContext<MoviesDbContext>(options =>
-    options.UseSqlite(builder.Configuration.GetConnectionString("MoviesConnection")));
+{
+   
+
+    options.UseSqlite($"Data Source={dbPath}");
+});
 
 builder.Services.AddCors(options =>
 {
