@@ -1,12 +1,12 @@
 
-import BooksPage from './pages/BooksPage';
+import MoviesPage from './pages/MoviesPage';
 
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { CartProvider } from './context/CartContext';
 import './App.css'
-import CartPage from './pages/CartPage';
-import BuyPage from './pages/BuyPage';
-import AdminBookPage from './pages/AdminBookPage';
+import SavedPage from './pages/SavedPage';
+
+import AdminPage from './pages/AdminPage';
 
 function App() {
   
@@ -16,11 +16,12 @@ function App() {
     <CartProvider>
     <Router>
       <Routes>
-        <Route path="/" element={<BooksPage />} />
-        <Route path="/books" element={<BooksPage />} />
-        <Route path="/buy/:title/:bookID/:price" element={<BuyPage />} />
-        <Route path="/cart" element={<CartPage />} />
-        <Route path="/AdminBookPage" element={<AdminBookPage />} />
+        <Route path="/" element={<MoviesPage />} />
+        <Route path="/login" element={<login />} />
+        <Route path="/movies" element={<MoviesPage />} />
+        
+        <Route path="/saved" element={<SavedPage />} />
+        <Route path="/AdminPage" element={<AdminPage />} />
       </Routes>
     </Router>
     </CartProvider>
