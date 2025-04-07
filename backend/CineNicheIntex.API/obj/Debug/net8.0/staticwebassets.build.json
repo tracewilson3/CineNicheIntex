@@ -1,11 +1,12 @@
 {
   "Version": 1,
-  "Hash": "yXZrt51EBOouLIvk21BcOXYwDYC0SUD/LgwIbUkyxl4=",
+  "Hash": "yY05vKx5HOHxz24NPLBMrBAs9FYr67rFV8ynwnew5I8=",
   "Source": "CineNicheIntex.API",
   "BasePath": "_content/CineNicheIntex.API",
   "Mode": "Default",
   "ManifestType": "Build",
   "ReferencedProjectsConfiguration": [],
   "DiscoveryPatterns": [],
-  "Assets": []
+  "Assets": [],
+  "Endpoints": []
 }
