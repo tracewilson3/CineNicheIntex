@@ -1,3 +1,8 @@
+// App.tsx
+
+
+import './App.css';
+import LoginPage from './pages/login';
 
 import MoviesPage from './pages/MoviesPage';
 
@@ -8,16 +13,16 @@ import SavedPage from './pages/SavedPage';
 
 import AdminPage from './pages/AdminPage';
 
-function App() {
-  
 
+function App() {
   return (
+
     <>
     <CartProvider>
     <Router>
       <Routes>
         <Route path="/" element={<MoviesPage />} />
-        <Route path="/login" element={<login />} />
+        <Route path="/login" element={<LoginPage />} />
         <Route path="/movies" element={<MoviesPage />} />
         
         <Route path="/saved" element={<SavedPage />} />
@@ -29,6 +34,7 @@ function App() {
     
     </>
   )
+
 }
 
-export default App
+export default App;

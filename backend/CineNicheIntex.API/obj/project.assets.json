@@ -1470,24 +1470,31 @@
     ]
   },
   "packageFolders": {
-    "/Users/tracewilson/.nuget/packages/": {}
+    "C:\\Users\\Grant Beardall\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/tracewilson/Desktop/Intex2/CineNicheIntex/backend/CineNicheIntex.API/CineNicheIntex.API.csproj",
+      "projectUniqueName": "C:\\Users\\Grant Beardall\\OneDrive\\Desktop\\INTEX\\CineNicheIntex\\backend\\CineNicheIntex.API\\CineNicheIntex.API.csproj",
       "projectName": "CineNicheIntex.API",
-      "projectPath": "/Users/tracewilson/Desktop/Intex2/CineNicheIntex/backend/CineNicheIntex.API/CineNicheIntex.API.csproj",
-      "packagesPath": "/Users/tracewilson/.nuget/packages/",
-      "outputPath": "/Users/tracewilson/Desktop/Intex2/CineNicheIntex/backend/CineNicheIntex.API/obj/",
+      "projectPath": "C:\\Users\\Grant Beardall\\OneDrive\\Desktop\\INTEX\\CineNicheIntex\\backend\\CineNicheIntex.API\\CineNicheIntex.API.csproj",
+      "packagesPath": "C:\\Users\\Grant Beardall\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Grant Beardall\\OneDrive\\Desktop\\INTEX\\CineNicheIntex\\backend\\CineNicheIntex.API\\obj\\",
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+      ],
       "configFilePaths": [
-        "/Users/tracewilson/.nuget/NuGet/NuGet.Config"
+        "C:\\Users\\Grant Beardall\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
         "net8.0"
       ],
       "sources": {
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -1504,7 +1511,7 @@
       "restoreAuditProperties": {
         "enableAudit": "true",
         "auditLevel": "low",
-        "auditMode": "all"
+        "auditMode": "direct"
       },
       "SdkAnalysisLevel": "9.0.100"
     },
@@ -1544,7 +1551,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/Users/tracewilson/.dotnet/sdk/9.0.100/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.101/PortableRuntimeIdentifierGraph.json"
       }
     }
   }
