@@ -1,0 +1,121 @@
+.temple-container {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    background: black;
+  }
+  
+  .temple-background {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    background-color: black;
+    z-index: 0;
+    filter: brightness(0.6);
+  }
+  
+  .idol-click-zone {
+    position: absolute;
+    top: 47%;
+    left: 50%;
+    width: 150px;
+    height: 220px;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+    cursor: pointer;
+  }
+  
+  .idol-prompt {
+    position: absolute;
+    top: 67%;
+    left: 50%;
+    transform: translateX(-50%);
+    color: white;
+    font-size: 1.3rem;
+    font-family: 'Cinzel', serif;
+    text-shadow: 0 0 10px black;
+    z-index: 3;
+  }
+  
+  /* Torch flicker effect */
+  .torch-glow {
+    position: absolute;
+    width: 80px;
+    height: 180px;
+    background: radial-gradient(circle, rgba(255,140,0,0.4) 0%, rgba(0,0,0,0) 80%);
+    filter: blur(20px);
+    opacity: 0.6;
+    animation: torchFlicker 1.5s infinite ease-in-out;
+    z-index: 2;
+    pointer-events: none;
+  }
+  
+  .torch-glow.left {
+    top: 30%;
+    left: 15%;
+  }
+  
+  .torch-glow.right {
+    top: 30%;
+    right: 15%;
+  }
+  
+  @keyframes torchFlicker {
+    0% { opacity: 0.4; transform: scale(1); }
+    50% { opacity: 0.7; transform: scale(1.05); }
+    100% { opacity: 0.3; transform: scale(0.98); }
+  }
+  
+  /* Screen shake animation */
+  @keyframes shake {
+    0% { transform: translate(0, 0); }
+    20% { transform: translate(-5px, 5px); }
+    40% { transform: translate(5px, -5px); }
+    60% { transform: translate(-5px, 5px); }
+    80% { transform: translate(5px, 0); }
+    100% { transform: translate(0, 0); }
+  }
+  
+  .shake {
+    animation: shake 0.5s ease-in-out;
+    animation-iteration-count: 4;
+  }
+  
+  /* Dust fall animation */
+  .dust-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 4;
+  }
+  
+  .dust {
+    position: absolute;
+    top: 0;
+    width: 4px;
+    height: 10px;
+    background: rgba(255, 255, 255, 0.1);
+    opacity: 0;
+    animation: fall 2.5s linear forwards;
+  }
+  
+  @keyframes fall {
+    0% {
+      transform: translateY(0);
+      opacity: 0;
+    }
+    10% {
+      opacity: 1;
+    }
+    100% {
+      transform: translateY(100vh);
+      opacity: 0;
+    }
+  }
+  
