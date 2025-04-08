@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './login.css';
+import logo from '../images/logo.png'
 
 const moviePosters = [
   'https://image.tmdb.org/t/p/original/qtfMr08KQsWXnCHY0a96N8NpQ2l.jpg', // Sonic 2
@@ -96,7 +97,7 @@ const LoginPage: React.FC = () => {
       <div className="login-overlay" />
 
       <form className="login-box" onSubmit={handleSubmit}>
-        <img src="/src/images/logo.png" alt="CineNiche Logo" className="login-logo" />
+        <img src={logo} alt="CineNiche Logo" className="login-logo" />
         <h2 className="login-title">Sign In</h2>
 
         <input
