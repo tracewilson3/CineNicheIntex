@@ -1,10 +1,7 @@
 using CineNicheIntex.API.Data;
-using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Net;
-using System.Net.Mail;
-
 
 
 namespace CineNicheIntex.API.Controllers
@@ -13,13 +10,14 @@ namespace CineNicheIntex.API.Controllers
     [ApiController]
     public class MoviesController : ControllerBase
     {
-        private MoviesDbContext _moviesContext;
+        private readonly MoviesDbContext _moviesContext;
 
-        public MoviesController(MoviesDbContext temp)
+        public MoviesController(MoviesDbContext context)
         {
-            _moviesContext = temp;
+            _moviesContext = context;
         }
 
+        // ✅ Public access
         [HttpGet("AllMovies")]
         public IActionResult GetMovies()
         {
@@ -37,6 +35,8 @@ namespace CineNicheIntex.API.Controllers
         }
 
 
+        [Authorize(Roles = "Admin")]
+
         [HttpGet("AllUsers")]
         public IActionResult GetUsers()
         {
@@ -44,6 +44,8 @@ namespace CineNicheIntex.API.Controllers
             return Ok(users);
         }
 
+        // 🔐 Admin only
+        [Authorize(Roles = "Admin")]
         [HttpGet("AllRatings")]
         public IActionResult GetRatings()
         {
@@ -51,6 +53,9 @@ namespace CineNicheIntex.API.Controllers
             return Ok(ratings);
         }
 
+
+        // 🔐 Admin only
+        [Authorize(Roles = "Admin")]
 
         [HttpGet("AllUsers")]
         public IActionResult GetUsers()
@@ -75,7 +80,6 @@ namespace CineNicheIntex.API.Controllers
         //}
     }
 
-
         [HttpGet("{id}")]
         public async Task<ActionResult<User>> GetUserById(int id)
         {
@@ -87,78 +91,38 @@ namespace CineNicheIntex.API.Controllers
             return user;
         }
 
-        [HttpPost("CreateUser")]
-        public async Task<IActionResult> CreateUser([FromBody] User newUser)
+        // 🔐 Admin-only: Add new movie
+        [Authorize(Roles = "Admin")]
+        [HttpPost("AddMovie")]
+        public async Task<IActionResult> AddMovie([FromBody] Movie movie)
         {
             if (!ModelState.IsValid)
-            {
                 return BadRequest(ModelState);
-            }
 
             try
             {
-                var passwordHasher = new PasswordHasher<User>();
-                newUser.hashed_password = passwordHasher.HashPassword(newUser, newUser.hashed_password);
-
-                _moviesContext.Users.Add(newUser);
+                _moviesContext.Movies.Add(movie);
                 await _moviesContext.SaveChangesAsync();
-
-                return CreatedAtAction(nameof(GetUserById), new { id = newUser.user_id }, newUser);
+                return Ok(new { message = "Movie added successfully", movie });
             }
             catch (Exception ex)
             {
-                Console.WriteLine("ERROR during CreateUser:");
-                Console.WriteLine(ex.ToString());
-                return StatusCode(500, "An error occurred while creating the user.");
+                Console.WriteLine($"❌ Error adding movie: {ex.Message}");
+                return StatusCode(500, "An error occurred while adding the movie.");
             }
         }
-[HttpPost("LoginUser")]
-public async Task<IActionResult> LoginUser([FromBody] LoginDto loginDto)
-{
-    if (string.IsNullOrWhiteSpace(loginDto.email) || string.IsNullOrWhiteSpace(loginDto.password))
-    {
-        return BadRequest("Email and password are required.");
-    }
 
-    var user = await _moviesContext.Users.FirstOrDefaultAsync(u => u.email == loginDto.email);
-
-    if (user == null)
-    {
-        return Unauthorized("Invalid email or password.");
-    }
-
-    var passwordHasher = new PasswordHasher<User>();
-    var result = passwordHasher.VerifyHashedPassword(user, user.hashed_password, loginDto.password);
-
-    if (result == PasswordVerificationResult.Failed)
-    {
-        return Unauthorized("Invalid email or password.");
-    }
-
-    // ✅ Generate and store 2FA code
-    var code = new Random().Next(100000, 999999).ToString();
-    user.TwoFactorCode = code;
-    user.TwoFactorExpiry = DateTime.UtcNow.AddMinutes(5);
-    await _moviesContext.SaveChangesAsync();
-
-    // ✅ Send 2FA code to user's email
-    try
-    {
-        var smtpClient = new SmtpClient("smtp.gmail.com")
+        // 🔐 Admin-only: Delete movie
+        [Authorize(Roles = "Admin")]
+        [HttpDelete("DeleteMovie/{id}")]
+        public async Task<IActionResult> DeleteMovie(int id)
         {
-            Port = 587,
-            Credentials = new NetworkCredential("byuisteam415@gmail.com", "ykseicgpponggsdf"), // <- NO spaces
-            EnableSsl = true,
-        };
+            var movie = await _moviesContext.Movies.FindAsync(id);
+            if (movie == null)
+                return NotFound(new { message = "Movie not found" });
 
-        var mailMessage = new MailMessage
-        {
-            From = new MailAddress("byuisteam415@gmail.com", "CineNiche"),
-            Subject = "Your CineNiche 2FA Code",
-            Body = $"Hi {user.name},\n\nYour 2FA verification code is: {code}\n\nThis code will expire in 5 minutes.",
-            IsBodyHtml = false,
-        };
 
+            try
         mailMessage.To.Add(user.email);
         smtpClient.Send(mailMessage);
         Console.WriteLine($"📬 Sent 2FA code to: {user.email}");
@@ -194,14 +158,17 @@ public async Task<IActionResult> LoginUser([FromBody] LoginDto loginDto)
             await _moviesContext.SaveChangesAsync();
 
             return Ok(new
+
             {
-                message = "2FA verified",
-                user_id = user.user_id,
-                name = user.name,
-                email = user.email
-            });
+                _moviesContext.Movies.Remove(movie);
+                await _moviesContext.SaveChangesAsync();
+                return Ok(new { message = "Movie deleted successfully" });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"❌ Error deleting movie: {ex.Message}");
+                return StatusCode(500, "An error occurred while deleting the movie.");
+            }
         }
     }
 }
-
-
