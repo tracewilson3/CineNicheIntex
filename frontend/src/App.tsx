@@ -1,30 +1,37 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+
 import MoviesPage1 from './pages/MoviesPage1';
-import './App.css'
-import SavedPage from './pages/SavedPage';
 
 
+
+import { Routes, Route } from 'react-router-dom';
+import './App.css';
+import MoviesPage from './pages/MoviesPage';
 import LoginPage from './pages/login';
 import SignupPage from './pages/signup';
 import TempleScene from './pages/templescene';
-
+import AdminMoviePage from './pages/AdminMoviePage';
+import AdminUsersPage from './pages/AdminUsersPage';
 
 function App() {
   return (
 
-    
-
-      <Routes>
-        {/* Public & marketing routes */}
-        <Route path="/" element={<LoginPage />} />
-        <Route path="/idol" element={<TempleScene />} />
-        <Route path="/signup" element={<SignupPage />} />
-        <Route path="/movies" element={<MoviesPage1 />} />
+        
 
     
-      </Routes>
+
 
     
+
+    <Routes>
+      <Route path="/" element={<LoginPage />} />
+      <Route path="/signup" element={<SignupPage />} />
+      <Route path="/idol" element={<TempleScene />} />
+      <Route path="/movies" element={<MoviesPage />} />
+      <Route path="/AdminPage" element={<AdminMoviePage />} />
+      <Route path="/movies1" element={<MoviesPage1 />} />
+      <Route path="/AdminUsers" element={<AdminUsersPage />} />
+    </Routes>
+
   );
 }
 

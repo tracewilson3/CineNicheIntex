@@ -14,7 +14,7 @@ const moviePosters = [
   'https://image.tmdb.org/t/p/original/jTNYlTEijZ6c8Mn4gvINOeB2HWM.jpg', // Spider-Man: No Way Home
 ];
 
-const LoginPage = () => {
+const LoginPage: React.FC = () => {
   const navigate = useNavigate();
 
   const [currentPoster, setCurrentPoster] = useState(0);
@@ -44,10 +44,41 @@ const LoginPage = () => {
     return () => clearTimeout(popupTimer);
   }, []);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log({ email, password });
+  
+    try {
+      const response = await fetch('https://localhost:5000/Movies/LoginUser', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+      });
+  
+      const responseText = await response.text();
+      
+      if (!response.ok) {
+        console.error("Login failed:", response.status, responseText);
+        alert(`Login failed: ${responseText}`);
+        return;
+      }
+  
+      const data = JSON.parse(responseText);
+      console.log('Login successful:', data);
+      localStorage.setItem('user', JSON.stringify(data));
+      navigate('/movies');
+    } catch (err) {
+      console.error('Login error:', err);
+      if (err instanceof TypeError && err.message.includes("Failed to fetch")) {
+        alert("Couldn't connect to the backend. Is it running and using HTTPS?");
+      } else {
+        alert(`Unexpected error: ${err}`);
+      }
+    }
+    
   };
+  
 
   return (
     <div className="login-background">
