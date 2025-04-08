@@ -9,6 +9,7 @@ import TempleScene from "./pages/templescene";
 import AdminMoviePage from "./pages/AdminMoviePage";
 import AdminUsersPage from "./pages/AdminUsersPage";
 import PrivacyPage from "./pages/PrivacyPage";
+import MovieDetails from "./pages/MovieDetails";
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
       <Route path="/movies1" element={<MoviesPage1 />} />
       <Route path="/AdminUsers" element={<AdminUsersPage />} />
       <Route path="/privacy" element={<PrivacyPage />} />
+      <Route path="/MovieDetails/:show_id" element={<MovieDetails />} />
     </Routes>
   );
 }
