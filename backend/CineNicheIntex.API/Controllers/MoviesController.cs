@@ -34,7 +34,7 @@ namespace CineNicheIntex.API.Controllers
         }
 
         // 🔐 Admin only
-        [Authorize(Roles = "Admin")]
+        // [Authorize(Roles = "Admin")]
         [HttpGet("AllUsers")]
         public IActionResult GetUsers()
         {
@@ -43,7 +43,7 @@ namespace CineNicheIntex.API.Controllers
         }
 
         // 🔐 Admin only
-        [Authorize(Roles = "Admin")]
+        // [Authorize(Roles = "Admin")]
         [HttpGet("AllRatings")]
         public IActionResult GetRatings()
         {

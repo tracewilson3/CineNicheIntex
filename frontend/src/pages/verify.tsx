@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import './verify.css';
+import { AUTH_URL } from '../api/config';
 
 const VerifyPage = () => {
   const [code, setCode] = useState('');
@@ -28,7 +29,7 @@ const VerifyPage = () => {
     e.preventDefault();
 
     try {
-      const response = await fetch('https://localhost:5000/auth/verify-2fa', {
+      const response = await fetch(AUTH_URL+'/verify-2fa', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, code }),

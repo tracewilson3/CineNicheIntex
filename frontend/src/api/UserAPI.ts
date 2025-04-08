@@ -1,16 +1,13 @@
 // src/api/UserAPI.ts
 
 import { User } from "../types/user";
-
+import { API_URL } from "./config";
 interface FetchUsersResponse {
   users: User[];
   totalNumUsers?: number; // Optional, in case your backend provides pagination metadata
 }
 
-const API_URL =
-  import.meta.env.MODE === "development"
-    ? "https://localhost:5000/Movies"
-    : "https://cineniche415backend.azurewebsites.net/Movies";
+
 
 export const fetchUsers = async (
   pageSize: number,

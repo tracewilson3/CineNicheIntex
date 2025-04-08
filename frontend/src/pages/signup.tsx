@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import './login.css';
 import { useNavigate } from 'react-router-dom';
+import { AUTH_URL } from '../api/config';
 
 const SignupPage = () => {
   const navigate = useNavigate();
@@ -28,7 +29,7 @@ const SignupPage = () => {
     }
 
     try {
-      const response = await fetch('https://localhost:5000/auth/register', {
+      const response = await fetch(AUTH_URL+'/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
