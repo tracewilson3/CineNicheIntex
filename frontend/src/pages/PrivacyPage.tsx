@@ -1,8 +1,10 @@
+import CineNicheHeader from "../components/CineNicheHeader";
 import "./PrivacyPage.css";
 
 const PrivacyPolicy = () => {
   return (
     <div className="container">
+      <CineNicheHeader />
       <div className="privacy-page d-flex align-items-center justify-content-center">
         <div className="text-center px-3 py-5" style={{ maxWidth: "900px" }}>
           <h1 className="mb-3">Privacy Policy</h1>
