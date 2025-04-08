@@ -23,13 +23,19 @@ namespace CineNicheIntex.API.Controllers
         [HttpGet("AllMovies")]
         public IActionResult GetMovies()
         {
-            
-
-            var movies = _moviesContext.Movies.Take(20).ToList();
-
-            return Ok(movies);
-            
+            try
+            {
+                var movies = _moviesContext.Movies.Take(20).ToList();
+                return Ok(movies);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("🔥 ERROR in GetMovies: " + ex.Message);
+                Console.WriteLine("🔥 STACKTRACE: " + ex.StackTrace);
+                return StatusCode(500, "Error retrieving movies.");
+            }
         }
+
 
         [HttpGet("AllUsers")]
         public IActionResult GetUsers()
