@@ -1,6 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-
-
+import MoviesPage1 from './pages/MoviesPage1';
 import './App.css'
 import SavedPage from './pages/SavedPage';
 
@@ -14,16 +13,17 @@ function App() {
   return (
 
     
-      <Router>
-        <Routes>
-          {/* Public & marketing routes */}
-          <Route path="/" element={<LoginPage />} />
-          <Route path="/idol" element={<TempleScene />} />
-          <Route path="/signup" element={<SignupPage />} />
 
-      
-        </Routes>
-      </Router>
+      <Routes>
+        {/* Public & marketing routes */}
+        <Route path="/" element={<LoginPage />} />
+        <Route path="/idol" element={<TempleScene />} />
+        <Route path="/signup" element={<SignupPage />} />
+        <Route path="/movies" element={<MoviesPage1 />} />
+
+    
+      </Routes>
+
     
   );
 }

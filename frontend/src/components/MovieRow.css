@@ -1,0 +1,58 @@
+/* MovieRow.css */
+.section {
+    padding: 1rem 2rem;
+    overflow: visible;          /* Allow cards to grow upward */
+    position: relative;         /* Required for z-index and overflow to take effect */
+    z-index: 1;
+  }
+  
+  
+  .section h2 {
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+    color: white; /* ← Set your desired color here */
+    text-align: left; /* ← This makes it align to the left */
+  }
+  
+  
+  .carousel {
+    display: flex;
+    gap: 1rem;
+    overflow-x: auto; /* horizontal scroll still enabled */
+    scroll-behavior: smooth;
+    padding-bottom: 1rem;
+    padding-top: 1rem; /* give top space for hover */
+    position: relative;
+    z-index: 1;
+    isolation: isolate; /* 💡 KEY: creates a new stacking context */
+  }
+  
+  
+  .carousel::-webkit-scrollbar {
+    display: none;
+  }
+  
+  .movie-row-card {
+    min-width: 165px;
+    height: 220px;
+    border-radius: 10px;
+    background-size: cover;
+    background-position: center;
+    flex-shrink: 0;
+    margin-bottom: 2rem;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .movie-row-card:hover {
+    transform: scale(1.1);
+    z-index: 10;
+    box-shadow: 0 8px 20px rgba(255, 255, 255, 0.2);
+  }
+  
+
+
+  
+  
+  
+  
+  
