@@ -10,12 +10,13 @@ import VerifyPage from "./pages/verify"; // ✅ import this
 import MoviesPage1 from "./pages/MoviesPage1";
 import PrivacyPage from "./pages/PrivacyPage";
 import MovieDetails from "./pages/MovieDetails";
+import HomePage from "./pages/HomePage";
 
 function App() {
   return (
 
     <Routes>
-      <Route path="/" element={<LoginPage />} />
+      <Route path="/login" element={<LoginPage />} />
       <Route path="/signup" element={<SignupPage />} />
       <Route path="/idol" element={<TempleScene />} />
       <Route path="/movies" element={<MoviesPage />} />
@@ -25,6 +26,7 @@ function App() {
       <Route path="/verify" element={<VerifyPage />} /> {/* ✅ added this line */}
       <Route path="/privacy" element={<PrivacyPage />} />
       <Route path="/MovieDetails/:show_id" element={<MovieDetails />} />
+      <Route path="/" element={<HomePage />} />
     </Routes>
   );
 }
