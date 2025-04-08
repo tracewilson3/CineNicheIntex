@@ -37,18 +37,18 @@ const AdminUsersPage = () => {
     loadUsers();
   }, [pageSize, pageNum]);
 
-  const handleDelete = async (userId: number) => {
-    const confirmDelete = window.confirm("Are you sure you want to delete this user?");
-    if (!confirmDelete) return;
+  // const handleDelete = async (userId: number) => {
+  //   const confirmDelete = window.confirm("Are you sure you want to delete this user?");
+  //   if (!confirmDelete) return;
 
-    try {
-      // await deleteUser(userId);
-      // setUsers(users.filter((u) => u.user_id !== userId));
-      alert("User deleted (mock action, hook up deleteUser when ready)");
-    } catch (error) {
-      alert("Failed to delete user");
-    }
-  };
+  //   try {
+  //     // await deleteUser(userId);
+  //     // setUsers(users.filter((u) => u.user_id !== userId));
+  //     alert("User deleted (mock action, hook up deleteUser when ready)");
+  //   } catch (error) {
+  //     alert("Failed to delete user");
+  //   }
+  // };
 
   if (loading) return <p>Loading users...</p>;
   if (error) return <p className="text-red-500">Error: {error}</p>;
@@ -116,9 +116,9 @@ const AdminUsersPage = () => {
               </td>
               <td>
                 {/* <button className="btn btn-warning btn-sm me-2" onClick={() => setEditingUser(u)}>Edit</button> */}
-                <button className="btn btn-danger btn-sm" onClick={() => handleDelete(u.user_id)}>
+                {/* <button className="btn btn-danger btn-sm" onClick={() => handleDelete(u.user_id)}>
                   Delete
-                </button>
+                </button> */}
               </td>
             </tr>
           ))}

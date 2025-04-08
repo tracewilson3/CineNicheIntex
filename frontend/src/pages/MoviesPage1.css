@@ -1,105 +1,103 @@
 /* MoviesPage1.css */
 
 header {
-    .logo {
-        height: 100px;
-      }
-
+  .logo {
+    height: 100px;
+  }
 }
 
-body, html {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: Arial, sans-serif;
-    background-color: #000;
-    color: white;
-    overflow-x: hidden;
-  }
-  
-  .app {
-    width: 100vw;
-    height: 100vh;
-    overflow-y: auto;
-    background-color: #000;
-  }
-  
-  
-  .header {
-    display: flex;
-    align-items: center;
-    padding: 1rem 2rem;
-    background-color: #111;
-    position: sticky;
-    top: 0;
-    z-index: 999;
-  }
-  
-  .logo {
-    height: 30px;
-  }
-  
-  .icons {
-    margin-left: auto;
-    display: flex;
-    gap: 1rem;
-  }
-  
-  .section {
-    padding: 1rem 2rem;
-    overflow: visible;          /* Allow cards to grow upward */
-    position: relative;         /* Required for z-index and overflow to take effect */
-    z-index: 1;
-  }
-  
-  .section h2 {
-    margin-left: 1rem;
-    margin-bottom: 1rem;
-    font-family: 'Poppins', sans-serif;
-    font-weight: 600;
-  }
-  
-  .carousel, .ranked-carousel {
-    display: flex;
-    gap: 1rem;
-    overflow-x: auto; /* horizontal scroll still enabled */
-    scroll-behavior: smooth;
-    padding-bottom: 1rem;
-    padding-top: 1rem; /* give top space for hover */
-    position: relative;
-    z-index: 1;
-    isolation: isolate; /* 💡 KEY: creates a new stacking context */
-  }
-  
-  .carousel::-webkit-scrollbar,
-  .ranked-carousel::-webkit-scrollbar {
-    display: none;
-  }
-  
-  .card {
-    min-width: 150px;
-    height: 225px;
-    border-radius: 10px;
-    background-size: cover;
-    background-position: center;
-    flex-shrink: 0;
-    position: relative;
-    z-index: 1;
-  }
-  
-  .ranked-item {
-    position: relative;
-    display: flex;
-    align-items: center;
-  }
-  
-  .rank-badge {
-    font-size: 5rem;
-    font-weight: bold;
-    color: #fff;
-    -webkit-text-stroke: 1px black;
-    margin-right: -1.5rem;
-    z-index: 2;
-  }
-  
-  
+body,
+html {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+  background-color: #000;
+  color: white;
+  overflow-x: hidden;
+}
+
+.app {
+  width: 100vw;
+  height: 100vh;
+  overflow-y: auto;
+  background-color: #000;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  padding: 1rem 2rem;
+  background-color: #111;
+  position: sticky;
+  top: 0;
+  z-index: 999;
+}
+
+.logo {
+  height: 30px;
+}
+
+.icons {
+  margin-left: auto;
+  display: flex;
+  gap: 1rem;
+}
+
+.section {
+  padding: 1rem 2rem;
+  overflow: visible; /* Allow cards to grow upward */
+  position: relative; /* Required for z-index and overflow to take effect */
+  z-index: 1;
+}
+
+.section h2 {
+  margin-left: 1rem;
+  margin-bottom: 1rem;
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+}
+
+.carousel,
+.ranked-carousel {
+  display: flex;
+  gap: 1rem;
+  overflow-x: auto; /* horizontal scroll still enabled */
+  scroll-behavior: smooth;
+  padding-bottom: 1rem;
+  padding-top: 1rem; /* give top space for hover */
+  position: relative;
+  z-index: 1;
+  isolation: isolate; /* 💡 KEY: creates a new stacking context */
+}
+
+.carousel::-webkit-scrollbar,
+.ranked-carousel::-webkit-scrollbar {
+  display: none;
+}
+
+.card {
+  min-width: 150px;
+  height: 225px;
+  border-radius: 10px;
+  background-size: cover;
+  background-position: center;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 1;
+}
+
+.ranked-item {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.rank-badge {
+  font-size: 5rem;
+  font-weight: bold;
+  color: #fff;
+  -webkit-text-stroke: 1px black;
+  margin-right: -1.5rem;
+  z-index: 2;
+}

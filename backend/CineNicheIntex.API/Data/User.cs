@@ -1,6 +1,8 @@
+
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Identity;
+
 
 
 namespace CineNicheIntex.API.Data
@@ -10,6 +12,7 @@ namespace CineNicheIntex.API.Data
     public class User
     {
         [Key]
+
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int user_id { get; set; }
         public string name { get; set; }
@@ -53,3 +56,4 @@ namespace CineNicheIntex.API.Data
 
 
 }
+

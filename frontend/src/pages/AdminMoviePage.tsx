@@ -19,7 +19,7 @@ const AdminMoviePage = () => {
   useEffect(() => {
     const loadMovies = async () => {
       try {
-        const data = await fetchMovies(pageSize, pageNum, []);
+        const data = await fetchMovies(pageSize, pageNum);
         setMovies(data.movies);
         if (data.totalNumMovies) {
           setTotalPages(Math.ceil(data.totalNumMovies / pageSize));
@@ -62,7 +62,7 @@ const AdminMoviePage = () => {
         <NewMovieForm
           onSuccess={() => {
             setShowForm(false);
-            fetchMovies(pageSize, pageNum, []).then((data) => setMovies(data.movies));
+            fetchMovies(pageSize, pageNum).then((data) => setMovies(data.movies));
           }}
           onCancel={() => setShowForm(false)}
         />
@@ -73,7 +73,7 @@ const AdminMoviePage = () => {
           movie={editingMovie}
           onSuccess={() => {
             setEditingMovie(null);
-            fetchMovies(pageSize, pageNum, []).then((data) => setMovies(data.movies));
+            fetchMovies(pageSize, pageNum).then((data) => setMovies(data.movies));
           }}
           onCancel={() => setEditingMovie(null)}
         />

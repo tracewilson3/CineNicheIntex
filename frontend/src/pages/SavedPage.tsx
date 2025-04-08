@@ -1,16 +1,15 @@
 import { useNavigate } from "react-router-dom";
-import { useCart } from "../context/SavedContext";
-import { BookItem } from "../types/BookItem";
+
 
 function SavedPage() {
     const navigate = useNavigate()
-    const {cart, removeFromCart} = useCart();
+    // const {cart, removeFromCart} = useCart();
 
     return (
         <div>
             <h2>Your Saved Movies</h2>
             <div>
-                {cart.length === 0 ? (
+                {/* {cart.length === 0 ? (
                 <p>Your cart is empty</p> 
                 ): (
                 <ul>
@@ -23,7 +22,7 @@ function SavedPage() {
                         </li>
                     ))}
                     </ul>
-                    )}
+                    )} */}
                 
             </div>
             <h3>Total: </h3>
