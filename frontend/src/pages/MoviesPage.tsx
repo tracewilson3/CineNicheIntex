@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import '../App.css';
 import MovieList from '../components/MovieList';
 import CategoryFilter from '../components/CategoryFilter';
+
 import WelcomeBand from '../components/WelcomeBand';
 
 function MoviesPage() {

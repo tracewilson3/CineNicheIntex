@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './login.css';
-import logo from './images/logo.png'
+import logo from '../images/logo.png'
 
 const moviePosters = [
   'https://image.tmdb.org/t/p/original/qtfMr08KQsWXnCHY0a96N8NpQ2l.jpg', // Sonic 2
