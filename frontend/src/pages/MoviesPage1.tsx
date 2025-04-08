@@ -1,8 +1,17 @@
-import React from "react";
-import "./MoviesPage1.css";
-import MovieRow from "../components/MovieRow";
+
+
 import "../components/MovieRow.css";
+
+import React from 'react';
+import './MoviesPage1.css';
+import PaginatedMovieRow from '../components/PaginatedMovieRow';
+import '../components/MovieRow.css';
+import logo from '../images/logo.png';
+import InfiniteScrollGrid from '../components/InfiniteScrollRows';
+import FloatingFooter from '../components/FloatingFooter';
 import CineNicheHeader from "../components/CineNicheHeader";
+
+
 
 const MoviesPage1 = () => {
   const placeholderImage = "https://placehold.co/150x225?text=Movie";
@@ -81,8 +90,17 @@ const MoviesPage1 = () => {
       {renderRankedCarousel("High Rated Movies")}
 
       {genreList.map((genre, index) => (
-        <MovieRow key={index} title={genre} />
-      ))}
+  <PaginatedMovieRow key={index} title={genre} />
+))}
+
+
+
+<InfiniteScrollGrid />
+<FloatingFooter />
+
+
+
+
     </div>
   );
 };

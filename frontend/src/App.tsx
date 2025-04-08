@@ -13,6 +13,7 @@ import MovieDetails from "./pages/MovieDetails";
 
 function App() {
   return (
+
     <Routes>
       <Route path="/" element={<LoginPage />} />
       <Route path="/signup" element={<SignupPage />} />
