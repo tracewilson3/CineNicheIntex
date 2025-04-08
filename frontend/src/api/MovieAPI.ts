@@ -12,18 +12,11 @@ const API_URL = `https://cineniche415backend.azurewebsites.net/Movies`;
 
 export const fetchMovies = async (
   pageSize: number,
-  pageNum: number,
-  selectedGenres: string[]
+  pageNum: number
 ): Promise<FetchMoviesResponse> => {
   try {
-    const genreParams = selectedGenres
-      .map((genre) => `genres=${encodeURIComponent(genre)}`)
-      .join("&");
-
     const response = await fetch(
-      `${API_URL}/AllMovies?movieCount=${pageSize}&pageNum=${pageNum}${
-        selectedGenres.length ? `&${genreParams}` : ""
-      }`,
+      `${API_URL}/AllMovies?movieCount=${pageSize}&pageNum=${pageNum}`,
       {
         method: "GET",
         headers: {
@@ -37,7 +30,7 @@ export const fetchMovies = async (
     }
 
     const movies = await response.json();
-    return { movies }; // Add totalNumMovies if your API supports it
+    return { movies };
   } catch (error) {
     console.error("Error fetching movies:", error);
     throw error;

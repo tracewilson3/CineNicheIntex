@@ -1,15 +1,15 @@
 // src/pages/MoviesPage.tsx
 
-import { useState } from 'react';
+
 import { useNavigate } from "react-router-dom";
 import '../App.css';
 import MovieList from '../components/MovieList';
-import CategoryFilter from '../components/CategoryFilter';
+
 
 import WelcomeBand from '../components/WelcomeBand';
 
 function MoviesPage() {
-  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+  // const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const navigate = useNavigate();
 
   return (
@@ -27,14 +27,14 @@ function MoviesPage() {
 
       <div className="row">
         <div className="col-md-3">
-          <CategoryFilter
+          {/* <CategoryFilter
             selectedCategories={selectedCategories}
             onCheckboxChange={setSelectedCategories}
-          />
+          /> */}
         </div>
 
         <div className="col-md-9">
-          <MovieList selectedCategories={selectedCategories} />
+          <MovieList  />
         </div>
       </div>
     </div>
