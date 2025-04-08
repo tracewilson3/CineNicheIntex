@@ -33,6 +33,11 @@ namespace CineNicheIntex.API.Data
         public string state { get; set; }
         public int zip { get; set; }
         public string? hashed_password { get; set; }
+        public string? TwoFactorCode { get; set; }
+        public DateTime? TwoFactorExpiry { get; set; }
+
+
+        
     }
 
     public class LoginDto
@@ -40,5 +45,11 @@ namespace CineNicheIntex.API.Data
     public string email { get; set; }
     public string password { get; set; }
     }
+    public class VerifyDto
+    {
+        public int user_id { get; set; }
+        public string code { get; set; }
+    }
+
 
 }

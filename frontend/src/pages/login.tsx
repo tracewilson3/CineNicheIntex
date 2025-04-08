@@ -57,7 +57,7 @@ const LoginPage: React.FC = () => {
       });
   
       const responseText = await response.text();
-      
+  
       if (!response.ok) {
         console.error("Login failed:", response.status, responseText);
         alert(`Login failed: ${responseText}`);
@@ -65,9 +65,16 @@ const LoginPage: React.FC = () => {
       }
   
       const data = JSON.parse(responseText);
-      console.log('Login successful:', data);
-      localStorage.setItem('user', JSON.stringify(data));
-      navigate('/movies');
+      console.log('Login response:', data);
+  
+      if (data.step === '2fa') {
+        // Redirect to verify page with user_id
+        navigate('/verify', { state: { user_id: data.user_id } });
+      } else {
+        // Normal login success (no 2FA step)
+        localStorage.setItem('user', JSON.stringify(data));
+        navigate('/movies');
+      }
     } catch (err) {
       console.error('Login error:', err);
       if (err instanceof TypeError && err.message.includes("Failed to fetch")) {
@@ -76,8 +83,8 @@ const LoginPage: React.FC = () => {
         alert(`Unexpected error: ${err}`);
       }
     }
-    
   };
+  
   
 
   return (

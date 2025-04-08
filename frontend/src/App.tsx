@@ -6,6 +6,7 @@ import SignupPage from './pages/signup';
 import TempleScene from './pages/templescene';
 import AdminMoviePage from './pages/AdminMoviePage';
 import AdminUsersPage from './pages/AdminUsersPage';
+import VerifyPage from './pages/verify'; // ✅ import this
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
       <Route path="/movies" element={<MoviesPage />} />
       <Route path="/AdminPage" element={<AdminMoviePage />} />
       <Route path="/AdminUsers" element={<AdminUsersPage />} />
+      <Route path="/verify" element={<VerifyPage />} /> {/* ✅ added this line */}
     </Routes>
   );
 }
