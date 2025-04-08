@@ -16,7 +16,9 @@ const MoviesPage1 = () => {
             <span className="rank-badge">{i + 1}</span>
             <div
               className="movie-row-card"
-              style={{ backgroundImage: `url(${placeholderImage})` }}
+              style={{
+                backgroundImage: `url(${placeholderImage})`,
+              }}
             ></div>
           </div>
         ))}
