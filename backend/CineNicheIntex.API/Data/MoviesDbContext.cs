@@ -1,3 +1,4 @@
+
 using Microsoft.EntityFrameworkCore;
 
 namespace CineNicheIntex.API.Data
@@ -22,3 +23,4 @@ namespace CineNicheIntex.API.Data
 
     }
 }
+

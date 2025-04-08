@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+
+using System.ComponentModel.DataAnnotations;
+
 
 namespace CineNicheIntex.API.Data
 {
@@ -10,4 +12,6 @@ namespace CineNicheIntex.API.Data
         public int rating { get; set; }
 
     }
+
 }
+

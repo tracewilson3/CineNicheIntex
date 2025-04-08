@@ -1,0 +1,97 @@
+/* Fullscreen flex layout */
+.verify-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    width: 100vw;
+    background-color: #000;
+    color: #fff;
+    font-family: 'Segoe UI', sans-serif;
+    padding: 1rem;
+    box-sizing: border-box;
+  }
+  
+  /* Centered content box */
+  .verify-box {
+    background-color: #111;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 0 12px rgba(255, 255, 255, 0.05);
+    max-width: 400px;
+    width: 100%;
+    margin: 0 auto;
+    text-align: center;
+    animation: fadeIn 0.6s ease;
+  }
+  
+  /* Headline */
+  .verify-box h2 {
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+  }
+  
+  /* Subtext */
+  .verify-box p {
+    font-size: 0.95rem;
+    color: #ccc;
+  }
+  
+  /* Input field */
+  .verify-input {
+    width: 100%;
+    padding: 10px 12px;
+    font-size: 1.1rem;
+    margin-top: 1rem;
+    border: 1px solid #333;
+    border-radius: 8px;
+    background-color: #000;
+    color: #fff;
+    outline: none;
+    text-align: center;
+    letter-spacing: 2px;
+  }
+  
+  /* Input focus state */
+  .verify-input:focus {
+    border-color: #666;
+  }
+  
+  /* Verify button */
+  .verify-button {
+    margin-top: 1.5rem;
+    width: 100%;
+    padding: 10px 12px;
+    font-size: 1rem;
+    background-color: #fff;
+    color: #000;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+  
+  /* Button hover effect */
+  .verify-button:hover {
+    background-color: #ddd;
+  }
+  
+  /* Error message styling */
+  .verify-error {
+    margin-top: 1rem;
+    color: #ff4d4d;
+    font-weight: 500;
+  }
+  
+  /* Smooth fade-in */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  

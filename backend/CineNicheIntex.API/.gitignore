@@ -1,3 +1,4 @@
+
 ﻿bin/
 obj/
 
@@ -6,8 +7,10 @@ obj/
 *.user
 *.sln.docstates
 
+
 .idea/
 *.DotSettings.user
 
 *.log
 *.tlog
+
