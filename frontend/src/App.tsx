@@ -14,6 +14,7 @@ import PrivacyPage from "./pages/PrivacyPage";
 
 function App() {
   return (
+
     <Routes>
       <Route path="/" element={<LoginPage />} />
       <Route path="/signup" element={<SignupPage />} />
