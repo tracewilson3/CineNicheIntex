@@ -51,6 +51,31 @@ namespace CineNicheIntex.API.Controllers
             return Ok(ratings);
         }
 
+
+        [HttpGet("AllUsers")]
+        public IActionResult GetUsers()
+        {
+            var users = _moviesContext.Users.Take(20).ToList();
+            return Ok(users);
+        }
+
+
+        [HttpGet("AllRatings")]
+        public IActionResult GetRatings()
+        {
+            var ratings = _moviesContext.Ratings.Take(20).ToList();
+            return Ok(ratings);
+        }
+        //[HttpPost("AddMovie")]
+        //public IActionResult AddMovie([FromBody] Movie newMovie)
+        //{
+        //    _moviesContext.Movies.Add(newMovie);
+        //    _moviesContext.SaveChanges();
+        //    return Ok(newMovie);
+        //}
+    }
+
+
         [HttpGet("{id}")]
         public async Task<ActionResult<User>> GetUserById(int id)
         {
@@ -151,6 +176,7 @@ public async Task<IActionResult> LoginUser([FromBody] LoginDto loginDto)
         message = "A verification code has been sent to your email.",
         user_id = user.user_id
     });
+
 }
  
         [HttpPost("VerifyCode")]
