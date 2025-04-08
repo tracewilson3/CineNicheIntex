@@ -1,0 +1,4 @@
+{
+    "appService.defaultWebAppToDeploy": "undefined/subscriptions/3085bc33-13c5-4a34-a5b2-af9626445bcc/resourceGroups/appsvc_windows_centralus/providers/Microsoft.Web/sites/CineNiche415Backend",
+    "appService.deploySubpath": "backend/CineNicheIntex.API/publish"
+}

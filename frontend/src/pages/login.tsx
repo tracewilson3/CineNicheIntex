@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './login.css';
+import logo from '../images/logo.png'
 
 const moviePosters = [
   'https://image.tmdb.org/t/p/original/qtfMr08KQsWXnCHY0a96N8NpQ2l.jpg', // Sonic 2
@@ -57,7 +58,7 @@ const LoginPage: React.FC = () => {
       });
   
       const responseText = await response.text();
-      
+  
       if (!response.ok) {
         console.error("Login failed:", response.status, responseText);
         alert(`Login failed: ${responseText}`);
@@ -65,9 +66,16 @@ const LoginPage: React.FC = () => {
       }
   
       const data = JSON.parse(responseText);
-      console.log('Login successful:', data);
-      localStorage.setItem('user', JSON.stringify(data));
-      navigate('/movies');
+      console.log('Login response:', data);
+  
+      if (data.step === '2fa') {
+        // Redirect to verify page with user_id
+        navigate('/verify', { state: { user_id: data.user_id } });
+      } else {
+        // Normal login success (no 2FA step)
+        localStorage.setItem('user', JSON.stringify(data));
+        navigate('/movies');
+      }
     } catch (err) {
       console.error('Login error:', err);
       if (err instanceof TypeError && err.message.includes("Failed to fetch")) {
@@ -76,8 +84,8 @@ const LoginPage: React.FC = () => {
         alert(`Unexpected error: ${err}`);
       }
     }
-    
   };
+  
   
 
   return (
@@ -89,7 +97,7 @@ const LoginPage: React.FC = () => {
       <div className="login-overlay" />
 
       <form className="login-box" onSubmit={handleSubmit}>
-        <img src="/src/images/logo.png" alt="CineNiche Logo" className="login-logo" />
+        <img src={logo} alt="CineNiche Logo" className="login-logo" />
         <h2 className="login-title">Sign In</h2>
 
         <input
