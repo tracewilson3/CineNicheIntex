@@ -7,7 +7,10 @@ interface FetchUsersResponse {
   totalNumUsers?: number; // Optional, in case your backend provides pagination metadata
 }
 
-const API_URL = `https://localhost:5000/Movies`;
+const API_URL =
+  import.meta.env.MODE === "development"
+    ? "https://localhost:5000/Movies"
+    : "https://cineniche415backend.azurewebsites.net/Movies";
 
 export const fetchUsers = async (
   pageSize: number,

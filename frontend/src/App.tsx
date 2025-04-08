@@ -1,8 +1,4 @@
 
-import MoviesPage1 from './pages/MoviesPage1';
-
-
-
 import { Routes, Route } from 'react-router-dom';
 import './App.css';
 import MoviesPage from './pages/MoviesPage';
@@ -11,16 +7,13 @@ import SignupPage from './pages/signup';
 import TempleScene from './pages/templescene';
 import AdminMoviePage from './pages/AdminMoviePage';
 import AdminUsersPage from './pages/AdminUsersPage';
+import VerifyPage from './pages/verify'; // ✅ import this
+import MoviesPage1 from "./pages/MoviesPage1";
+import PrivacyPage from "./pages/PrivacyPage";
+
 
 function App() {
   return (
-
-    
-
-    
-
-
-    
 
     <Routes>
       <Route path="/" element={<LoginPage />} />
@@ -30,8 +23,12 @@ function App() {
       <Route path="/AdminPage" element={<AdminMoviePage />} />
       <Route path="/movies1" element={<MoviesPage1 />} />
       <Route path="/AdminUsers" element={<AdminUsersPage />} />
-    </Routes>
 
+      <Route path="/verify" element={<VerifyPage />} /> {/* ✅ added this line */}
+
+      <Route path="/privacy" element={<PrivacyPage />} />
+
+    </Routes>
   );
 }
 

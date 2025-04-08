@@ -1,0 +1,18 @@
+/* PrivacyPolicy.css */
+.privacy-page {
+  min-height: 100vh;
+  background-color: #000;
+  color: #fff;
+  padding: 2rem;
+  text-align: center;
+  overflow-x: hidden;
+}
+
+.privacy-link {
+  color: #e50914;
+  text-decoration: underline;
+}
+
+.privacy-link:hover {
+  color: #fff;
+}
