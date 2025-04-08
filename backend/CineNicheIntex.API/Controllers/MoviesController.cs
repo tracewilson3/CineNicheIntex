@@ -38,7 +38,7 @@ namespace CineNicheIntex.API.Controllers
         [HttpGet("AllUsers")]
         public IActionResult GetUsers()
         {
-            var users = _moviesContext.Users.Take(20).ToList();
+            var users = _moviesContext.Users.OrderByDescending(u => u.user_id).Take(20).ToList();
             return Ok(users);
         }
 

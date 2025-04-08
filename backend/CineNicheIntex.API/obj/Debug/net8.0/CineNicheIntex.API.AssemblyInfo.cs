@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("CineNicheIntex.API")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d33723895af52a1af0bef22afec4ffa08e5f61f5")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+4466b61d02d3f9745aee8917c631f58c878cd9b7")]
 [assembly: System.Reflection.AssemblyProductAttribute("CineNicheIntex.API")]
 [assembly: System.Reflection.AssemblyTitleAttribute("CineNicheIntex.API")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
