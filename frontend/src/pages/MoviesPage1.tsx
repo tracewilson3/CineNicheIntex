@@ -12,57 +12,57 @@ import { Movie } from "../types/movie.ts";
 import { useNavigate } from "react-router-dom";
 
 const MoviesPage1 = () => {
-  const [movies, setMovies] = useState<Movie[]>([]);
-  const [error, setError] = useState<string | null>(null);
+  // const [movies, setMovies] = useState<Movie[]>([]);
+  // const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
 
   const ImageURL = "https://cinenichemovieposters.blob.core.windows.net/movieposters";
-  useEffect(() => {
-    const loadMovies = async () => {
-      try {
-        const data = await fetchMovies(100, 1);
-        setMovies(data);
-      } catch (error) {
-        setError((error as Error).message);
-      }
-    };
-    loadMovies();
-  }, []);
+  // useEffect(() => {
+  //   const loadMovies = async () => {
+  //     try {
+  //       const data = await fetchMovies(100, 1);
+  //       setMovies(data);
+  //     } catch (error) {
+  //       setError((error as Error).message);
+  //     }
+  //   };
+  //   loadMovies();
+  // }, []);
 
-  if (error) return <p>Error: {error}</p>;
+  // if (error) return <p>Error: {error}</p>;
 
   const sanitizeTitle = (title: string) => {
     return title.replace(/[#().:'!&"?-]/g, "");
   };
 
-  const renderRankedCarousel = (title: string) => (
-    <div className="section">
-      <h2>{title}</h2>
-      <div className="ranked-carousel">
-        {movies.map((m, i) => {
-          const sanitized = sanitizeTitle(m.title);
-          return (
-            <div
-              className="ranked-item"
-              key={m.show_id}
-              onClick={() => navigate(`/MovieDetails/${m.show_id}`)}
-              style={{ cursor: "pointer" }}
-            >
-              <span className="rank-badge">{i + 1}</span>
-              <div
-                className="movie-row-card"
-                style={{
-                  backgroundImage: `url(${ImageURL}/${encodeURIComponent(sanitized)}.jpg)`,
-                }}
-              >
-                {m.title}
-              </div>
-            </div>
-          );
-        })}
-      </div>
-    </div>
-  );
+  // const renderRankedCarousel = (title: string) => (
+  //   <div className="section">
+  //     <h2>{title}</h2>
+  //     <div className="ranked-carousel">
+  //       {movies.map((m, i) => {
+  //         const sanitized = sanitizeTitle(m.title);
+  //         return (
+  //           <div
+  //             className="ranked-item"
+  //             key={m.show_id}
+  //             onClick={() => navigate(`/MovieDetails/${m.show_id}`)}
+  //             style={{ cursor: "pointer" }}
+  //           >
+  //             <span className="rank-badge">{i + 1}</span>
+  //             <div
+  //               className="movie-row-card"
+  //               style={{
+  //                 backgroundImage: `url(${ImageURL}/${encodeURIComponent(sanitized)}.jpg)`,
+  //               }}
+  //             >
+  //               {m.title}
+  //             </div>
+  //           </div>
+  //         );
+  //       })}
+  //     </div>
+  //   </div>
+  // );
 
   const genreList = [
     "Action",
@@ -103,7 +103,7 @@ const MoviesPage1 = () => {
     <div className="app dark-background">
       <CineNicheHeader />
 
-      {renderRankedCarousel("Popular Movies")}
+      {/* {renderRankedCarousel("Popular Movies")}
 
       <div className="section">
         <h2>Recommended For You</h2>
@@ -124,10 +124,10 @@ const MoviesPage1 = () => {
         </div>
       </div>
 
-      {renderRankedCarousel("High Rated Movies")}
+      {renderRankedCarousel("High Rated Movies")} */}
 
       {genreList.map((genre, index) => (
-        <PaginatedMovieRow key={index} title={genre} />
+        <PaginatedMovieRow key={index} genreTitle={genre} />
       ))}
 
       <InfiniteScrollGrid />

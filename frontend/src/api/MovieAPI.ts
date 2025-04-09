@@ -12,14 +12,21 @@ const API_URL =
     ? "https://localhost:5000/Movies"
     : "https://cineniche415backend.azurewebsites.net/Movies";
 
-export const fetchMovies = async (pageSize: number, pageNum: number): Promise<Movie[]> => {
+export const fetchMovies = async (
+  pageSize: number = 50,
+  pageNumber: number = 1,
+  genre?: string
+): Promise<Movie[]> => {
   try {
-    const response = await fetch(`${API_URL}/AllMovies?movieCount=${pageSize}&pageNum=${pageNum}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    const response = await fetch(
+      `${API_URL}/AllMovies?pageSize=${pageSize}&pageNumber=${pageNumber}&genre=${genre}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
 
     if (!response.ok) {
       throw new Error("Failed to fetch movies");

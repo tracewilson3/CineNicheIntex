@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("CineNicheIntex.API")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+205f091d38acfa47f72011d4e781da2c35554980")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+6a04a931e4c11a0ccc0a22ad39270b8d79a73f7c")]
 [assembly: System.Reflection.AssemblyProductAttribute("CineNicheIntex.API")]
 [assembly: System.Reflection.AssemblyTitleAttribute("CineNicheIntex.API")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

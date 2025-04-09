@@ -30,11 +30,53 @@ const MovieDetails: React.FC = () => {
   if (error) return <p>Error: {error}</p>;
   if (!movie) return <p>Loading movie...</p>;
 
+  const getGenres = (movie: Movie): string[] => {
+    const genreMap: { [key in keyof Movie]?: string } = {
+      action: "Action",
+      adventure: "Adventure",
+      anime_Series_International_TV_Shows: "Anime / International TV",
+      british_TV_Shows_Docuseries_International_TV_Shows: "British / Docuseries / International",
+      children: "Children",
+      comedies: "Comedies",
+      comedies_Dramas_International_Movies: "Comedies / Dramas / International",
+      comedies_International_Movies: "Comedies / International",
+      comedies_Romantic_Movies: "Comedies / Romance",
+      crime_TV_Shows_Docuseries: "Crime / Docuseries",
+      documentaries: "Documentaries",
+      documentaries_International_Movies: "Documentaries / International",
+      docuseries: "Docuseries",
+      dramas: "Dramas",
+      dramas_International_Movies: "Dramas / International",
+      dramas_Romantic_Movies: "Dramas / Romance",
+      family_Movies: "Family",
+      fantasy: "Fantasy",
+      horror_Movies: "Horror",
+      international_Movies_Thrillers: "International / Thrillers",
+      international_TV_Shows_Romantic_TV_Shows_TV_Dramas: "Romantic TV / Dramas",
+      kids_TV: "Kids TV",
+      language_TV_Shows: "Language TV",
+      musicals: "Musicals",
+      nature_TV: "Nature TV",
+      reality_TV: "Reality TV",
+      spirituality: "Spirituality",
+      tV_Action: "TV Action",
+      tV_Comedies: "TV Comedies",
+      tV_Dramas: "TV Dramas",
+      talk_Shows_TV_Comedies: "Talk Shows / Comedies",
+      thrillers: "Thrillers",
+    };
+
+    return Object.entries(genreMap)
+      .filter(([key]) => (movie as any)[key] === 1)
+      .map(([_, label]) => label);
+  };
+
   const sanitizeTitle = (title: string) => {
     return title.replace(/[#().:'!&"?-]/g, "");
   };
 
   const sanitized = sanitizeTitle(movie.title);
+  const genres = getGenres(movie);
 
   return (
     <>
@@ -51,10 +93,30 @@ const MovieDetails: React.FC = () => {
           </div>
           <div className="col-md-8">
             <h1 className="display-4">{movie.title}</h1>
-            <p className="lead mt-3">{movie.description}</p>
             <p className="lead mt-3">{movie.rating}</p>
-            <p className="lead mt-3">{movie.cast}</p>
-            <p className="lead mt-3">{movie.director}</p>
+            <p className="lead mt-3">{movie.description}</p>
+
+            {/* get the genres */}
+            {genres.length > 0 && (
+              <p className="lead mt-3">
+                <strong>Genres:</strong> {genres.join(", ")}
+              </p>
+            )}
+
+            <p className="lead mt-3">
+              <strong>Cast:</strong> {movie.cast}
+            </p>
+            <p className="lead mt-3">
+              <strong>Director:</strong> {movie.director}
+            </p>
+            <p className="lead mt-3">
+              <strong>Duration:</strong> {movie.duration}
+            </p>
+            <p className="lead mt-3">
+              <strong>Released: </strong>
+              {movie.release_year}
+            </p>
+            {}
           </div>
         </div>
 
