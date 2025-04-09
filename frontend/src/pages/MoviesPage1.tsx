@@ -10,6 +10,7 @@ import { Movie } from "../types/movie.ts";
 import { useNavigate } from "react-router-dom";
 
 const MoviesPage1 = () => {
+
   const [movies, setMovies] = useState<Movie[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [topRatedMovies, setTopRatedMovies] = useState<any[]>([]);
@@ -39,11 +40,13 @@ const MoviesPage1 = () => {
     loadAllMovies();
   }, []);
 
-  if (error) return <p>Error: {error}</p>;
+
+  // if (error) return <p>Error: {error}</p>;
 
   const sanitizeTitle = (title: string) => {
     return title.replace(/[#().:'!&"?-]/g, "");
   };
+
 
   const renderRankedCarousel = (
     title: string,
@@ -77,6 +80,7 @@ const MoviesPage1 = () => {
     </div>
   );
 
+
   const genreList = [
     "Action", "Adventure", "Anime Series / International TV Shows",
     "British TV Shows / Docuseries / International TV Shows", "Children", "Comedies",
@@ -94,8 +98,10 @@ const MoviesPage1 = () => {
     <div className="app dark-background">
       <CineNicheHeader />
 
+
       {renderRankedCarousel("Popular Movies", mostReviewedMovies)}
       
+
       <div className="section">
         <h2>Recommended For You</h2>
         <div className="carousel">
@@ -117,10 +123,11 @@ const MoviesPage1 = () => {
         </div>
       </div>
 
+
       {renderRankedCarousel("High Rated Movies", topRatedMovies)}
 
       {genreList.map((genre, index) => (
-        <PaginatedMovieRow key={index} title={genre} />
+        <PaginatedMovieRow key={index} genreTitle={genre} />
       ))}
 
       <InfiniteScrollGrid />
