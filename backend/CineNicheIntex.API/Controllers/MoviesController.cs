@@ -24,6 +24,10 @@ namespace CineNicheIntex.API.Controllers
             try
             {
                 var movies = _moviesContext.Movies.OrderByDescending(m => m.show_id).Take(20).ToList();
+                foreach (var m in movies)
+                    {
+                        Console.WriteLine($"{m.show_id}: {m.title}");
+                    }
                 return Ok(movies);
             }
             catch (Exception ex)
@@ -45,11 +49,18 @@ namespace CineNicheIntex.API.Controllers
         // 🔐 Admin only
         // [Authorize(Roles = "Admin")]
         [HttpGet("AllRatings")]
-        public IActionResult GetRatings()
+        public IActionResult GetAllRatings()
         {
-            var ratings = _moviesContext.Ratings.Take(20).ToList();
+            var ratings = _moviesContext.Ratings.ToList();
+            Console.WriteLine($"📊 Retrieved {ratings.Count} ratings");
+
+            // Optional: Dump first few for debugging
+            foreach (var r in ratings.Take(5))
+                Console.WriteLine($"🧾 user_id={r.user_id}, show_id={r.show_id}, rating={r.rating}");
+
             return Ok(ratings);
-        }
+}
+
 
         // ✅ Public: get user by ID
         [HttpGet("User/{id}")]
@@ -65,23 +76,27 @@ namespace CineNicheIntex.API.Controllers
         // 🔐 Admin only: Add a new movie
         // [Authorize(Roles = "Admin")]
         [HttpPost("AddMovie")]
-        public async Task<IActionResult> AddMovie([FromBody] Movie movie)
-        {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+public async Task<IActionResult> AddMovie([FromBody] Movie movie)
+{
+    Console.WriteLine("🎬 AddMovie called. Incoming show_id: " + movie.show_id);
 
-            try
-            {
-                _moviesContext.Movies.Add(movie);
-                await _moviesContext.SaveChangesAsync();
-                return Ok(new { message = "Movie added successfully", movie });
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"❌ Error adding movie: {ex.Message}");
-                return StatusCode(500, "An error occurred while adding the movie.");
-            }
-        }
+    if (!ModelState.IsValid)
+        return BadRequest(ModelState);
+
+    try
+    {
+        _moviesContext.Movies.Add(movie);
+        await _moviesContext.SaveChangesAsync();
+        Console.WriteLine("✅ Movie saved. Generated show_id: " + movie.show_id);
+        return Ok(new { message = "Movie added successfully", movie });
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine("❌ Error adding movie: " + ex.Message);
+        return StatusCode(500, "Internal server error");
+    }
+}
+
         // 🔐 Admin only: Update a movie
         // [Authorize(Roles = "Admin")]
         [HttpPut("UpdateMovie/{id}")]
