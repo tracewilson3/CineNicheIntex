@@ -8,3 +8,14 @@ obj/
 *.DotSettings.user
 *.log
 *.tlog
+# macOS
+.DS_Store
+
+
+
+# Build artifacts
+publish/
+
+
+# Visual Studio/Code
+.vscode/
