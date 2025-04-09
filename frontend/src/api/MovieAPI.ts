@@ -35,30 +35,26 @@ export const fetchMovies = async (
     throw error;
   }
 };
+type NewMovie = Omit<Movie, "show_id">;
 
-export const addMovie = async (newMovie: Movie): Promise<Movie> => {
-  try {
-    const response = await fetch(`${API_URL}/AddMovie`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(newMovie),
-    });
+export const addMovie = async (newMovie: NewMovie): Promise<Movie> => {
+  const response = await fetch(`${API_URL}/AddMovie`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(newMovie),
+  });
 
-    if (!response.ok) {
-      throw new Error("Failed to add movie");
-    }
-
-    return await response.json();
-  } catch (error) {
-    console.error("Error adding movie:", error);
-    throw error;
+  if (!response.ok) {
+    throw new Error("Failed to add movie");
   }
+
+  return await response.json();
 };
 
 export const updateMovie = async (
-  showId: string,
+  showId: number,
   updatedMovie: Movie
 ): Promise<Movie> => {
   try {
@@ -81,9 +77,9 @@ export const updateMovie = async (
   }
 };
 
-export const deleteMovie = async (showId: string): Promise<void> => {
+export const deleteMovie = async (show_id: number): Promise<void> => {
   try {
-    const response = await fetch(`${API_URL}/DeleteMovie/${showId}`, {
+    const response = await fetch(`${API_URL}/DeleteMovie/${show_id}`, {
       method: "DELETE",
     });
 
@@ -95,3 +91,5 @@ export const deleteMovie = async (showId: string): Promise<void> => {
     throw error;
   }
 };
+
+

@@ -36,7 +36,9 @@ namespace CineNicheIntex.API.Data
         public string state { get; set; }
         public int zip { get; set; }
         public string? hashed_password { get; set; }
+        [NotMapped]
         public string? TwoFactorCode { get; set; }
+        [NotMapped]
         public DateTime? TwoFactorExpiry { get; set; }
 
 
