@@ -213,9 +213,11 @@ public async Task<IActionResult> AddMovie([FromBody] Movie movie)
 
         // 🔐 2FA verification (non-admin)
         [HttpPost("VerifyCode")]
-        public async Task<IActionResult> VerifyCode([FromBody] VerifyDto dto)
+        public async Task<IActionResult> VerifyCode([FromBody] MovieVerifyDto dto)
         {
-            var user = await _moviesContext.Users.FindAsync(dto.Email);
+            var user = await _moviesContext.MovieUsers
+                .FirstOrDefaultAsync(u => u.email == dto.Email); // ✅ query by email instead of PK
+
             if (user == null)
                 return Unauthorized("Invalid user.");
 
@@ -233,4 +235,39 @@ public async Task<IActionResult> AddMovie([FromBody] Movie movie)
             });
         }
     }
+    }
+[HttpPut("UpdateProfile/{email}")]
+public async Task<IActionResult> UpdateUserProfile(string email, [FromBody] User updatedData)
+{
+    var user = await _moviesContext.Users.FirstOrDefaultAsync(u => u.email == email);
+    if (user == null)
+        return NotFound(new { message = "User not found" });
+
+    // Update allowed fields
+    user.name = updatedData.name;
+    user.phone = updatedData.phone;
+    user.gender = updatedData.gender;
+    user.city = updatedData.city;
+    user.state = updatedData.state;
+    user.age = updatedData.age;
+    user.zip = updatedData.zip;
+
+    user.Netflix = updatedData.Netflix;
+    user.Amazon_Prime = updatedData.Amazon_Prime;
+    user.DisneyPlus = updatedData.DisneyPlus;
+    user.ParamountPlus = updatedData.ParamountPlus;
+    user.Max = updatedData.Max;
+    user.Hulu = updatedData.Hulu;
+    user.AppleTVPlus = updatedData.AppleTVPlus;
+    user.Peacock = updatedData.Peacock;
+
+    await _moviesContext.SaveChangesAsync();
+
+    return Ok(new { message = "Profile updated successfully" });
 }
+ // ✅ Local DTO to avoid conflict
+    public class MovieVerifyDto
+    {
+        public string Email { get; set; } = string.Empty;
+        public string Code { get; set; } = string.Empty;
+    }
