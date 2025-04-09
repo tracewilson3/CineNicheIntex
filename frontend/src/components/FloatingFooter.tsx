@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import './FloatingFooter.css';
+import '../css/FloatingFooter.css';
 
 const FloatingFooter: React.FC = () => {
   const [showFooter, setShowFooter] = useState(false);

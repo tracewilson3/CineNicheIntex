@@ -1,6 +1,6 @@
 import React from "react";
-import "./MoviesPage1.css";
-import "../components/MovieRow.css";
+import "../css/MoviesPage1.css";
+import "../css/MovieRow.css";
 import StarRating from "../components/StarRating";
 import CineNicheHeader from "../components/CineNicheHeader";
 

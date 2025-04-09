@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { useParams } from "react-router-dom";
-import "./MovieRow.css";
+import "../css/MovieRow.css";
 
 const placeholderImage = "https://placehold.co/150x225?text=Movie";
 

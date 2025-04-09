@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import './InfiniteScrollRows.css';
+import '../css/InfiniteScrollRows.css';
 
 const placeholderImage = 'https://placehold.co/165x240?text=Movie';
 

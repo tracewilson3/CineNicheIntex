@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { fetchMovies } from "../api/MovieAPI";
 import { Movie } from "../types/movie";
 import Pagination from "./Pagination";
-import "./MovieList.css";
+import "../css/MovieList.css";
 
 function MovieList() {
   const [movies, setMovies] = useState<Movie[]>([]);

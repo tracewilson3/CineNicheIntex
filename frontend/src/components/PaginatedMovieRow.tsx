@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import './PaginatedMovieRow.css';
+import '../css/PaginatedMovieRow.css';
 
 const placeholderImage = 'https://placehold.co/165x240?text=Movie';
 

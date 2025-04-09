@@ -1,5 +1,5 @@
 import CineNicheHeader from "../components/CineNicheHeader";
-import "./PrivacyPage.css";
+import "../css/PrivacyPage.css";
 
 const PrivacyPolicy = () => {
   return (
