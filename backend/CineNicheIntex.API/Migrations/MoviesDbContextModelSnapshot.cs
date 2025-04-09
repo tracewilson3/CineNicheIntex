@@ -19,8 +19,8 @@ namespace CineNicheIntex.API.Migrations
 
             modelBuilder.Entity("CineNicheIntex.API.Data.Movie", b =>
                 {
-                    b.Property<string>("show_id")
-                        .HasColumnType("TEXT");
+                    b.Property<int>("show_id")
+                        .HasColumnType("INTEGER");
 
                     b.Property<int?>("Action")
                         .HasColumnType("INTEGER");
@@ -183,9 +183,9 @@ namespace CineNicheIntex.API.Migrations
                     b.Property<int>("rating")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("show_id")
+                    b.Property<int>("show_id")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("user_id");
 

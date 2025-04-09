@@ -31,8 +31,12 @@ catch (Exception ex)
 try
 {
     builder.Services.AddDbContext<MoviesDbContext>(options =>
-        options.UseSqlite($"Data Source={moviesDbPath}"));
-    Console.WriteLine("✅ Movies DB context configured: " + moviesDbPath);
+    {
+        options.UseSqlite($"Data Source={moviesDbPath}")
+            .LogTo(Console.WriteLine, LogLevel.Information) // 👈 EF SQL logs
+            .EnableSensitiveDataLogging(); // 👈 Optional, for parameter values
+    });
+
 }
 catch (Exception ex)
 {
@@ -172,6 +176,57 @@ using (var scope = app.Services.CreateScope())
             Console.WriteLine($"- {error.Description}");
     }
 }
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<MoviesDbContext>();
+    var anyMovie = db.Movies.FirstOrDefault();
+    Console.WriteLine(anyMovie != null 
+        ? $"🎬 First movie in DB: {anyMovie.title} (ID: {anyMovie.show_id})" 
+        : "⚠️ No movies in DB");
+}
+// ✅ LOGGING: Write to Console, ILogger, and File
+try
+{
+    var logger = app.Services.GetRequiredService<ILogger<Program>>();
+
+    Console.WriteLine("📢 App is starting...");
+    logger.LogInformation("📢 App is starting...");
+
+    var logDir = Path.Combine("D:\\home\\LogFiles");
+    var startupLogPath = Path.Combine(logDir, "startup-log.txt");
+    
+    Directory.CreateDirectory(logDir); // just in case
+    File.AppendAllText(startupLogPath, $"✅ App started at {DateTime.UtcNow}\n");
+    var size = new FileInfo(moviesDbPath).Length;
+    File.AppendAllText(startupLogPath, $"🎞️ Movies.db size: {size} bytes\n");
+    File.AppendAllText(startupLogPath, $"📍 Movies path: {moviesDbPath}\n");
+    File.AppendAllText(startupLogPath, $"📍 Identity path: {identityDbPath}\n");
+    
+    var scope = app.Services.CreateScope();
+    var db = scope.ServiceProvider.GetRequiredService<MoviesDbContext>();
+    var anyMovie = db.Movies.FirstOrDefault();
+    if (anyMovie != null)
+    {
+        File.AppendAllText(startupLogPath, $"🎬 First movie title: {anyMovie.title}, ID: {anyMovie.show_id}\n");
+        Console.WriteLine("🎥 Total movies in DB: " + db.Movies.Count());
+
+    }
+
+    
+    Console.WriteLine("📁 Wrote startup log to: " + startupLogPath);
+}
+catch (Exception ex)
+{
+    var fallbackLogPath = Path.Combine("D:\\home\\LogFiles", "startup-error-log.txt");
+    File.AppendAllText(fallbackLogPath, $"🔥 Error writing log: {ex.Message}\n");
+
+    Console.WriteLine("🔥 Logging error: " + ex.Message);
+}
+
+
+
+
+
 
 
 app.Run();
@@ -200,24 +255,28 @@ static async Task EnsureDatabaseExistsAsync(WebApplication app, string moviesPat
         }
 
         // Download Movies.db if missing
-        if (!File.Exists(moviesPath))
+        var moviesUrl = config["BlobDbUrl"];
+        if (!string.IsNullOrWhiteSpace(moviesUrl))
         {
-            var moviesUrl = config["BlobDbUrl"];
-            if (!string.IsNullOrWhiteSpace(moviesUrl))
+            if (File.Exists(moviesPath))
             {
-                Console.WriteLine("🌐 Movies.db not found, downloading...");
-                var bytes = await client.GetByteArrayAsync(moviesUrl);
-                await File.WriteAllBytesAsync(moviesPath, bytes);
-                Console.WriteLine("✅ Movies.db downloaded.");
+                Console.WriteLine("🧹 Deleting old Movies.db to refresh from blob...");
+                File.Delete(moviesPath);
             }
-            else
-            {
-                Console.WriteLine("⚠️ BlobDbUrl not set in configuration.");
-            }
+
+            Console.WriteLine("🌐 Downloading fresh Movies.db...");
+            var bytes = await client.GetByteArrayAsync(moviesUrl);
+            await File.WriteAllBytesAsync(moviesPath, bytes);
+            Console.WriteLine("✅ Movies.db downloaded and replaced.");
+        }
+        else
+        {
+            Console.WriteLine("⚠️ BlobDbUrl not set in configuration.");
         }
     }
     catch (Exception ex)
     {
         Console.WriteLine("🔥 DB download error: " + ex.Message);
     }
+    
 }
