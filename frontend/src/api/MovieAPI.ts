@@ -40,6 +40,48 @@ export const fetchMovies = async (
   }
 };
 
+export const fetchTopRated = async (): Promise<Movie[]> => {
+  try {
+    const response = await fetch(`${API_URL}/TopRated`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch movies");
+    }
+
+    const movies = await response.json();
+    return movies;
+  } catch (error) {
+    console.error("Error fetching movies:", error);
+    throw error;
+  }
+};
+
+export const fetchMostReviewed = async (): Promise<Movie[]> => {
+  try {
+    const response = await fetch(`${API_URL}/MostReviewed`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch movies");
+    }
+
+    const movies = await response.json();
+    return movies;
+  } catch (error) {
+    console.error("Error fetching movies:", error);
+    throw error;
+  }
+};
+
 // this is to get just one movie for the movie details page
 export const fetchMovieDetails = async (movie_id: string): Promise<Movie> => {
   try {

@@ -1,0 +1,27 @@
+.search-input {
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: 999px;
+    border: none;
+    width: 100%;
+    max-width: 400px; /* 🔄 was 300px, now longer */
+    background-color: #2a2a2a; /* dark grey */
+    color: #d1d1d1;            /* light grey text */
+  }
+  
+  .search-input::placeholder {
+    color: #888888;
+  }
+  
+  .search-input:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px #555;
+  }
+  .search-form {
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    margin: 0 2rem; /* adds breathing room */
+  }
+    
