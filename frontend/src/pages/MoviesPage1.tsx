@@ -31,27 +31,35 @@ const MoviesPage1 = () => {
 
   if (error) return <p>Error: {error}</p>;
 
+  const sanitizeTitle = (title: string) => {
+    return title.replace(/[#().:'!&"?-]/g, "");
+  };
+
   const renderRankedCarousel = (title: string) => (
     <div className="section">
       <h2>{title}</h2>
       <div className="ranked-carousel">
-        {movies.map((m, i) => (
-          <div
-            className="ranked-item"
-            key={m.show_id}
-            onClick={() => navigate(`/MovieDetails/${m.show_id}`)}
-          >
-            <span className="rank-badge">{i + 1}</span>
+        {movies.map((m, i) => {
+          const sanitized = sanitizeTitle(m.title);
+          return (
             <div
-              className="movie-row-card"
-              style={{
-                backgroundImage: `url(${ImageURL}/${encodeURIComponent(m.title)}.jpg)`,
-              }}
+              className="ranked-item"
+              key={m.show_id}
+              onClick={() => navigate(`/MovieDetails/${m.show_id}`)}
+              style={{ cursor: "pointer" }}
             >
-              {m.title}
+              <span className="rank-badge">{i + 1}</span>
+              <div
+                className="movie-row-card"
+                style={{
+                  backgroundImage: `url(${ImageURL}/${encodeURIComponent(sanitized)}.jpg)`,
+                }}
+              >
+                {m.title}
+              </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );
@@ -100,16 +108,19 @@ const MoviesPage1 = () => {
       <div className="section">
         <h2>Recommended For You</h2>
         <div className="carousel">
-          {movies.map((m, i) => (
-            <div
-              key={i}
-              className="movie-row-card"
-              style={{ backgroundImage: `url(${ImageURL}/${encodeURIComponent(m.title)}.jpg)` }}
-              onClick={() => navigate(`/MovieDetails/${m.show_id}`)}
-            >
-              {m.title}
-            </div>
-          ))}
+          {movies.map((m, i) => {
+            const sanitized = sanitizeTitle(m.title);
+            return (
+              <div
+                key={i}
+                className="movie-row-card"
+                style={{ backgroundImage: `url(${ImageURL}/${encodeURIComponent(sanitized)}.jpg)` }}
+                onClick={() => navigate(`/MovieDetails/${m.show_id}`)}
+              >
+                {m.title}
+              </div>
+            );
+          })}
         </div>
       </div>
 

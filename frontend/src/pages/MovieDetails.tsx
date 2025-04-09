@@ -30,6 +30,12 @@ const MovieDetails: React.FC = () => {
   if (error) return <p>Error: {error}</p>;
   if (!movie) return <p>Loading movie...</p>;
 
+  const sanitizeTitle = (title: string) => {
+    return title.replace(/[#().:'!&"?-]/g, "");
+  };
+
+  const sanitized = sanitizeTitle(movie.title);
+
   return (
     <>
       <CineNicheHeader />
@@ -37,7 +43,7 @@ const MovieDetails: React.FC = () => {
         <div className="row align-items-center">
           <div className="col-md-4 text-center mb-4">
             <img
-              src={`${ImageURL}/${encodeURIComponent(movie.title)}.jpg`}
+              src={`${ImageURL}/${encodeURIComponent(sanitized)}.jpg`}
               alt={movie.title}
               className="img-fluid rounded shadow"
               style={{ width: "300px", height: "450px" }}
@@ -46,6 +52,9 @@ const MovieDetails: React.FC = () => {
           <div className="col-md-8">
             <h1 className="display-4">{movie.title}</h1>
             <p className="lead mt-3">{movie.description}</p>
+            <p className="lead mt-3">{movie.rating}</p>
+            <p className="lead mt-3">{movie.cast}</p>
+            <p className="lead mt-3">{movie.director}</p>
           </div>
         </div>
 
