@@ -1,7 +1,9 @@
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using System.Net.Mail;
+using CineNicheIntex.API.Data;
 
 namespace CineNicheIntex.API.Controllers
 {
@@ -11,17 +13,24 @@ namespace CineNicheIntex.API.Controllers
     {
         private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly MoviesDbContext _context;
 
-        public AuthController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager)
+        public AuthController(
+            UserManager<IdentityUser> userManager,
+            SignInManager<IdentityUser> signInManager,
+            MoviesDbContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _context = context;
         }
 
-        // ✅ Register user and confirm email immediately
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterDto dto)
         {
+            Console.WriteLine($"📨 Register attempt for: {dto.Email}");
+            Console.WriteLine("📁 Movies DB path: " + _context.Database.GetDbConnection().DataSource);
+
             var user = new IdentityUser
             {
                 UserName = dto.Email,
@@ -33,35 +42,59 @@ namespace CineNicheIntex.API.Controllers
             if (!result.Succeeded)
             {
                 var messages = result.Errors.Select(e => e.Description).ToList();
+                Console.WriteLine("❌ Registration failed:");
+                foreach (var msg in messages)
+                {
+                    Console.WriteLine("   • " + msg);
+                }
+
                 return BadRequest(new { errors = messages });
             }
 
-            // ✅ Manually mark email as confirmed
             user.EmailConfirmed = true;
             await _userManager.UpdateAsync(user);
 
-            return Ok("User registered successfully.");
+            try
+            {
+                var appUser = new User
+                {
+                    email = dto.Email,
+                    hashed_password = "Identity",
+                    name = "", phone = "", gender = "", city = "", state = "",
+                    age = 0, Netflix = 0, Amazon_Prime = 0, DisneyPlus = 0,
+                    ParamountPlus = 0, Max = 0, Hulu = 0, AppleTVPlus = 0, Peacock = 0,
+                    zip = 0
+                };
+
+                _context.MovieUsers.Add(appUser);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("🔥 Error saving to movies_users: " + ex.Message);
+                // Optionally return a soft error
+            }
+
+            Console.WriteLine("✅ Registration successful for: " + dto.Email);
+            return Ok(new { message = "User registered successfully." });
         }
 
-        // ✅ Start login: verify credentials + send 2FA
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginDto dto)
         {
-            var user = await _userManager.FindByEmailAsync(dto.Email);
+            var user = await _userManager.FindByEmailAsync(dto.email);
             if (user == null)
                 return Unauthorized(new { error = "Invalid email or password." });
 
             if (!user.EmailConfirmed)
                 return Unauthorized(new { error = "Email not confirmed." });
 
-            var isValid = await _userManager.CheckPasswordAsync(user, dto.Password);
+            var isValid = await _userManager.CheckPasswordAsync(user, dto.password);
             if (!isValid)
                 return Unauthorized(new { error = "Invalid email or password." });
 
-            // ✅ Generate 2FA token
             var code = await _userManager.GenerateTwoFactorTokenAsync(user, TokenOptions.DefaultEmailProvider);
 
-            // ✅ Send code to email
             try
             {
                 var smtpClient = new SmtpClient("smtp.gmail.com")
@@ -79,7 +112,7 @@ namespace CineNicheIntex.API.Controllers
                     IsBodyHtml = false,
                 };
 
-                mailMessage.To.Add(dto.Email);
+                mailMessage.To.Add(dto.email);
                 smtpClient.Send(mailMessage);
             }
             catch (Exception ex)
@@ -95,15 +128,14 @@ namespace CineNicheIntex.API.Controllers
             });
         }
 
-        // ✅ Final step of login: verify 2FA
         [HttpPost("verify-2fa")]
         public async Task<IActionResult> Verify2FA([FromBody] VerifyDto dto)
         {
-            var user = await _userManager.FindByEmailAsync(dto.Email);
+            var user = await _userManager.FindByEmailAsync(dto.email);
             if (user == null)
                 return Unauthorized(new { error = "User not found." });
 
-            var isValid = await _userManager.VerifyTwoFactorTokenAsync(user, TokenOptions.DefaultEmailProvider, dto.Code);
+            var isValid = await _userManager.VerifyTwoFactorTokenAsync(user, TokenOptions.DefaultEmailProvider, dto.code);
             if (!isValid)
                 return Unauthorized(new { error = "Invalid or expired verification code." });
 
@@ -126,13 +158,13 @@ namespace CineNicheIntex.API.Controllers
 
     public class LoginDto
     {
-        public string Email { get; set; } = string.Empty;
-        public string Password { get; set; } = string.Empty;
+        public string email { get; set; } = string.Empty;
+        public string password { get; set; } = string.Empty;
     }
 
     public class VerifyDto
     {
-        public string Email { get; set; } = string.Empty;
-        public string Code { get; set; } = string.Empty;
+        public string email { get; set; } = string.Empty;
+        public string code { get; set; } = string.Empty;
     }
 }

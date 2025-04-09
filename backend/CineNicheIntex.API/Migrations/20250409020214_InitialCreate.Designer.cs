@@ -11,14 +11,14 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CineNicheIntex.API.Migrations
 {
     [DbContext(typeof(MoviesDbContext))]
-    [Migration("20250407233525_InitialCreate")]
+    [Migration("20250409020214_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "9.0.3");
+            modelBuilder.HasAnnotation("ProductVersion", "8.0.13");
 
             modelBuilder.Entity("CineNicheIntex.API.Data.Movie", b =>
                 {

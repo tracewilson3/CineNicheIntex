@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-
 namespace CineNicheIntex.API.Controllers
 {
     [Route("[controller]")]
@@ -38,7 +37,7 @@ namespace CineNicheIntex.API.Controllers
         [HttpGet("AllUsers")]
         public IActionResult GetUsers()
         {
-            var users = _moviesContext.Users.Take(20).ToList();
+            var users = _moviesContext.MovieUsers.Take(20).ToList(); // ✅ updated from Users → MovieUsers
             return Ok(users);
         }
 
@@ -55,7 +54,7 @@ namespace CineNicheIntex.API.Controllers
         [HttpGet("User/{id}")]
         public async Task<ActionResult<User>> GetUserById(int id)
         {
-            var user = await _moviesContext.Users.FindAsync(id);
+            var user = await _moviesContext.MovieUsers.FindAsync(id); // ✅ updated
             if (user == null)
                 return NotFound();
 
@@ -107,9 +106,11 @@ namespace CineNicheIntex.API.Controllers
 
         // 🔐 2FA verification (non-admin)
         [HttpPost("VerifyCode")]
-        public async Task<IActionResult> VerifyCode([FromBody] VerifyDto dto)
+        public async Task<IActionResult> VerifyCode([FromBody] MovieVerifyDto dto)
         {
-            var user = await _moviesContext.Users.FindAsync(dto.Email);
+            var user = await _moviesContext.MovieUsers
+                .FirstOrDefaultAsync(u => u.email == dto.Email); // ✅ query by email instead of PK
+
             if (user == null)
                 return Unauthorized("Invalid user.");
 
@@ -126,5 +127,41 @@ namespace CineNicheIntex.API.Controllers
                 user_id = user.user_id
             });
         }
+    }
+[HttpPut("UpdateProfile/{email}")]
+public async Task<IActionResult> UpdateUserProfile(string email, [FromBody] User updatedData)
+{
+    var user = await _moviesContext.Users.FirstOrDefaultAsync(u => u.email == email);
+    if (user == null)
+        return NotFound(new { message = "User not found" });
+
+    // Update allowed fields
+    user.name = updatedData.name;
+    user.phone = updatedData.phone;
+    user.gender = updatedData.gender;
+    user.city = updatedData.city;
+    user.state = updatedData.state;
+    user.age = updatedData.age;
+    user.zip = updatedData.zip;
+
+    user.Netflix = updatedData.Netflix;
+    user.Amazon_Prime = updatedData.Amazon_Prime;
+    user.DisneyPlus = updatedData.DisneyPlus;
+    user.ParamountPlus = updatedData.ParamountPlus;
+    user.Max = updatedData.Max;
+    user.Hulu = updatedData.Hulu;
+    user.AppleTVPlus = updatedData.AppleTVPlus;
+    user.Peacock = updatedData.Peacock;
+
+    await _moviesContext.SaveChangesAsync();
+
+    return Ok(new { message = "Profile updated successfully" });
+}
+
+    // ✅ Local DTO to avoid conflict
+    public class MovieVerifyDto
+    {
+        public string Email { get; set; } = string.Empty;
+        public string Code { get; set; } = string.Empty;
     }
 }
