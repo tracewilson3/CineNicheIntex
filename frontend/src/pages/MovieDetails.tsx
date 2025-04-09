@@ -1,18 +1,34 @@
-import React from "react";
+import { useEffect, useState } from "react";
 import "./MoviesPage1.css";
 import "../components/MovieRow.css";
 import StarRating from "../components/StarRating";
 import CineNicheHeader from "../components/CineNicheHeader";
+import { Movie } from "../types/movie";
+import { fetchMovieDetails } from "../api/MovieAPI";
+import { useParams } from "react-router-dom";
 
 const MovieDetails: React.FC = () => {
-  const movie = {
-    title: "Example Movie",
-    imageUrl: "https://via.placeholder.com/300x450",
-    description: `This is a placeholder description for the movie. 
-    You'll be able to populate this with dynamic content later.`,
-  };
-
+  const { show_id } = useParams<{ show_id: string }>(); // get it from the URL
+  const [movie, setMovie] = useState<Movie>();
+  const [error, setError] = useState<string | null>(null);
   const placeholderImage = "https://placehold.co/150x225?text=Movie";
+  const ImageURL = "https://cinenichemovieposters.blob.core.windows.net/movieposters";
+
+  useEffect(() => {
+    if (!show_id) return;
+    const loadMovie = async () => {
+      try {
+        const data = await fetchMovieDetails(show_id);
+        setMovie(data);
+      } catch (error) {
+        setError((error as Error).message);
+      }
+    };
+    loadMovie();
+  }, [show_id]);
+
+  if (error) return <p>Error: {error}</p>;
+  if (!movie) return <p>Loading movie...</p>;
 
   return (
     <>
@@ -21,18 +37,15 @@ const MovieDetails: React.FC = () => {
         <div className="row align-items-center">
           <div className="col-md-4 text-center mb-4">
             <img
-              src={placeholderImage}
+              src={`${ImageURL}/${encodeURIComponent(movie.title)}.jpg`}
               alt={movie.title}
               className="img-fluid rounded shadow"
               style={{ width: "300px", height: "450px" }}
             />
           </div>
           <div className="col-md-8">
-            <h1 className="display-4">Avatar: The Last Airbender</h1>
-            <p className="lead mt-3">
-              A young boy known as the Avatar must master the four elemental powers to save a world
-              at war and fight a ruthless enemy bent on stopping him.
-            </p>
+            <h1 className="display-4">{movie.title}</h1>
+            <p className="lead mt-3">{movie.description}</p>
           </div>
         </div>
 

@@ -1,34 +1,55 @@
-
-
 import "../components/MovieRow.css";
 
-import React from 'react';
-import './MoviesPage1.css';
-import PaginatedMovieRow from '../components/PaginatedMovieRow';
-import '../components/MovieRow.css';
-import logo from '../images/logo.png';
-import InfiniteScrollGrid from '../components/InfiniteScrollRows';
-import FloatingFooter from '../components/FloatingFooter';
+import { useEffect, useState } from "react";
+import "./MoviesPage1.css";
+import PaginatedMovieRow from "../components/PaginatedMovieRow";
+import "../components/MovieRow.css";
+import InfiniteScrollGrid from "../components/InfiniteScrollRows";
+import FloatingFooter from "../components/FloatingFooter";
 import CineNicheHeader from "../components/CineNicheHeader";
-
-
+import { fetchMovies } from "../api/MovieAPI.ts";
+import { Movie } from "../types/movie.ts";
+import { useNavigate } from "react-router-dom";
 
 const MoviesPage1 = () => {
-  const placeholderImage = "https://placehold.co/150x225?text=Movie";
+  const [movies, setMovies] = useState<Movie[]>([]);
+  const [error, setError] = useState<string | null>(null);
+  const navigate = useNavigate();
+
+  const ImageURL = "https://cinenichemovieposters.blob.core.windows.net/movieposters";
+  useEffect(() => {
+    const loadMovies = async () => {
+      try {
+        const data = await fetchMovies(100, 1);
+        setMovies(data);
+      } catch (error) {
+        setError((error as Error).message);
+      }
+    };
+    loadMovies();
+  }, []);
+
+  if (error) return <p>Error: {error}</p>;
 
   const renderRankedCarousel = (title: string) => (
     <div className="section">
       <h2>{title}</h2>
       <div className="ranked-carousel">
-        {[...Array(10)].map((_, i) => (
-          <div className="ranked-item" key={i}>
+        {movies.map((m, i) => (
+          <div
+            className="ranked-item"
+            key={m.show_id}
+            onClick={() => navigate(`/MovieDetails/${m.show_id}`)}
+          >
             <span className="rank-badge">{i + 1}</span>
             <div
               className="movie-row-card"
               style={{
-                backgroundImage: `url(${placeholderImage})`,
+                backgroundImage: `url(${ImageURL}/${encodeURIComponent(m.title)}.jpg)`,
               }}
-            ></div>
+            >
+              {m.title}
+            </div>
           </div>
         ))}
       </div>
@@ -79,12 +100,15 @@ const MoviesPage1 = () => {
       <div className="section">
         <h2>Recommended For You</h2>
         <div className="carousel">
-          {[...Array(20)].map((_, i) => (
+          {movies.map((m, i) => (
             <div
               key={i}
               className="movie-row-card"
-              style={{ backgroundImage: `url(${placeholderImage})` }}
-            ></div>
+              style={{ backgroundImage: `url(${ImageURL}/${encodeURIComponent(m.title)}.jpg)` }}
+              onClick={() => navigate(`/MovieDetails/${m.show_id}`)}
+            >
+              {m.title}
+            </div>
           ))}
         </div>
       </div>
@@ -92,17 +116,11 @@ const MoviesPage1 = () => {
       {renderRankedCarousel("High Rated Movies")}
 
       {genreList.map((genre, index) => (
-  <PaginatedMovieRow key={index} title={genre} />
-))}
+        <PaginatedMovieRow key={index} title={genre} />
+      ))}
 
-
-
-<InfiniteScrollGrid />
-<FloatingFooter />
-
-
-
-
+      <InfiniteScrollGrid />
+      <FloatingFooter />
     </div>
   );
 };

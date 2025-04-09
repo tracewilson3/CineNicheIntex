@@ -8,7 +8,7 @@ namespace CineNicheIntex.API.Data;
 public class Movie
 {
     [Key]
-    public string show_id { get; set; }
+    public int show_id { get; set; }
     [Column("type")]
     public string? type { get; set; }
     public string title { get; set; }

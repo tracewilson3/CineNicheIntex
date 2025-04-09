@@ -36,21 +36,23 @@ namespace CineNicheIntex.API.Controllers
             }
         }
 
-
-        [HttpGet("AllUsers")]
-        public IActionResult GetUsers()
+        [HttpGet("MovieDetails/{show_id}")]
+        public IActionResult GetMovieDetails(int show_id)
         {
-            var users = _moviesContext.Users.Take(20).ToList();
-            return Ok(users);
+            try
+            {
+                var movie = _moviesContext.Movies.FirstOrDefault(x => x.show_id == show_id);
+                return Ok(movie);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("🔥 ERROR in GetMovies: " + ex.Message);
+                Console.WriteLine("🔥 STACKTRACE: " + ex.StackTrace);
+                return StatusCode(500, "Error retrieving movies.");
+            }
         }
 
-        [HttpGet("AllRatings")]
-        public IActionResult GetRatings()
-        {
-            var ratings = _moviesContext.Ratings.Take(20).ToList();
-            return Ok(ratings);
-        }
-
+    
 
         [HttpGet("AllUsers")]
         public IActionResult GetUsers()
@@ -73,7 +75,7 @@ namespace CineNicheIntex.API.Controllers
         //    _moviesContext.SaveChanges();
         //    return Ok(newMovie);
         //}
-    }
+    
 
 
         [HttpGet("{id}")]

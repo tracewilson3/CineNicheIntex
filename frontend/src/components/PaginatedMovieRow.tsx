@@ -1,7 +1,7 @@
-import React, { useEffect, useRef, useState } from 'react';
-import './PaginatedMovieRow.css';
+import React, { useEffect, useRef, useState } from "react";
+import "./PaginatedMovieRow.css";
 
-const placeholderImage = 'https://placehold.co/165x240?text=Movie';
+const placeholderImage = "https://placehold.co/165x240?text=Movie";
 
 interface PaginatedMovieRowProps {
   title: string;
@@ -21,7 +21,7 @@ const PaginatedMovieRow: React.FC<PaginatedMovieRowProps> = ({ title }) => {
   useEffect(() => {
     const options = {
       root: null,
-      rootMargin: '0px',
+      rootMargin: "0px",
       threshold: 1.0,
     };
     const observer = new IntersectionObserver(handleObserver, options);

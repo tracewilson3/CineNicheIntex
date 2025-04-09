@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Cooper\\Desktop\\IS CORE\\INTEX2\\CineNicheIntex\\backend\\CineNicheIntex.API\\CineNicheIntex.API.csproj": {}
+    "C:\\Users\\Cooper\\Desktop\\IS CORE\\INTEX 2\\CineNicheIntex\\backend\\CineNicheIntex.API\\CineNicheIntex.API.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Cooper\\Desktop\\IS CORE\\INTEX2\\CineNicheIntex\\backend\\CineNicheIntex.API\\CineNicheIntex.API.csproj": {
+    "C:\\Users\\Cooper\\Desktop\\IS CORE\\INTEX 2\\CineNicheIntex\\backend\\CineNicheIntex.API\\CineNicheIntex.API.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Cooper\\Desktop\\IS CORE\\INTEX2\\CineNicheIntex\\backend\\CineNicheIntex.API\\CineNicheIntex.API.csproj",
+        "projectUniqueName": "C:\\Users\\Cooper\\Desktop\\IS CORE\\INTEX 2\\CineNicheIntex\\backend\\CineNicheIntex.API\\CineNicheIntex.API.csproj",
         "projectName": "CineNicheIntex.API",
-        "projectPath": "C:\\Users\\Cooper\\Desktop\\IS CORE\\INTEX2\\CineNicheIntex\\backend\\CineNicheIntex.API\\CineNicheIntex.API.csproj",
+        "projectPath": "C:\\Users\\Cooper\\Desktop\\IS CORE\\INTEX 2\\CineNicheIntex\\backend\\CineNicheIntex.API\\CineNicheIntex.API.csproj",
         "packagesPath": "C:\\Users\\Cooper\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Cooper\\Desktop\\IS CORE\\INTEX2\\CineNicheIntex\\backend\\CineNicheIntex.API\\obj\\",
+        "outputPath": "C:\\Users\\Cooper\\Desktop\\IS CORE\\INTEX 2\\CineNicheIntex\\backend\\CineNicheIntex.API\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -51,6 +51,12 @@
           "targetAlias": "net8.0",
           "dependencies": {
             "Microsoft.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[8.0.13, )"
+            },
+            "Microsoft.EntityFrameworkCore.Design": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
               "target": "Package",
               "version": "[8.0.13, )"
             },
