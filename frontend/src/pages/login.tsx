@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './login.css';
 import logo from '../images/logo.png'
+import { AUTH_URL } from '../api/config';
 
 const moviePosters = [
   'https://image.tmdb.org/t/p/original/qtfMr08KQsWXnCHY0a96N8NpQ2l.jpg',
@@ -48,7 +49,7 @@ const LoginPage: React.FC = () => {
     e.preventDefault();
 
     try {
-      const response = await fetch('https://localhost:5000/auth/login', {
+      const response = await fetch(AUTH_URL+'/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

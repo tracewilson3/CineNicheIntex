@@ -1,16 +1,12 @@
 // src/api/MovieAPI.ts please work
 
 import { Movie } from "../types/movie";
-
+import { API_URL } from "./config";
 interface FetchMoviesResponse {
   movies: Movie[];
   totalNumMovies?: number; // Optional unless your API sends this
 }
 
-const API_URL =
-  import.meta.env.MODE === "development"
-    ? "https://localhost:5000/Movies"
-    : "https://cineniche415backend.azurewebsites.net/Movies";
 
 
 export const fetchMovies = async (
