@@ -8,8 +8,7 @@ interface NewMovieFormProps {
 }
 
 const NewMovieForm = ({ onSuccess, onCancel }: NewMovieFormProps) => {
-  const [formData, setFormData] = useState<Movie>({
-    show_id: '',
+  const [formData, setFormData] = useState<Omit<Movie, 'show_id'>>({
     title: '',
     director: '',
     cast: '',
@@ -38,10 +37,6 @@ const NewMovieForm = ({ onSuccess, onCancel }: NewMovieFormProps) => {
     <form onSubmit={handleSubmit} className="mb-4">
       <h2>Add New Movie</h2>
       <div className="form-grid">
-        <label>
-          Show ID:
-          <input type="text" name="show_id" value={formData.show_id} onChange={handleChange} />
-        </label>
         <label>
           Title:
           <input type="text" name="title" value={formData.title} onChange={handleChange} />

@@ -1,12 +1,10 @@
 import { useEffect, useState } from "react";
 import { User } from "../types/user";
-import { fetchUsers } from "../api/UserAPI";
-// You can add these when you build them:
-// import { addUser, deleteUser, updateUser } from "../api/UserAPI";
+import { deleteUser, fetchUsers } from "../api/UserAPI";
 import Pagination from "../components/Pagination";
 import AdminNavbar from "../components/AdminNavBar";
-// import NewUserForm from "../components/NewUserForm";
-// import EditUserForm from "../components/EditUserForm";
+import NewUserForm from "../components/NewUserForm";
+import EditUserForm from "../components/EditUserForm";
 
 const AdminUsersPage = () => {
   const [users, setUsers] = useState<User[]>([]);
@@ -16,7 +14,7 @@ const AdminUsersPage = () => {
   const [pageNum, setPageNum] = useState<number>(1);
   const [totalPages, setTotalPages] = useState<number>(0);
   const [showForm, setShowForm] = useState(false);
-  // const [editingUser, setEditingUser] = useState<User | null>(null);
+  const [editingUser, setEditingUser] = useState<User | null>(null);
 
   useEffect(() => {
     const loadUsers = async () => {
@@ -37,18 +35,18 @@ const AdminUsersPage = () => {
     loadUsers();
   }, [pageSize, pageNum]);
 
-  // const handleDelete = async (userId: number) => {
-  //   const confirmDelete = window.confirm("Are you sure you want to delete this user?");
-  //   if (!confirmDelete) return;
+  const handleDelete = async (user_id: number) => {
+    const confirmDelete = window.confirm("Are you sure you want to delete this user?");
+    if (!confirmDelete) return;
 
-  //   try {
-  //     // await deleteUser(userId);
-  //     // setUsers(users.filter((u) => u.user_id !== userId));
-  //     alert("User deleted (mock action, hook up deleteUser when ready)");
-  //   } catch (error) {
-  //     alert("Failed to delete user");
-  //   }
-  // };
+    try {
+      await deleteUser(user_id);
+      setUsers(users.filter((u) => u.user_id !== user_id));
+      alert("User deleted");
+    } catch (error) {
+      alert("Failed to delete user");
+    }
+  };
 
   if (loading) return <p>Loading users...</p>;
   if (error) return <p className="text-red-500">Error: {error}</p>;
@@ -64,7 +62,7 @@ const AdminUsersPage = () => {
         </button>
       )}
 
-      {/* {showForm && (
+      {showForm && (
         <NewUserForm
           onSuccess={() => {
             setShowForm(false);
@@ -72,18 +70,18 @@ const AdminUsersPage = () => {
           }}
           onCancel={() => setShowForm(false)}
         />
-      )} */}
+      )}
 
-      {/* {editingUser && (
+      {editingUser && (
         <EditUserForm
           user={editingUser}
           onSuccess={() => {
             setEditingUser(null);
             fetchUsers(pageSize, pageNum).then((data) => setUsers(data.users));
-          }}
+          } }
           onCancel={() => setEditingUser(null)}
-        />
-      )} */}
+               />
+      )}
 
       <table className="table table-bordered table-striped">
         <thead className="thead-dark">
@@ -100,29 +98,45 @@ const AdminUsersPage = () => {
           </tr>
         </thead>
         <tbody>
-          {users.map((u) => (
-            <tr key={u.user_id}>
-              <td>{u.user_id}</td>
-              <td>{u.name}</td>
-              <td>{u.email}</td>
-              <td>{u.age}</td>
-              <td>{u.gender}</td>
-              <td>{u.city}</td>
-              <td>{u.state}</td>
-              <td>
-                {["Netflix", "Amazon_Prime", "DisneyPlus", "Hulu", "Max", "Peacock"]
-                  .filter((service) => u[service as keyof User])
-                  .join(", ")}
-              </td>
-              <td>
-                {/* <button className="btn btn-warning btn-sm me-2" onClick={() => setEditingUser(u)}>Edit</button> */}
-                {/* <button className="btn btn-danger btn-sm" onClick={() => handleDelete(u.user_id)}>
-                  Delete
-                </button> */}
-              </td>
-            </tr>
-          ))}
-        </tbody>
+  {users.map((u) => (
+    <tr key={u.user_id}>
+      <td>{u.user_id}</td>
+      <td>{u.name}</td>
+      <td>{u.email}</td>
+      <td>{u.age}</td>
+      <td>{u.gender}</td>
+      <td>{u.city}</td>
+      <td>{u.state}</td>
+      <td>
+        {[
+          "Netflix",
+          "Amazon_Prime",
+          "DisneyPlus",
+          "Hulu",
+          "Max",
+          "Peacock"
+        ]
+          .filter((service) => u[service as keyof User])
+          .join(", ")}
+      </td>
+      <td>
+        <button
+          className="btn btn-warning btn-sm me-2"
+          onClick={() => setEditingUser(u)}
+        >
+          Edit
+        </button>
+        <button
+          className="btn btn-danger btn-sm"
+          onClick={() => handleDelete(u.user_id)}
+        >
+          Delete
+        </button>
+      </td>
+    </tr>
+  ))}
+</tbody>
+
       </table>
 
       <Pagination

@@ -4,13 +4,42 @@ using Microsoft.EntityFrameworkCore;
 using CineNicheIntex.API.Data;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Logging.AddConsole();
 
+// 🌐 Configure Identity DB path
+string identityDbPath = builder.Environment.IsDevelopment()
+    ? Path.Combine(Directory.GetCurrentDirectory(), "identity.db")
+    : Path.Combine("D:\\home\\data", "identity.db");
 
+// 🌐 Configure Movies DB path
+string moviesDbPath = builder.Environment.IsDevelopment()
+    ? Path.Combine(Directory.GetCurrentDirectory(), "Movies.db")
+    : Path.Combine("D:\\home\\data", "Movies.db");
 
-// 🔐 Identity/auth DB
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+// 🔧 Configure EF Core contexts
+try
+{
+    builder.Services.AddDbContext<ApplicationDbContext>(options =>
+        options.UseSqlite($"Data Source={identityDbPath}"));
+    Console.WriteLine("✅ Identity DB context configured: " + identityDbPath);
+}
+catch (Exception ex)
+{
+    Console.WriteLine("🔥 Failed to configure Identity DB context: " + ex.Message);
+}
 
+try
+{
+    builder.Services.AddDbContext<MoviesDbContext>(options =>
+        options.UseSqlite($"Data Source={moviesDbPath}"));
+    Console.WriteLine("✅ Movies DB context configured: " + moviesDbPath);
+}
+catch (Exception ex)
+{
+    Console.WriteLine("🔥 Failed to configure Movies DB context: " + ex.Message);
+}
+
+// 🔐 Identity setup
 builder.Services.AddDefaultIdentity<IdentityUser>(options =>
 {
     options.Password.RequireDigit = true;
@@ -23,32 +52,7 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options =>
 .AddRoles<IdentityRole>()
 .AddEntityFrameworkStores<ApplicationDbContext>();
 
-
-
-// Setup DB path
-string dbPath;
-
-if (builder.Environment.IsDevelopment())
-{
-    dbPath = Path.Combine(Directory.GetCurrentDirectory(), "Movies.db");
-}
-else
-{
-    dbPath = Path.Combine("D:\\home\\data", "Movies.db");
-}
-
-try
-{
-    builder.Services.AddDbContext<MoviesDbContext>(options =>
-        options.UseSqlite($"Data Source={dbPath}"));
-}
-catch (Exception ex)
-{
-    Console.WriteLine("🔥 Failed to configure DB context: " + ex.Message);
-}
-
-
-// Services
+// 🔧 Services
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -56,7 +60,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend", policy =>
     {
-        policy.WithOrigins("http://localhost:3000", "http://cineniche.org","https://blue-wave-05d54c91e.6.azurestaticapps.net")
+        policy.WithOrigins("http://localhost:3000", "http://cineniche.org", "https://blue-wave-05d54c91e.6.azurestaticapps.net")
             .AllowAnyMethod()
             .AllowAnyHeader()
             .AllowCredentials();
@@ -65,11 +69,33 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
+// 🔧 Force download both DBs
+await EnsureDatabaseExistsAsync(app, moviesDbPath, identityDbPath);
 
-// 🔧 Safely download DB
-await EnsureDatabaseExistsAsync(app, dbPath);
+// 🧾 Log resolved paths
+Console.WriteLine("🧭 Movies DB path: " + moviesDbPath);
+Console.WriteLine("🧭 Identity DB path: " + identityDbPath);
 
-// Middleware
+// 📦 File checks
+if (File.Exists(moviesDbPath))
+{
+    Console.WriteLine("✅ Movies.db found (" + new FileInfo(moviesDbPath).Length + " bytes)");
+}
+else
+{
+    Console.WriteLine("❌ Movies.db NOT FOUND");
+}
+
+if (File.Exists(identityDbPath))
+{
+    Console.WriteLine("✅ identity.db found (" + new FileInfo(identityDbPath).Length + " bytes)");
+}
+else
+{
+    Console.WriteLine("❌ identity.db NOT FOUND");
+}
+
+// 🔧 Middleware
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -77,7 +103,6 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseCors("AllowFrontend");
-
 
 app.Use(async (context, next) =>
 {
@@ -90,29 +115,22 @@ app.Use(async (context, next) =>
             "img-src 'self' data:; " +
             "font-src 'self'; " +
             "connect-src 'self' http://localhost:3000 ws://localhost:3000;");
-
         await next();
     }
     catch (Exception ex)
     {
-        Console.WriteLine("🔥 Unhandled exception: " + ex.Message);
-        Console.WriteLine(ex.StackTrace);
+        Console.WriteLine("🔥 Middleware exception: " + ex.Message);
         throw;
     }
-
 });
 
-
-
+app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
-
-app.UseHttpsRedirection();
-
 app.MapControllers();
 
+// ✅ OPTIONAL: Admin seeding (commented out until DBs are stable)
 
-// ✅ Seed Admin user and role
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
@@ -132,20 +150,19 @@ using (var scope = app.Services.CreateScope())
     if (adminUser != null)
     {
         await userManager.DeleteAsync(adminUser);
-        adminUser = null;
     }
 
-    adminUser = new IdentityUser
+    var newAdmin = new IdentityUser
     {
         UserName = adminEmail,
         Email = adminEmail,
         EmailConfirmed = true
     };
 
-    var result = await userManager.CreateAsync(adminUser, adminPassword);
+    var result = await userManager.CreateAsync(newAdmin, adminPassword);
     if (result.Succeeded)
     {
-        await userManager.AddToRoleAsync(adminUser, adminRole);
+        await userManager.AddToRoleAsync(newAdmin, adminRole);
         Console.WriteLine("✅ Admin user created and assigned role.");
     }
     else
@@ -156,41 +173,51 @@ using (var scope = app.Services.CreateScope())
     }
 }
 
-Console.WriteLine("📂 DB exists? " + File.Exists(dbPath));
-
 
 app.Run();
 
 
-static async Task EnsureDatabaseExistsAsync(WebApplication app, string dbPath)
+// 🔧 Utility: Download missing DBs (or overwrite them for testing)
+static async Task EnsureDatabaseExistsAsync(WebApplication app, string moviesPath, string identityPath)
 {
+    var config = app.Configuration;
+    var client = new HttpClient();
+
     try
     {
-        if (File.Exists(dbPath))
+        // Always overwrite identity.db (for now)
+        var identityUrl = config["IdentityDbUrl"];
+        if (!string.IsNullOrWhiteSpace(identityUrl))
         {
-            Console.WriteLine("✅ Existing DB found at: " + dbPath);
-            return;
+            Console.WriteLine("🌐 Downloading identity.db (force overwrite)...");
+            var bytes = await client.GetByteArrayAsync(identityUrl);
+            await File.WriteAllBytesAsync(identityPath, bytes);
+            Console.WriteLine("✅ identity.db downloaded.");
+        }
+        else
+        {
+            Console.WriteLine("⚠️ IdentityDbUrl not set in configuration.");
         }
 
-        Console.WriteLine("🌐 No local DB found, attempting to download from blob...");
-
-        var client = new HttpClient();
-        var blobUrl = app.Configuration["BlobDbUrl"];
-
-        if (string.IsNullOrWhiteSpace(blobUrl))
+        // Download Movies.db if missing
+        if (!File.Exists(moviesPath))
         {
-            Console.WriteLine("❌ BlobDbUrl not found in configuration.");
-            return;
+            var moviesUrl = config["BlobDbUrl"];
+            if (!string.IsNullOrWhiteSpace(moviesUrl))
+            {
+                Console.WriteLine("🌐 Movies.db not found, downloading...");
+                var bytes = await client.GetByteArrayAsync(moviesUrl);
+                await File.WriteAllBytesAsync(moviesPath, bytes);
+                Console.WriteLine("✅ Movies.db downloaded.");
+            }
+            else
+            {
+                Console.WriteLine("⚠️ BlobDbUrl not set in configuration.");
+            }
         }
-
-        var bytes = await client.GetByteArrayAsync(blobUrl);
-        await File.WriteAllBytesAsync(dbPath, bytes);
-
-        Console.WriteLine("✅ Movies.db successfully downloaded to: " + dbPath);
     }
     catch (Exception ex)
     {
-        Console.WriteLine("🔥 Failed to download DB: " + ex.Message);
-        Console.WriteLine("🔥 STACKTRACE: " + ex.StackTrace);
+        Console.WriteLine("🔥 DB download error: " + ex.Message);
     }
 }
