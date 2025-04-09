@@ -21,46 +21,20 @@ namespace CineNicheIntex.API.Controllers
         }
 
         [HttpGet("AllMovies")]
-        public IActionResult GetMovies([FromQuery] int pageSize = 20, [FromQuery] int pageNumber = 1, [FromQuery] string? genre = null)
+        public IActionResult GetMovies()
         {
             try
             {
-                IQueryable<Movie> query = _moviesContext.Movies;
-
-                if (!string.IsNullOrEmpty(genre))
-                {
-                    // Map the genre query to the exact property name
-                    var matchingProp = typeof(Movie)
-                        .GetProperties()
-                        .FirstOrDefault(p => string.Equals(p.Name, genre, StringComparison.OrdinalIgnoreCase));
-
-                    if (matchingProp == null)
-                    {
-                        return BadRequest("Invalid genre field name.");
-                    }
-
-                    // Use the correct case version of the property name
-                    query = query.Where(m => EF.Property<int>(m, matchingProp.Name) == 1);
-                }
-
-                var movies = query
-                    .OrderBy(m => m.show_id)
-                    .Skip((pageNumber - 1) * pageSize)
-                    .Take(pageSize)
-                    .ToList();
-
+                var movies = _moviesContext.Movies.Take(20).ToList();
                 return Ok(movies);
             }
             catch (Exception ex)
             {
-                Console.WriteLine("ERROR in GetMovies: " + ex.Message);
-                Console.WriteLine("STACKTRACE: " + ex.StackTrace);
+                Console.WriteLine("🔥 ERROR in GetMovies: " + ex.Message);
+                Console.WriteLine("🔥 STACKTRACE: " + ex.StackTrace);
                 return StatusCode(500, "Error retrieving movies.");
             }
         }
-
-
-
 
         [HttpGet("MovieDetails/{show_id}")]
         public IActionResult GetMovieDetails(int show_id)
@@ -229,6 +203,87 @@ public async Task<IActionResult> LoginUser([FromBody] LoginDto loginDto)
                 email = user.email
             });
         }
+        
+        [HttpGet("TopRated")]
+        public IActionResult GetTopRatedMovies()
+        {
+            try
+            {
+                var topRated = _moviesContext.Movies
+                    .Join(_moviesContext.Ratings,
+                        movie => movie.show_id,
+                        rating => rating.show_id,
+                        (movie, rating) => new { movie, rating })
+                    .GroupBy(m => m.movie)
+                    .Select(g => new
+                    {
+                        movie = g.Key,
+                        averageRating = g.Average(x => x.rating.rating)
+                    })
+                    .OrderByDescending(x => x.averageRating)
+                    .Take(10)
+                    .ToList();
+
+                return Ok(topRated);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("🔥 ERROR in GetTopRatedMovies: " + ex.Message);
+                Console.WriteLine("🔥 STACKTRACE: " + ex.StackTrace);
+                return StatusCode(500, new { error = ex.Message });
+            }
+        }
+
+        [HttpGet("MostReviewed")]
+        public IActionResult GetMostReviewedMovies()
+        {
+            try
+            {
+                var mostReviewed = _moviesContext.Movies
+                    .Join(_moviesContext.Ratings,
+                        movie => movie.show_id,
+                        rating => rating.show_id,
+                        (movie, rating) => new { movie, rating })
+                    .GroupBy(m => m.movie)
+                    .Select(g => new
+                    {
+                        movie = g.Key,
+                        reviewCount = g.Count()
+                    })
+                    .OrderByDescending(x => x.reviewCount)
+                    .Take(10)
+                    .ToList();
+
+                return Ok(mostReviewed);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("🔥 ERROR in GetMostReviewedMovies: " + ex.Message);
+                Console.WriteLine("🔥 STACKTRACE: " + ex.StackTrace);
+                return StatusCode(500, new { error = ex.Message });
+            }
+        }
+
+        [HttpGet("Search")]
+        public IActionResult SearchMovies(string query)
+        {
+            if (string.IsNullOrWhiteSpace(query))
+                return BadRequest("Query cannot be empty.");
+
+            var lowerQuery = query.ToLower();
+
+            var results = _moviesContext.Movies
+                .Where(m =>
+                    m.title.ToLower().Contains(lowerQuery) ||
+                    (m.director != null && m.director.ToLower().Contains(lowerQuery)) ||
+                    (m.cast != null && m.cast.ToLower().Contains(lowerQuery)))
+                .Take(497)
+                .ToList();
+
+            return Ok(results);
+        }
+
+
     }
 }
 
