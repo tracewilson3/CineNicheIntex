@@ -12,6 +12,7 @@ import PrivacyPage from "./pages/PrivacyPage";
 import MovieDetails from "./pages/MovieDetails";
 import HomePage from "./pages/HomePage";
 import SearchResultsPage from "./pages/SearchResultsPage";
+import RecommendationsPage from "./pages/RecommendationsPage";
 
 
 function App() {
@@ -29,6 +30,7 @@ function App() {
       <Route path="/MovieDetails/:show_id" element={<MovieDetails />} />
       <Route path="/" element={<HomePage />} />
       <Route path="/search" element={<SearchResultsPage />} />
+      <Route path="/recommendations" element={<RecommendationsPage />} />
       
     </Routes>
   );

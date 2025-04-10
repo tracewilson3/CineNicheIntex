@@ -7,5 +7,9 @@ export default defineConfig({
   plugins: [react()],
   server: {
     port: 3000,
-  },
+    proxy: {
+      '/api': 'https://localhost:5000' // 👈 Your ASP.NET backend port
+    }
+  }
 })
+
