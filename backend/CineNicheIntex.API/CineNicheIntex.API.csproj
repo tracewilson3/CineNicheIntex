@@ -2,12 +2,19 @@
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
+    <EnableDefaultItems>false</EnableDefaultItems> <!-- 🚫 This disables wildcards like **/*.cs, **/*.resx, etc -->
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
   <ItemGroup>
+    <!-- ✅ Manually include source files -->
+    <Compile Include="Controllers/**/*.cs" />
+    <Compile Include="Data/**/*.cs" />
+    <Compile Include="Program.cs" />
+  </ItemGroup>
 
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Authentication" Version="2.3.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.4" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="8.0.4" />
@@ -18,90 +25,6 @@
     </PackageReference>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.13" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <_ContentIncludedByDefault Remove="publish\publish\publish\publish\publish\publish\publish\publish\publish\publish\publish\publish\web.config" />
-    <_ContentIncludedByDefault Remove="publish\publish\publish\publish\publish\publish\publish\publish\publish\publish\publish\web.config" />
-    <_ContentIncludedByDefault Remove="publish\publish\publish\publish\publish\publish\publish\publish\publish\publish\web.config" />
-    <_ContentIncludedByDefault Remove="publish\publish\publish\publish\publish\publish\publish\publish\publish\web.config" />
-    <_ContentIncludedByDefault Remove="publish\publish\publish\publish\publish\publish\publish\publish\web.config" />
-    <_ContentIncludedByDefault Remove="publish\publish\publish\publish\publish\publish\publish\web.config" />
-    <_ContentIncludedByDefault Remove="publish\publish\publish\publish\publish\publish\web.config" />
-    <_ContentIncludedByDefault Remove="publish\publish\publish\publish\publish\web.config" />
-    <_ContentIncludedByDefault Remove="publish\publish\publish\publish\web.config" />
-    <_ContentIncludedByDefault Remove="publish\publish\publish\web.config" />
-    <_ContentIncludedByDefault Remove="publish\publish\web.config" />
-    <_ContentIncludedByDefault Remove="publish\web.config" />
-    <_ContentIncludedByDefault Remove="publish\appsettings.Development.json" />
-    <_ContentIncludedByDefault Remove="publish\appsettings.json" />
-    <_ContentIncludedByDefault Remove="publish\CineNicheIntex.API.deps.json" />
-    <_ContentIncludedByDefault Remove="publish\CineNicheIntex.API.runtimeconfig.json" />
-    <_ContentIncludedByDefault Remove="publish\Mission11.API.deps.json" />
-    <_ContentIncludedByDefault Remove="publish\Mission11.API.runtimeconfig.json" />
-    <_ContentIncludedByDefault Remove="publish\publish\appsettings.Development.json" />
-    <_ContentIncludedByDefault Remove="publish\publish\appsettings.json" />
-    <_ContentIncludedByDefault Remove="publish\publish\CineNicheIntex.API.deps.json" />
-    <_ContentIncludedByDefault Remove="publish\publish\CineNicheIntex.API.runtimeconfig.json" />
-    <_ContentIncludedByDefault Remove="publish\publish\Mission11.API.deps.json" />
-    <_ContentIncludedByDefault Remove="publish\publish\Mission11.API.runtimeconfig.json" />
-    <_ContentIncludedByDefault Remove="publish\publish\publish\appsettings.Development.json" />
-    <_ContentIncludedByDefault Remove="publish\publish\publish\appsettings.json" />
-    <_ContentIncludedByDefault Remove="publish\publish\publish\CineNicheIntex.API.deps.json" />
-    <_ContentIncludedByDefault Remove="publish\publish\publish\CineNicheIntex.API.runtimeconfig.json" />
-    <_ContentIncludedByDefault Remove="publish\publish\publish\Mission11.API.deps.json" />
-    <_ContentIncludedByDefault Remove="publish\publish\publish\Mission11.API.runtimeconfig.json" />
-    <_ContentIncludedByDefault Remove="publish\publish\publish\publish\appsettings.Development.json" />
-    <_ContentIncludedByDefault Remove="publish\publish\publish\publish\appsettings.json" />
-    <_ContentIncludedByDefault Remove="publish\publish\publish\publish\CineNicheIntex.API.deps.json" />
-    <_ContentIncludedByDefault Remove="publish\publish\publish\publish\CineNicheIntex.API.runtimeconfig.json" />
-    <_ContentIncludedByDefault Remove="publish\publish\publish\publish\Mission11.API.deps.json" />
-    <_ContentIncludedByDefault Remove="publish\publish\publish\publish\Mission11.API.runtimeconfig.json" />
-    <_ContentIncludedByDefault Remove="publish\publish\publish\publish\publish\appsettings.Development.json" />
-    <_ContentIncludedByDefault Remove="publish\publish\publish\publish\publish\appsettings.json" />
-    <_ContentIncludedByDefault Remove="publish\publish\publish\publish\publish\CineNicheIntex.API.deps.json" />
-    <_ContentIncludedByDefault Remove="publish\publish\publish\publish\publish\CineNicheIntex.API.runtimeconfig.json" />
-    <_ContentIncludedByDefault Remove="publish\publish\publish\publish\publish\Mission11.API.deps.json" />
-    <_ContentIncludedByDefault Remove="publish\publish\publish\publish\publish\Mission11.API.runtimeconfig.json" />
-    <_ContentIncludedByDefault Remove="publish\publish\publish\publish\publish\publish\appsettings.Development.json" />
-    <_ContentIncludedByDefault Remove="publish\publish\publish\publish\publish\publish\appsettings.json" />
-    <_ContentIncludedByDefault Remove="publish\publish\publish\publish\publish\publish\CineNicheIntex.API.deps.json" />
-    <_ContentIncludedByDefault Remove="publish\publish\publish\publish\publish\publish\CineNicheIntex.API.runtimeconfig.json" />
-    <_ContentIncludedByDefault Remove="publish\publish\publish\publish\publish\publish\Mission11.API.deps.json" />
-    <_ContentIncludedByDefault Remove="publish\publish\publish\publish\publish\publish\Mission11.API.runtimeconfig.json" />
-    <_ContentIncludedByDefault Remove="publish\publish\publish\publish\publish\publish\publish\appsettings.Development.json" />
-    <_ContentIncludedByDefault Remove="publish\publish\publish\publish\publish\publish\publish\appsettings.json" />
-    <_ContentIncludedByDefault Remove="publish\publish\publish\publish\publish\publish\publish\CineNicheIntex.API.deps.json" />
-    <_ContentIncludedByDefault Remove="publish\publish\publish\publish\publish\publish\publish\CineNicheIntex.API.runtimeconfig.json" />
-    <_ContentIncludedByDefault Remove="publish\publish\publish\publish\publish\publish\publish\Mission11.API.deps.json" />
-    <_ContentIncludedByDefault Remove="publish\publish\publish\publish\publish\publish\publish\Mission11.API.runtimeconfig.json" />
-    <_ContentIncludedByDefault Remove="publish\publish\publish\publish\publish\publish\publish\publish\appsettings.Development.json" />
-    <_ContentIncludedByDefault Remove="publish\publish\publish\publish\publish\publish\publish\publish\appsettings.json" />
-    <_ContentIncludedByDefault Remove="publish\publish\publish\publish\publish\publish\publish\publish\CineNicheIntex.API.deps.json" />
-    <_ContentIncludedByDefault Remove="publish\publish\publish\publish\publish\publish\publish\publish\CineNicheIntex.API.runtimeconfig.json" />
-    <_ContentIncludedByDefault Remove="publish\publish\publish\publish\publish\publish\publish\publish\Mission11.API.deps.json" />
-    <_ContentIncludedByDefault Remove="publish\publish\publish\publish\publish\publish\publish\publish\Mission11.API.runtimeconfig.json" />
-    <_ContentIncludedByDefault Remove="publish\publish\publish\publish\publish\publish\publish\publish\publish\appsettings.Development.json" />
-    <_ContentIncludedByDefault Remove="publish\publish\publish\publish\publish\publish\publish\publish\publish\appsettings.json" />
-    <_ContentIncludedByDefault Remove="publish\publish\publish\publish\publish\publish\publish\publish\publish\CineNicheIntex.API.deps.json" />
-    <_ContentIncludedByDefault Remove="publish\publish\publish\publish\publish\publish\publish\publish\publish\CineNicheIntex.API.runtimeconfig.json" />
-    <_ContentIncludedByDefault Remove="publish\publish\publish\publish\publish\publish\publish\publish\publish\Mission11.API.deps.json" />
-    <_ContentIncludedByDefault Remove="publish\publish\publish\publish\publish\publish\publish\publish\publish\Mission11.API.runtimeconfig.json" />
-    <_ContentIncludedByDefault Remove="publish\publish\publish\publish\publish\publish\publish\publish\publish\publish\appsettings.Development.json" />
-    <_ContentIncludedByDefault Remove="publish\publish\publish\publish\publish\publish\publish\publish\publish\publish\appsettings.json" />
-    <_ContentIncludedByDefault Remove="publish\publish\publish\publish\publish\publish\publish\publish\publish\publish\CineNicheIntex.API.deps.json" />
-    <_ContentIncludedByDefault Remove="publish\publish\publish\publish\publish\publish\publish\publish\publish\publish\CineNicheIntex.API.runtimeconfig.json" />
-    <_ContentIncludedByDefault Remove="publish\publish\publish\publish\publish\publish\publish\publish\publish\publish\Mission11.API.deps.json" />
-    <_ContentIncludedByDefault Remove="publish\publish\publish\publish\publish\publish\publish\publish\publish\publish\Mission11.API.runtimeconfig.json" />
-    <_ContentIncludedByDefault Remove="publish\publish\publish\publish\publish\publish\publish\publish\publish\publish\publish\appsettings.Development.json" />
-    <_ContentIncludedByDefault Remove="publish\publish\publish\publish\publish\publish\publish\publish\publish\publish\publish\appsettings.json" />
-    <_ContentIncludedByDefault Remove="publish\publish\publish\publish\publish\publish\publish\publish\publish\publish\publish\CineNicheIntex.API.deps.json" />
-    <_ContentIncludedByDefault Remove="publish\publish\publish\publish\publish\publish\publish\publish\publish\publish\publish\Mission11.API.deps.json" />
-    <_ContentIncludedByDefault Remove="publish\publish\publish\publish\publish\publish\publish\publish\publish\publish\publish\Mission11.API.runtimeconfig.json" />
-    <_ContentIncludedByDefault Remove="publish\publish\publish\publish\publish\publish\publish\publish\publish\publish\publish\publish\appsettings.Development.json" />
-    <_ContentIncludedByDefault Remove="publish\publish\publish\publish\publish\publish\publish\publish\publish\publish\publish\publish\appsettings.json" />
-    <_ContentIncludedByDefault Remove="publish\publish\publish\publish\publish\publish\publish\publish\publish\publish\publish\publish\Mission11.API.deps.json" />
-    <_ContentIncludedByDefault Remove="publish\publish\publish\publish\publish\publish\publish\publish\publish\publish\publish\publish\Mission11.API.runtimeconfig.json" />
   </ItemGroup>
 
 </Project>

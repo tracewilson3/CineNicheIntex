@@ -311,57 +311,10 @@ public async Task<IActionResult> AddMovie([FromBody] Movie movie)
             }
         }
 
-        [HttpGet("MostReviewed")]
-        public IActionResult GetMostReviewedMovies()
-        {
-            try
-            {
-                var mostReviewed = _moviesContext.Movies
-                    .Join(_moviesContext.Ratings,
-                        movie => movie.show_id,
-                        rating => rating.show_id,
-                        (movie, rating) => new { movie, rating })
-                    .GroupBy(m => m.movie)
-                    .Select(g => new
-                    {
-                        movie = g.Key,
-                        reviewCount = g.Count()
-                    })
-                    .OrderByDescending(x => x.reviewCount)
-                    .Take(10)
-                    .ToList();
-
-                return Ok(mostReviewed);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("🔥 ERROR in GetMostReviewedMovies: " + ex.Message);
-                Console.WriteLine("🔥 STACKTRACE: " + ex.StackTrace);
-                return StatusCode(500, new { error = ex.Message });
-            }
-        }
-
-        [HttpGet("Search")]
-        public IActionResult SearchMovies(string query)
-        {
-            if (string.IsNullOrWhiteSpace(query))
-                return BadRequest("Query cannot be empty.");
-
-            var lowerQuery = query.ToLower();
-
-            var results = _moviesContext.Movies
-                .Where(m =>
-                    m.title.ToLower().Contains(lowerQuery) ||
-                    (m.director != null && m.director.ToLower().Contains(lowerQuery)) ||
-                    (m.cast != null && m.cast.ToLower().Contains(lowerQuery)))
-                .Take(497)
-                .ToList();
-
-            return Ok(results);
-        }
 
 
-    }
+
+    
     
 [HttpPut("UpdateProfile/{email}")]
 public async Task<IActionResult> UpdateUserProfile(string email, [FromBody] User updatedData)
@@ -400,35 +353,7 @@ public async Task<IActionResult> UpdateUserProfile(string email, [FromBody] User
     }
 
 
-     [HttpGet("TopRated")]
-        public IActionResult GetTopRatedMovies()
-        {
-            try
-            {
-                var topRated = _moviesContext.Movies
-                    .Join(_moviesContext.Ratings,
-                        movie => movie.show_id,
-                        rating => rating.show_id,
-                        (movie, rating) => new { movie, rating })
-                    .GroupBy(m => m.movie)
-                    .Select(g => new RatedMovieDto
-                    {
-                        movie = g.Key,
-                        averageRating = g.Average(x => x.rating.rating)
-                    })
-                    .OrderByDescending(x => x.averageRating)
-                    .Take(10)
-                    .ToList();
-
-                return Ok(topRated);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("🔥 ERROR in GetTopRatedMovies: " + ex.Message);
-                Console.WriteLine("🔥 STACKTRACE: " + ex.StackTrace);
-                return StatusCode(500, new { error = ex.Message });
-            }
-        }
+     
 
         [HttpGet("MostReviewed")]
         public IActionResult GetMostReviewedMovies()
@@ -479,5 +404,6 @@ public async Task<IActionResult> UpdateUserProfile(string email, [FromBody] User
             return Ok(results);
         }
 
-}}
+}
 
+}

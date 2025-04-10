@@ -12,7 +12,7 @@ import PrivacyPage from "./pages/PrivacyPage";
 import MovieDetails from "./pages/MovieDetails";
 import HomePage from "./pages/HomePage";
 import SearchResultsPage from "./pages/SearchResultsPage";
-import SearchResultsPage from "./pages/SearchResultsPage";
+
 
 function App() {
   return (
@@ -29,7 +29,7 @@ function App() {
       <Route path="/MovieDetails/:show_id" element={<MovieDetails />} />
       <Route path="/" element={<HomePage />} />
       <Route path="/search" element={<SearchResultsPage />} />
-      <Route path="/search" element={<SearchResultsPage />} />
+      
     </Routes>
   );
 }
