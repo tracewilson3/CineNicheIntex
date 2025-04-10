@@ -9,13 +9,13 @@ interface FetchMoviesResponse {
 }
 
 
-
 export const fetchMovies = async (
   pageSize: number = 50,
   pageNumber: number = 1,
   genre?: string
 ): Promise<FetchMoviesResponse> => {
   try {
+
     const url = new URL(`${API_URL}/AllMovies`);
     url.searchParams.append("pageSize", pageSize.toString());
     url.searchParams.append("pageNumber", pageNumber.toString());
@@ -29,6 +29,7 @@ export const fetchMovies = async (
         "Content-Type": "application/json",
       },
     });
+
 
     if (!response.ok) {
       throw new Error("Failed to fetch movies");
