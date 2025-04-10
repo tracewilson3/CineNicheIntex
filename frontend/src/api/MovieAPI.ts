@@ -1,16 +1,14 @@
 // src/api/MovieAPI.ts please work
 
 import { Movie } from "../types/movie";
+import { API_URL } from "./config";
 
 interface FetchMoviesResponse {
   movies: Movie[];
   totalNumMovies?: number; // Optional unless your API sends this
 }
 
-const API_URL =
-  import.meta.env.MODE === "development"
-    ? "https://localhost:5000/Movies"
-    : "https://cineniche415backend.azurewebsites.net/Movies";
+
 
 export const fetchMovies = async (
   pageSize: number = 50,
@@ -39,6 +37,12 @@ export const fetchMovies = async (
     throw error;
   }
 };
+
+
+
+
+
+
 
 export const fetchTopRated = async (): Promise<Movie[]> => {
   try {
@@ -146,6 +150,7 @@ export const updateMovie = async (showId: string, updatedMovie: Movie): Promise<
   }
 };
 
+export const deleteMovie = async (showId: string): Promise<void> => {
 export const deleteMovie = async (showId: string): Promise<void> => {
   try {
     const response = await fetch(`${API_URL}/DeleteMovie/${showId}`, {
