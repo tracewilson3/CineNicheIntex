@@ -5,6 +5,7 @@ import FloatingFooter from "../components/FloatingFooter.tsx";
 import "./MoviesPage1.css"; // reuse same styles
 import { Movie } from "../types/movie.ts";
 import "./SearchResultsPage.css";
+import { API_URL } from "../api/config.ts";
 
 const SearchResultsPage = () => {
   const [results, setResults] = useState<Movie[]>([]);
@@ -23,8 +24,8 @@ const SearchResultsPage = () => {
 
     const fetchResults = async () => {
       try {
-        const res = await fetch(
-          `https://localhost:5000/Movies/Search?query=${encodeURIComponent(query)}`
+        const res = await fetch(API_URL+
+          `${encodeURIComponent(query)}`
         );
         const data = await res.json();
         setResults(data);
