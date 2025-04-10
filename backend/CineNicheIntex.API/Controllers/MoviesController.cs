@@ -69,9 +69,6 @@ namespace CineNicheIntex.API.Controllers
             }
         }
 
-        
-
-
 
 
         [HttpGet("AllUsers")]
