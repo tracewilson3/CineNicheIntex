@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { REC_URL } from './config';
 import { API_URL } from './config';
+import { API_URL } from './config';
 
 export async function fetchUserRecommendations(user_id: number): Promise<string[]> {
   try {
