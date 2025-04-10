@@ -6,6 +6,17 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CineNicheIntex.API.Controllers
 {
+           public class RatedMovieDto
+        {
+            public Movie movie { get; set; } = default!;
+            public double averageRating { get; set; }
+        }
+
+        public class ReviewedMovieDto
+        {
+            public Movie movie { get; set; } = default!;
+            public int reviewCount { get; set; }
+        }
     [Route("[controller]")]
     [ApiController]
     public class MoviesController : ControllerBase
@@ -17,56 +28,89 @@ namespace CineNicheIntex.API.Controllers
             _moviesContext = context;
         }
 
-        // ✅ Public: get 20 movies
+       
         [HttpGet("AllMovies")]
-        public IActionResult GetMovies()
+        public IActionResult GetMovies([FromQuery] int pageSize = 20, [FromQuery] int pageNumber = 1, [FromQuery] string? genre = null)
         {
             try
             {
-                var movies = _moviesContext.Movies.OrderByDescending(m => m.show_id).Take(20).ToList();
-                foreach (var m in movies)
+                IQueryable<Movie> query = _moviesContext.Movies;
+
+                if (!string.IsNullOrEmpty(genre))
+                {
+                    // Map the genre query to the exact property name
+                    var matchingProp = typeof(Movie)
+                        .GetProperties()
+                        .FirstOrDefault(p => string.Equals(p.Name, genre, StringComparison.OrdinalIgnoreCase));
+
+                    if (matchingProp == null)
                     {
-                        Console.WriteLine($"{m.show_id}: {m.title}");
+                        return BadRequest("Invalid genre field name.");
                     }
+
+                    // Use the correct case version of the property name
+                    query = query.Where(m => EF.Property<int>(m, matchingProp.Name) == 1);
+                }
+
+                var movies = query
+                    .OrderBy(m => m.show_id)
+                    .Skip((pageNumber - 1) * pageSize)
+                    .Take(pageSize)
+                    .ToList();
+
                 return Ok(movies);
             }
             catch (Exception ex)
             {
-                Console.WriteLine("🔥 ERROR in GetMovies: " + ex.Message);
+                Console.WriteLine("ERROR in GetMovies: " + ex.Message);
+                Console.WriteLine("STACKTRACE: " + ex.StackTrace);
                 return StatusCode(500, "Error retrieving movies.");
             }
         }
+
+
+           [HttpGet("MovieDetails/{show_id}")]
+        public IActionResult GetMovieDetails(int show_id)
+        {
+            try
+            {
+                var movie = _moviesContext.Movies.FirstOrDefault(x => x.show_id == show_id);
+                return Ok(movie);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("🔥 ERROR in GetMovies: " + ex.Message);
+                Console.WriteLine("🔥 STACKTRACE: " + ex.StackTrace);
+                return StatusCode(500, "Error retrieving movies.");
+            }
+        }
+
+    
 
         // 🔐 Admin only
         // [Authorize(Roles = "Admin")]
         [HttpGet("AllUsers")]
         public IActionResult GetUsers()
         {
-            var users = _moviesContext.Users.OrderByDescending(u => u.user_id).Take(20).ToList();
+            var users = _moviesContext.MovieUsers.OrderByDescending(u => u.user_id).Take(20).ToList();
             return Ok(users);
         }
 
-        // 🔐 Admin only
-        // [Authorize(Roles = "Admin")]
+
         [HttpGet("AllRatings")]
-        public IActionResult GetAllRatings()
+        public IActionResult GetRatings()
         {
-            var ratings = _moviesContext.Ratings.ToList();
-            Console.WriteLine($"📊 Retrieved {ratings.Count} ratings");
-
-            // Optional: Dump first few for debugging
-            foreach (var r in ratings.Take(5))
-                Console.WriteLine($"🧾 user_id={r.user_id}, show_id={r.show_id}, rating={r.rating}");
-
+            var ratings = _moviesContext.Ratings.Take(20).ToList();
             return Ok(ratings);
-}
+        }
+       
+    
 
 
-        // ✅ Public: get user by ID
-        [HttpGet("User/{id}")]
+        [HttpGet("{id}")]
         public async Task<ActionResult<User>> GetUserById(int id)
         {
-            var user = await _moviesContext.Users.FindAsync(id);
+            var user = await _moviesContext.MovieUsers.FindAsync(id);
             if (user == null)
                 return NotFound();
 
@@ -154,7 +198,7 @@ public async Task<IActionResult> AddMovie([FromBody] Movie movie)
 
             try
             {
-                _moviesContext.Users.Add(user);
+                _moviesContext.MovieUsers.Add(user);
                 await _moviesContext.SaveChangesAsync();
                 return Ok(new { message = "User added successfully", user });
             }
@@ -167,13 +211,13 @@ public async Task<IActionResult> AddMovie([FromBody] Movie movie)
         [HttpDelete("DeleteUser/{id}")]
         public async Task<IActionResult> DeleteUser(int id)
         {
-            var user = await _moviesContext.Users.FindAsync(id);
+            var user = await _moviesContext.MovieUsers.FindAsync(id);
             if (user == null)
                 return NotFound(new { message = "User not found" });
 
             try
             {
-                _moviesContext.Users.Remove(user);
+                _moviesContext.MovieUsers.Remove(user);
                 await _moviesContext.SaveChangesAsync();
                 return Ok(new { message = "User deleted successfully" });
             }
@@ -190,7 +234,7 @@ public async Task<IActionResult> AddMovie([FromBody] Movie movie)
             if (id != updatedUser.user_id)
                 return BadRequest(new { message = "User ID mismatch" });
 
-            var user = await _moviesContext.Users.FindAsync(id);
+            var user = await _moviesContext.MovieUsers.FindAsync(id);
             if (user == null)
                 return NotFound(new { message = "User not found" });
 
@@ -230,16 +274,52 @@ public async Task<IActionResult> AddMovie([FromBody] Movie movie)
 
             return Ok(new
             {
-                message = "Verification successful",
-                user_id = user.user_id
+                message = "2FA verified",
+                user_id = user.user_id,
+                name = user.name,
+                email = user.email
             });
         }
-    }
-    }
+        
+        [HttpGet("TopRated")]
+        public IActionResult GetTopRatedMovies()
+        {
+            try
+            {
+                var topRated = _moviesContext.Movies
+                    .Join(_moviesContext.Ratings,
+                        movie => movie.show_id,
+                        rating => rating.show_id,
+                        (movie, rating) => new { movie, rating })
+                    .GroupBy(m => m.movie)
+                    .Select(g => new
+                    {
+                        movie = g.Key,
+                        averageRating = g.Average(x => x.rating.rating)
+                    })
+                    .OrderByDescending(x => x.averageRating)
+                    .Take(10)
+                    .ToList();
+
+                return Ok(topRated);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("🔥 ERROR in GetTopRatedMovies: " + ex.Message);
+                Console.WriteLine("🔥 STACKTRACE: " + ex.StackTrace);
+                return StatusCode(500, new { error = ex.Message });
+            }
+        }
+
+
+
+
+    
+    
 [HttpPut("UpdateProfile/{email}")]
 public async Task<IActionResult> UpdateUserProfile(string email, [FromBody] User updatedData)
 {
-    var user = await _moviesContext.Users.FirstOrDefaultAsync(u => u.email == email);
+    var user = await _moviesContext.MovieUsers.FirstOrDefaultAsync(u => u.email == email);
     if (user == null)
         return NotFound(new { message = "User not found" });
 
@@ -271,3 +351,59 @@ public async Task<IActionResult> UpdateUserProfile(string email, [FromBody] User
         public string Email { get; set; } = string.Empty;
         public string Code { get; set; } = string.Empty;
     }
+
+
+     
+
+        [HttpGet("MostReviewed")]
+        public IActionResult GetMostReviewedMovies()
+        {
+            try
+            {
+                var mostReviewed = _moviesContext.Movies
+                    .Join(_moviesContext.Ratings,
+                        movie => movie.show_id,
+                        rating => rating.show_id,
+                        (movie, rating) => new { movie, rating })
+                    .GroupBy(m => m.movie)
+                    .Select(g => new ReviewedMovieDto
+                    {
+                        movie = g.Key,
+                        reviewCount = g.Count()
+                    })
+                    .OrderByDescending(x => x.reviewCount)
+                    .Take(10)
+                    .ToList();
+
+                return Ok(mostReviewed);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("🔥 ERROR in GetMostReviewedMovies: " + ex.Message);
+                Console.WriteLine("🔥 STACKTRACE: " + ex.StackTrace);
+                return StatusCode(500, new { error = ex.Message });
+            }
+        }
+
+        [HttpGet("Search")]
+        public IActionResult SearchMovies(string query)
+        {
+            if (string.IsNullOrWhiteSpace(query))
+                return BadRequest("Query cannot be empty.");
+
+            var lowerQuery = query.ToLower();
+
+            var results = _moviesContext.Movies
+                .Where(m =>
+                    m.title.ToLower().Contains(lowerQuery) ||
+                    (m.director != null && m.director.ToLower().Contains(lowerQuery)) ||
+                    (m.cast != null && m.cast.ToLower().Contains(lowerQuery)))
+                .Take(497)
+                .ToList();
+
+            return Ok(results);
+        }
+
+}
+
+}
