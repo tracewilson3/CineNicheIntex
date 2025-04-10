@@ -16,30 +16,35 @@ export const fetchMovies = async (
   genre?: string
 ): Promise<FetchMoviesResponse> => {
   try {
-    const response = await fetch(
-      `${API_URL}/AllMovies?pageSize=${pageSize}&pageNumber=${pageNumber}&genre=${genre}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
+    const url = new URL(`${API_URL}/AllMovies`);
+    url.searchParams.append("pageSize", pageSize.toString());
+    url.searchParams.append("pageNumber", pageNumber.toString());
+    if (genre) {
+      url.searchParams.append("genre", genre);
+    }
+
+    const response = await fetch(url.toString(), {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
 
     if (!response.ok) {
       throw new Error("Failed to fetch movies");
     }
 
-    const movies = await response.json();
+    const movies: Movie[] = await response.json();
     return {
       movies,
-      totalNumMovies: movies.length, // or however you want to calculate this
+      totalNumMovies: undefined // 👈 you can calculate or request this from backend if needed
     };
   } catch (error) {
     console.error("Error fetching movies:", error);
     throw error;
   }
 };
+
 
 
 
