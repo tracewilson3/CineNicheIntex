@@ -6,6 +6,17 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CineNicheIntex.API.Controllers
 {
+           public class RatedMovieDto
+        {
+            public Movie movie { get; set; } = default!;
+            public double averageRating { get; set; }
+        }
+
+        public class ReviewedMovieDto
+        {
+            public Movie movie { get; set; } = default!;
+            public int reviewCount { get; set; }
+        }
     [Route("[controller]")]
     [ApiController]
     public class MoviesController : ControllerBase

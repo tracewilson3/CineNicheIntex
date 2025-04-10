@@ -13,10 +13,8 @@ import MovieDetails from "./pages/MovieDetails";
 import HomePage from "./pages/HomePage";
 import SearchResultsPage from "./pages/SearchResultsPage";
 
-
 function App() {
   return (
-
     <Routes>
       <Route path="/login" element={<LoginPage />} />
       <Route path="/signup" element={<SignupPage />} />
@@ -29,6 +27,7 @@ function App() {
       <Route path="/privacy" element={<PrivacyPage />} />
       <Route path="/MovieDetails/:show_id" element={<MovieDetails />} />
       <Route path="/" element={<HomePage />} />
+      <Route path="/search" element={<SearchResultsPage />} />
       <Route path="/search" element={<SearchResultsPage />} />
     </Routes>
   );

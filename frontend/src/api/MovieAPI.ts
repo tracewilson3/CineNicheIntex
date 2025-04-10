@@ -1,10 +1,12 @@
 // src/api/MovieAPI.ts please work
 
 import { Movie } from "../types/movie";
-import { API_URL } from "./config";
 
 
-
+const API_URL =
+  import.meta.env.MODE === "development"
+    ? "https://localhost:5000/Movies"
+    : "https://cineniche415backend.azurewebsites.net/Movies";
 
 export const fetchMovies = async (
   pageSize: number = 50,
@@ -104,28 +106,28 @@ export const fetchMovieDetails = async (movie_id: string): Promise<Movie> => {
   }
 };
 
-type NewMovie = Omit<Movie, "show_id">;
+export const addMovie = async (newMovie: Movie): Promise<Movie> => {
+  try {
+    const response = await fetch(`${API_URL}/AddMovie`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(newMovie),
+    });
 
-export const addMovie = async (newMovie: NewMovie): Promise<Movie> => {
-  const response = await fetch(`${API_URL}/AddMovie`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(newMovie),
-  });
+    if (!response.ok) {
+      throw new Error("Failed to add movie");
+    }
 
-  if (!response.ok) {
-    throw new Error("Failed to add movie");
+    return await response.json();
+  } catch (error) {
+    console.error("Error adding movie:", error);
+    throw error;
   }
-
-  return await response.json();
 };
 
-export const updateMovie = async (
-  showId: number,
-  updatedMovie: Movie
-): Promise<Movie> => {
+export const updateMovie = async (showId: string, updatedMovie: Movie): Promise<Movie> => {
   try {
     const response = await fetch(`${API_URL}/UpdateMovie/${showId}`, {
       method: "PUT",
@@ -146,9 +148,9 @@ export const updateMovie = async (
   }
 };
 
-export const deleteMovie = async (show_id: number): Promise<void> => {
+export const deleteMovie = async (showId: string): Promise<void> => {
   try {
-    const response = await fetch(`${API_URL}/DeleteMovie/${show_id}`, {
+    const response = await fetch(`${API_URL}/DeleteMovie/${showId}`, {
       method: "DELETE",
     });
 
@@ -160,5 +162,3 @@ export const deleteMovie = async (show_id: number): Promise<void> => {
     throw error;
   }
 };
-
-

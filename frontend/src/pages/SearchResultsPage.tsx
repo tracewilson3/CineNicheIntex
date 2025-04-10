@@ -4,7 +4,7 @@ import CineNicheHeader from "../components/CineNicheHeader.tsx";
 import FloatingFooter from "../components/FloatingFooter.tsx";
 import "./MoviesPage1.css"; // reuse same styles
 import { Movie } from "../types/movie.ts";
-import "./SearchResultsPage.css"
+import "./SearchResultsPage.css";
 
 const SearchResultsPage = () => {
   const [results, setResults] = useState<Movie[]>([]);
@@ -23,7 +23,9 @@ const SearchResultsPage = () => {
 
     const fetchResults = async () => {
       try {
-        const res = await fetch(`https://localhost:5000/Movies/Search?query=${encodeURIComponent(query)}`);
+        const res = await fetch(
+          `https://localhost:5000/Movies/Search?query=${encodeURIComponent(query)}`
+        );
         const data = await res.json();
         setResults(data);
         setLoading(false);
@@ -52,23 +54,22 @@ const SearchResultsPage = () => {
         {!loading && results.length === 0 && <p>No results found.</p>}
 
         <div className="movie-grid">
-  {results.map((movie) => {
-    const sanitized = sanitizeTitle(movie.title);
-    return (
-      <div
-        key={movie.show_id}
-        className="movie-grid-card"
-        style={{
-          backgroundImage: `url(${ImageURL}/${encodeURIComponent(sanitized)}.jpg)`,
-        }}
-        onClick={() => navigate(`/MovieDetails/${movie.show_id}`)}
-      >
-        <div className="movie-title-overlay">{movie.title}</div>
-      </div>
-    );
-  })}
-</div>
-
+          {results.map((movie) => {
+            const sanitized = sanitizeTitle(movie.title);
+            return (
+              <div
+                key={movie.show_id}
+                className="movie-grid-card"
+                style={{
+                  backgroundImage: `url(${ImageURL}/${encodeURIComponent(sanitized)}.jpg)`,
+                }}
+                onClick={() => navigate(`/MovieDetails/${movie.show_id}`)}
+              >
+                <div className="movie-title-overlay">{movie.title}</div>
+              </div>
+            );
+          })}
+        </div>
       </div>
 
       <FloatingFooter />
