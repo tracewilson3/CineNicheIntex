@@ -17,25 +17,64 @@ namespace CineNicheIntex.API.Controllers
             _moviesContext = context;
         }
 
-        // ✅ Public: get 20 movies
+       
         [HttpGet("AllMovies")]
-        public IActionResult GetMovies()
+        public IActionResult GetMovies([FromQuery] int pageSize = 20, [FromQuery] int pageNumber = 1, [FromQuery] string? genre = null)
         {
             try
             {
-                var movies = _moviesContext.Movies.OrderByDescending(m => m.show_id).Take(20).ToList();
-                foreach (var m in movies)
+                IQueryable<Movie> query = _moviesContext.Movies;
+
+                if (!string.IsNullOrEmpty(genre))
+                {
+                    // Map the genre query to the exact property name
+                    var matchingProp = typeof(Movie)
+                        .GetProperties()
+                        .FirstOrDefault(p => string.Equals(p.Name, genre, StringComparison.OrdinalIgnoreCase));
+
+                    if (matchingProp == null)
                     {
-                        Console.WriteLine($"{m.show_id}: {m.title}");
+                        return BadRequest("Invalid genre field name.");
                     }
+
+                    // Use the correct case version of the property name
+                    query = query.Where(m => EF.Property<int>(m, matchingProp.Name) == 1);
+                }
+
+                var movies = query
+                    .OrderBy(m => m.show_id)
+                    .Skip((pageNumber - 1) * pageSize)
+                    .Take(pageSize)
+                    .ToList();
+
                 return Ok(movies);
             }
             catch (Exception ex)
             {
-                Console.WriteLine("🔥 ERROR in GetMovies: " + ex.Message);
+                Console.WriteLine("ERROR in GetMovies: " + ex.Message);
+                Console.WriteLine("STACKTRACE: " + ex.StackTrace);
                 return StatusCode(500, "Error retrieving movies.");
             }
         }
+
+
+           [HttpGet("MovieDetails/{show_id}")]
+        public IActionResult GetMovieDetails(int show_id)
+        {
+            try
+            {
+                var movie = _moviesContext.Movies.FirstOrDefault(x => x.show_id == show_id);
+                return Ok(movie);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("🔥 ERROR in GetMovies: " + ex.Message);
+                Console.WriteLine("🔥 STACKTRACE: " + ex.StackTrace);
+                return StatusCode(500, "Error retrieving movies.");
+            }
+        }
+
+    
 
         // 🔐 Admin only
         // [Authorize(Roles = "Admin")]
