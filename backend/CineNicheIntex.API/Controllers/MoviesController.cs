@@ -2,6 +2,7 @@ using CineNicheIntex.API.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 
 namespace CineNicheIntex.API.Controllers
@@ -56,9 +57,12 @@ namespace CineNicheIntex.API.Controllers
                         return BadRequest("Invalid genre field name.");
                     }
 
+
                     // Use the correct case version of the property name
                     query = query.Where(m => EF.Property<int>(m, matchingProp.Name) == 1);
                 }
+
+                var totalNumMovies = query.Count();
 
                 var movies = query
                     .OrderBy(m => m.show_id)
@@ -66,7 +70,11 @@ namespace CineNicheIntex.API.Controllers
                     .Take(pageSize)
                     .ToList();
 
-                return Ok(movies);
+                return Ok(new
+                {
+                    movies,
+                    totalNumMovies
+                });
             }
             catch (Exception ex)
             {
@@ -98,10 +106,21 @@ namespace CineNicheIntex.API.Controllers
         // 🔐 Admin only
         // [Authorize(Roles = "Admin")]
         [HttpGet("AllUsers")]
-        public IActionResult GetUsers()
+        public IActionResult GetUsers(int pageSize = 20, [FromQuery] int pageNum = 1)
         {
-            var users = _moviesContext.MovieUsers.OrderByDescending(u => u.user_id).Take(20).ToList();
-            return Ok(users);
+            var totalUsers = _moviesContext.MovieUsers.Count();
+
+            var users = _moviesContext.MovieUsers
+                    .OrderBy(m => m.user_id)
+                    .Skip((pageNum - 1) * pageSize)
+                    .Take(pageSize)
+                    .ToList();
+
+            return Ok(new
+            {
+                users,
+                totalNumUsers = totalUsers
+            });
         }
 
 

@@ -53,7 +53,7 @@ const AdminUsersPage = () => {
 
   return (
     <div className="container">
-        <AdminNavbar />
+      <AdminNavbar />
       <h1 className="mb-3">Admin - Users</h1>
 
       {!showForm && (
@@ -78,9 +78,9 @@ const AdminUsersPage = () => {
           onSuccess={() => {
             setEditingUser(null);
             fetchUsers(pageSize, pageNum).then((data) => setUsers(data.users));
-          } }
+          }}
           onCancel={() => setEditingUser(null)}
-               />
+        />
       )}
 
       <table className="table table-bordered table-striped">
@@ -98,45 +98,31 @@ const AdminUsersPage = () => {
           </tr>
         </thead>
         <tbody>
-  {users.map((u) => (
-    <tr key={u.user_id}>
-      <td>{u.user_id}</td>
-      <td>{u.name}</td>
-      <td>{u.email}</td>
-      <td>{u.age}</td>
-      <td>{u.gender}</td>
-      <td>{u.city}</td>
-      <td>{u.state}</td>
-      <td>
-        {[
-          "Netflix",
-          "Amazon_Prime",
-          "DisneyPlus",
-          "Hulu",
-          "Max",
-          "Peacock"
-        ]
-          .filter((service) => u[service as keyof User])
-          .join(", ")}
-      </td>
-      <td>
-        <button
-          className="btn btn-warning btn-sm me-2"
-          onClick={() => setEditingUser(u)}
-        >
-          Edit
-        </button>
-        <button
-          className="btn btn-danger btn-sm"
-          onClick={() => handleDelete(u.user_id)}
-        >
-          Delete
-        </button>
-      </td>
-    </tr>
-  ))}
-</tbody>
-
+          {users.map((u) => (
+            <tr key={u.user_id}>
+              <td>{u.user_id}</td>
+              <td>{u.name}</td>
+              <td>{u.email}</td>
+              <td>{u.age}</td>
+              <td>{u.gender}</td>
+              <td>{u.city}</td>
+              <td>{u.state}</td>
+              <td>
+                {["Netflix", "Amazon_Prime", "DisneyPlus", "Hulu", "Max", "Peacock"]
+                  .filter((service) => u[service as keyof User])
+                  .join(", ")}
+              </td>
+              <td>
+                <button className="btn btn-warning btn-sm me-2" onClick={() => setEditingUser(u)}>
+                  Edit
+                </button>
+                <button className="btn btn-danger btn-sm" onClick={() => handleDelete(u.user_id)}>
+                  Delete
+                </button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
       </table>
 
       <Pagination

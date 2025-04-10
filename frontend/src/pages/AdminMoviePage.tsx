@@ -50,7 +50,7 @@ const AdminMoviePage = () => {
 
   return (
     <div className="container">
-        <AdminNavbar />
+      <AdminNavbar />
       <h1 className="mb-3">Admin - Movies</h1>
 
       {!showForm && (
