@@ -8,14 +8,12 @@ interface FetchMoviesResponse {
   totalNumMovies?: number; // Optional unless your API sends this
 }
 
-
 export const fetchMovies = async (
   pageSize: number = 50,
   pageNumber: number = 1,
   genre?: string
-): Promise<FetchMoviesResponse> => {
+): Promise<{ movies: Movie[]; totalNumMovies: number }> => {
   try {
-
     const url = new URL(`${API_URL}/AllMovies`);
     url.searchParams.append("pageSize", pageSize.toString());
     url.searchParams.append("pageNumber", pageNumber.toString());
@@ -30,29 +28,20 @@ export const fetchMovies = async (
       },
     });
 
-
     if (!response.ok) {
       throw new Error("Failed to fetch movies");
     }
 
-    const movies: Movie[] = await response.json();
+    const data = await response.json();
     return {
-      movies,
-      totalNumMovies: undefined // 👈 you can calculate or request this from backend if needed
+      movies: data.movies,
+      totalNumMovies: data.totalNumMovies,
     };
   } catch (error) {
     console.error("Error fetching movies:", error);
     throw error;
   }
 };
-
-
-
-
-
-
-
-
 
 export const fetchTopRated = async (): Promise<Movie[]> => {
   try {
@@ -118,7 +107,7 @@ export const fetchMovieDetails = async (movie_id: number): Promise<Movie> => {
   }
 };
 
-export const addMovie = async (newMovie: Omit<Movie, 'show_id'>): Promise<Movie> => {
+export const addMovie = async (newMovie: Omit<Movie, "show_id">): Promise<Movie> => {
   try {
     const response = await fetch(`${API_URL}/AddMovie`, {
       method: "POST",

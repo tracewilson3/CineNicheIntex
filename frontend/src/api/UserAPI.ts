@@ -30,32 +30,26 @@ export const fetchUsers = async (
   pageNum: number
 ): Promise<FetchUsersResponse> => {
   try {
-    const response = await fetch(
-      `${API_URL}/AllUsers?userCount=${pageSize}&pageNum=${pageNum}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
+    const response = await fetch(`${API_URL}/AllUsers?pageSize=${pageSize}&pageNum=${pageNum}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
 
     if (!response.ok) {
       throw new Error("Failed to fetch users");
     }
 
-    const users = await response.json();
-    return { users }; // Adjust if your backend includes metadata like totalNumUsers
+    const data = await response.json();
+    return { users: data.users, totalNumUsers: data.totalNumUsers }; // Adjust if your backend includes metadata like totalNumUsers
   } catch (error) {
     console.error("Error fetching users:", error);
     throw error;
   }
 };
 
-export const updateUser = async (
-  user_id: number,
-  updatedUser: User
-): Promise<User> => {
+export const updateUser = async (user_id: number, updatedUser: User): Promise<User> => {
   try {
     const response = await fetch(`${API_URL}/UpdateUser/${user_id}`, {
       method: "PUT",
