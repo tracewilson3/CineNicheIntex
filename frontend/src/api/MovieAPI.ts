@@ -2,6 +2,7 @@
 
 import { Movie } from "../types/movie";
 import { API_URL } from "./config";
+
 interface FetchMoviesResponse {
   movies: Movie[];
   totalNumMovies?: number; // Optional unless your API sends this
@@ -17,8 +18,13 @@ export const fetchMovies = async (
   pageNumber: number = 1,
   genre?: string
 ): Promise<Movie[]> => {
+  pageSize: number = 50,
+  pageNumber: number = 1,
+  genre?: string
+): Promise<Movie[]> => {
   try {
     const response = await fetch(
+      `${API_URL}/AllMovies?pageSize=${pageSize}&pageNumber=${pageNumber}&genre=${genre}`,
       `${API_URL}/AllMovies?pageSize=${pageSize}&pageNumber=${pageNumber}&genre=${genre}`,
       {
         method: "GET",
@@ -99,12 +105,78 @@ export const fetchMovieDetails = async (movie_id: string): Promise<Movie> => {
 
     const movie = await response.json();
     return movie;
+    return movies;
   } catch (error) {
     console.error("Error fetching movies:", error);
     throw error;
   }
 };
-type NewMovie = Omit<Movie, "show_id">;
+
+export const fetchTopRated = async (): Promise<Movie[]> => {
+  try {
+    const response = await fetch(`${API_URL}/TopRated`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch movies");
+    }
+
+    const movies = await response.json();
+    return movies;
+  } catch (error) {
+    console.error("Error fetching movies:", error);
+    throw error;
+  }
+};
+
+export const fetchMostReviewed = async (): Promise<Movie[]> => {
+  try {
+    const response = await fetch(`${API_URL}/MostReviewed`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch movies");
+    }
+
+    const movies = await response.json();
+    return movies;
+  } catch (error) {
+    console.error("Error fetching movies:", error);
+    throw error;
+  }
+};
+
+// this is to get just one movie for the movie details page
+export const fetchMovieDetails = async (movie_id: string): Promise<Movie> => {
+  try {
+    const response = await fetch(`${API_URL}/MovieDetails/${movie_id}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch movie");
+    }
+
+    const movie = await response.json();
+    return movie;
+  } catch (error) {
+    console.error("Error fetching movies:", error);
+    throw error;
+  }
+};
+
+
 
 export const addMovie = async (newMovie: NewMovie): Promise<Movie> => {
   const response = await fetch(`${API_URL}/AddMovie`, {

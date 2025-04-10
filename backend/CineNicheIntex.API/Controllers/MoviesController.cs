@@ -74,7 +74,7 @@ namespace CineNicheIntex.API.Controllers
         [HttpGet("AllUsers")]
         public IActionResult GetUsers()
         {
-            var users = _moviesContext.Users.Take(20).ToList();
+            var users = _moviesContext.MovieUsers.OrderByDescending(u => u.user_id).Take(20).ToList();
             return Ok(users);
         }
 
@@ -92,7 +92,7 @@ namespace CineNicheIntex.API.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<User>> GetUserById(int id)
         {
-            var user = await _moviesContext.Users.FindAsync(id);
+            var user = await _moviesContext.MovieUsers.FindAsync(id);
             if (user == null)
                 return NotFound();
 
@@ -180,7 +180,7 @@ public async Task<IActionResult> AddMovie([FromBody] Movie movie)
 
             try
             {
-                _moviesContext.Users.Add(user);
+                _moviesContext.MovieUsers.Add(user);
                 await _moviesContext.SaveChangesAsync();
                 return Ok(new { message = "User added successfully", user });
             }
@@ -193,13 +193,13 @@ public async Task<IActionResult> AddMovie([FromBody] Movie movie)
         [HttpDelete("DeleteUser/{id}")]
         public async Task<IActionResult> DeleteUser(int id)
         {
-            var user = await _moviesContext.Users.FindAsync(id);
+            var user = await _moviesContext.MovieUsers.FindAsync(id);
             if (user == null)
                 return NotFound(new { message = "User not found" });
 
             try
             {
-                _moviesContext.Users.Remove(user);
+                _moviesContext.MovieUsers.Remove(user);
                 await _moviesContext.SaveChangesAsync();
                 return Ok(new { message = "User deleted successfully" });
             }
@@ -216,7 +216,7 @@ public async Task<IActionResult> AddMovie([FromBody] Movie movie)
             if (id != updatedUser.user_id)
                 return BadRequest(new { message = "User ID mismatch" });
 
-            var user = await _moviesContext.Users.FindAsync(id);
+            var user = await _moviesContext.MovieUsers.FindAsync(id);
             if (user == null)
                 return NotFound(new { message = "User not found" });
 
@@ -348,7 +348,7 @@ public async Task<IActionResult> AddMovie([FromBody] Movie movie)
 [HttpPut("UpdateProfile/{email}")]
 public async Task<IActionResult> UpdateUserProfile(string email, [FromBody] User updatedData)
 {
-    var user = await _moviesContext.Users.FirstOrDefaultAsync(u => u.email == email);
+    var user = await _moviesContext.MovieUsers.FirstOrDefaultAsync(u => u.email == email);
     if (user == null)
         return NotFound(new { message = "User not found" });
 
