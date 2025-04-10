@@ -9,7 +9,6 @@ interface FetchMoviesResponse {
 }
 
 
-
 export const fetchMovies = async (
   pageSize: number = 50,
   pageNumber: number = 1,
@@ -19,10 +18,7 @@ export const fetchMovies = async (
     const response = await fetch(
       `${API_URL}/AllMovies?pageSize=${pageSize}&pageNumber=${pageNumber}&genre=${genre}`,
       {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        credentials: "include",
       }
     );
 
