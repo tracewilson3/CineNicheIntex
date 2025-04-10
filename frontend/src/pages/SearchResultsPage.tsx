@@ -25,7 +25,7 @@ const SearchResultsPage = () => {
     const fetchResults = async () => {
       try {
         const res = await fetch(API_URL+
-          `${encodeURIComponent(query)}`
+          `https://localhost:5000/Movies/Search?query=${encodeURIComponent(query)}`
         );
         const data = await res.json();
         setResults(data);
