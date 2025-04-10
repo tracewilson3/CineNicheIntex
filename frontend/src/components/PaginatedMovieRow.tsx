@@ -71,11 +71,11 @@ const PaginatedMovieRow: React.FC<PaginatedMovieRowProps> = ({ genreTitle }) => 
 
       setMovies((prev) => {
         const seen = new Set(prev.map((m) => m.show_id));
-        const unique = data.filter((m) => !seen.has(m.show_id));
+        const unique = data.movies.filter((m) => !seen.has(m.show_id));
         return [...prev, ...unique];
       });
 
-      if (data.length < pageSize) setHasMore(false);
+      if (data.movies.length < pageSize) setHasMore(false);
       setPage(nextPage + 1); // 👈 now we explicitly control the next page
     } catch (err) {
       console.error(err);

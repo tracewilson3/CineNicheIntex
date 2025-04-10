@@ -17,16 +17,24 @@ const MovieDetails: React.FC = () => {
 
   useEffect(() => {
     if (!show_id) return;
+  
     const loadMovie = async () => {
       try {
-        const data = await fetchMovieDetails(show_id);
+        const id = parseInt(show_id); 
+        if (isNaN(id)) {
+          setError("Invalid movie ID.");
+          return;
+        }
+        const data = await fetchMovieDetails(id);
         setMovie(data);
       } catch (error) {
         setError((error as Error).message);
       }
     };
+  
     loadMovie();
   }, [show_id]);
+  
 
   if (error) return <p>Error: {error}</p>;
   if (!movie) return <p>Loading movie...</p>;
