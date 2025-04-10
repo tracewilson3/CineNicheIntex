@@ -85,13 +85,7 @@ namespace CineNicheIntex.API.Controllers
             var ratings = _moviesContext.Ratings.Take(20).ToList();
             return Ok(ratings);
         }
-        //[HttpPost("AddMovie")]
-        //public IActionResult AddMovie([FromBody] Movie newMovie)
-        //{
-        //    _moviesContext.Movies.Add(newMovie);
-        //    _moviesContext.SaveChanges();
-        //    return Ok(newMovie);
-        //}
+       
     
 
 
