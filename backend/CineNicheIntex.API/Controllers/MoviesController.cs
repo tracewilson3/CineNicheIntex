@@ -17,7 +17,7 @@ namespace CineNicheIntex.API.Controllers
             _moviesContext = context;
         }
 
-        // ✅ Public: get 20 movies
+       
         [HttpGet("AllMovies")]
         public IActionResult GetMovies([FromQuery] int pageSize = 20, [FromQuery] int pageNumber = 1, [FromQuery] string? genre = null)
         {
@@ -65,6 +65,7 @@ namespace CineNicheIntex.API.Controllers
             catch (Exception ex)
             {
                 Console.WriteLine("🔥 ERROR in GetMovies: " + ex.Message);
+                Console.WriteLine("🔥 STACKTRACE: " + ex.StackTrace);
                 return StatusCode(500, "Error retrieving movies.");
             }
         }
