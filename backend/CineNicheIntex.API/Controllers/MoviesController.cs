@@ -6,6 +6,17 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CineNicheIntex.API.Controllers
 {
+           public class RatedMovieDto
+        {
+            public Movie movie { get; set; } = default!;
+            public double averageRating { get; set; }
+        }
+
+        public class ReviewedMovieDto
+        {
+            public Movie movie { get; set; } = default!;
+            public int reviewCount { get; set; }
+        }
     [Route("[controller]")]
     [ApiController]
     public class MoviesController : ControllerBase
@@ -310,85 +321,86 @@ public async Task<IActionResult> UpdateUserProfile(string email, [FromBody] User
         public string Email { get; set; } = string.Empty;
         public string Code { get; set; } = string.Empty;
     }
-    [HttpGet("TopRated")]
-       public IActionResult GetTopRatedMovies()
-       {
-           try
-           {
-               var topRated = _moviesContext.Movies
-                   .Join(_moviesContext.Ratings,
-                       movie => movie.show_id,
-                       rating => rating.show_id,
-                       (movie, rating) => new { movie, rating })
-                   .GroupBy(m => m.movie)
-                   .Select(g => new
-                   {
-                       movie = g.Key,
-                       averageRating = g.Average(x => x.rating.rating)
-                   })
-                   .OrderByDescending(x => x.averageRating)
-                   .Take(10)
-                   .ToList();
 
 
-               return Ok(topRated);
-           }
-           catch (Exception ex)
-           {
-               Console.WriteLine("🔥 ERROR in GetTopRatedMovies: " + ex.Message);
-               Console.WriteLine("🔥 STACKTRACE: " + ex.StackTrace);
-               return StatusCode(500, new { error = ex.Message });
-           }
-       }
-[HttpGet("MostReviewed")]
-       public IActionResult GetMostReviewedMovies()
-       {
-           try
-           {
-               var mostReviewed = _moviesContext.Movies
-                   .Join(_moviesContext.Ratings,
-                       movie => movie.show_id,
-                       rating => rating.show_id,
-                       (movie, rating) => new { movie, rating })
-                   .GroupBy(m => m.movie)
-                   .Select(g => new
-                   {
-                       movie = g.Key,
-                       reviewCount = g.Count()})
-                   .OrderByDescending(x => x.reviewCount)
-                   .Take(10)
-                   .ToList();
+     [HttpGet("TopRated")]
+        public IActionResult GetTopRatedMovies()
+        {
+            try
+            {
+                var topRated = _moviesContext.Movies
+                    .Join(_moviesContext.Ratings,
+                        movie => movie.show_id,
+                        rating => rating.show_id,
+                        (movie, rating) => new { movie, rating })
+                    .GroupBy(m => m.movie)
+                    .Select(g => new RatedMovieDto
+                    {
+                        movie = g.Key,
+                        averageRating = g.Average(x => x.rating.rating)
+                    })
+                    .OrderByDescending(x => x.averageRating)
+                    .Take(10)
+                    .ToList();
 
+                return Ok(topRated);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("🔥 ERROR in GetTopRatedMovies: " + ex.Message);
+                Console.WriteLine("🔥 STACKTRACE: " + ex.StackTrace);
+                return StatusCode(500, new { error = ex.Message });
+            }
+        }
 
-               return Ok(mostReviewed);
-           }
-           catch (Exception ex)
-           {
-               Console.WriteLine("🔥 ERROR in GetMostReviewedMovies: " + ex.Message);
-               Console.WriteLine("🔥 STACKTRACE: " + ex.StackTrace);
-               return StatusCode(500, new { error = ex.Message });
-           }
-       }
-[HttpGet("Search")]
-       public IActionResult SearchMovies(string query)
-       {
-           if (string.IsNullOrWhiteSpace(query))
-               return BadRequest("Query cannot be empty.");
+        [HttpGet("MostReviewed")]
+        public IActionResult GetMostReviewedMovies()
+        {
+            try
+            {
+                var mostReviewed = _moviesContext.Movies
+                    .Join(_moviesContext.Ratings,
+                        movie => movie.show_id,
+                        rating => rating.show_id,
+                        (movie, rating) => new { movie, rating })
+                    .GroupBy(m => m.movie)
+                    .Select(g => new ReviewedMovieDto
+                    {
+                        movie = g.Key,
+                        reviewCount = g.Count()
+                    })
+                    .OrderByDescending(x => x.reviewCount)
+                    .Take(10)
+                    .ToList();
 
+                return Ok(mostReviewed);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("🔥 ERROR in GetMostReviewedMovies: " + ex.Message);
+                Console.WriteLine("🔥 STACKTRACE: " + ex.StackTrace);
+                return StatusCode(500, new { error = ex.Message });
+            }
+        }
 
-           var lowerQuery = query.ToLower();
+        [HttpGet("Search")]
+        public IActionResult SearchMovies(string query)
+        {
+            if (string.IsNullOrWhiteSpace(query))
+                return BadRequest("Query cannot be empty.");
 
+            var lowerQuery = query.ToLower();
 
-           var results = _moviesContext.Movies
-               .Where(m =>
-                   m.title.ToLower().Contains(lowerQuery) ||
-                   (m.director != null && m.director.ToLower().Contains(lowerQuery)) ||
-                   (m.cast != null && m.cast.ToLower().Contains(lowerQuery)))
-               .Take(497)
-               .ToList();
+            var results = _moviesContext.Movies
+                .Where(m =>
+                    m.title.ToLower().Contains(lowerQuery) ||
+                    (m.director != null && m.director.ToLower().Contains(lowerQuery)) ||
+                    (m.cast != null && m.cast.ToLower().Contains(lowerQuery)))
+                .Take(497)
+                .ToList();
 
-
-           return Ok(results);
-       }
+            return Ok(results);
+        }
 
 }}
+
