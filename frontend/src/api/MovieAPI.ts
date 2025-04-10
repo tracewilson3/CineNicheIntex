@@ -3,6 +3,10 @@
 import { Movie } from "../types/movie";
 import { API_URL } from "./config";
 
+interface FetchMoviesResponse {
+  movies: Movie[];
+  totalNumMovies?: number; // Optional unless your API sends this
+}
 
 
 
@@ -104,16 +108,15 @@ export const fetchMovieDetails = async (movie_id: string): Promise<Movie> => {
   }
 };
 
-type NewMovie = Omit<Movie, "show_id">;
-
-export const addMovie = async (newMovie: NewMovie): Promise<Movie> => {
-  const response = await fetch(`${API_URL}/AddMovie`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(newMovie),
-  });
+export const addMovie = async (newMovie: Movie): Promise<Movie> => {
+  try {
+    const response = await fetch(`${API_URL}/AddMovie`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(newMovie),
+    });
 
     if (!response.ok) {
       throw new Error("Failed to add movie");
@@ -147,6 +150,7 @@ export const updateMovie = async (showId: string, updatedMovie: Movie): Promise<
   }
 };
 
+export const deleteMovie = async (showId: string): Promise<void> => {
 export const deleteMovie = async (showId: string): Promise<void> => {
   try {
     const response = await fetch(`${API_URL}/DeleteMovie/${showId}`, {

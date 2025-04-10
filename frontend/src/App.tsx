@@ -12,6 +12,7 @@ import PrivacyPage from "./pages/PrivacyPage";
 import MovieDetails from "./pages/MovieDetails";
 import HomePage from "./pages/HomePage";
 import SearchResultsPage from "./pages/SearchResultsPage";
+import SearchResultsPage from "./pages/SearchResultsPage";
 
 function App() {
   return (
