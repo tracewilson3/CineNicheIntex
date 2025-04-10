@@ -33,13 +33,13 @@ const AdminMoviePage = () => {
     loadMovies();
   }, [pageSize, pageNum]);
 
-  const handleDelete = async (showId: string) => {
+  const handleDelete = async (show_id: number) => {
     const confirmDelete = window.confirm("Are you sure you want to delete this movie?");
     if (!confirmDelete) return;
 
     try {
-      await deleteMovie(showId);
-      setMovies(movies.filter((m) => m.show_id !== showId));
+      await deleteMovie(show_id);
+      setMovies(movies.filter((m) => m.show_id !== show_id));
     } catch (error) {
       alert("Failed to delete movie");
     }

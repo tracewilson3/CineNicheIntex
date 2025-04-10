@@ -1,10 +1,7 @@
 using CineNicheIntex.API.Data;
-using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Net;
-using System.Net.Mail;
-
 
 
 namespace CineNicheIntex.API.Controllers
@@ -13,13 +10,14 @@ namespace CineNicheIntex.API.Controllers
     [ApiController]
     public class MoviesController : ControllerBase
     {
-        private MoviesDbContext _moviesContext;
+        private readonly MoviesDbContext _moviesContext;
 
-        public MoviesController(MoviesDbContext temp)
+        public MoviesController(MoviesDbContext context)
         {
-            _moviesContext = temp;
+            _moviesContext = context;
         }
 
+        // ✅ Public: get 20 movies
         [HttpGet("AllMovies")]
         public IActionResult GetMovies([FromQuery] int pageSize = 20, [FromQuery] int pageNumber = 1, [FromQuery] string? genre = null)
         {
@@ -67,12 +65,14 @@ namespace CineNicheIntex.API.Controllers
             catch (Exception ex)
             {
                 Console.WriteLine("🔥 ERROR in GetMovies: " + ex.Message);
-                Console.WriteLine("🔥 STACKTRACE: " + ex.StackTrace);
                 return StatusCode(500, "Error retrieving movies.");
             }
         }
 
-    
+        
+
+
+
 
         [HttpGet("AllUsers")]
         public IActionResult GetUsers()
@@ -103,112 +103,160 @@ namespace CineNicheIntex.API.Controllers
         {
             var user = await _moviesContext.Users.FindAsync(id);
             if (user == null)
-            {
                 return NotFound();
-            }
-            return user;
+
+            return Ok(user);
         }
 
-        [HttpPost("CreateUser")]
-        public async Task<IActionResult> CreateUser([FromBody] User newUser)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            try
-            {
-                var passwordHasher = new PasswordHasher<User>();
-                newUser.hashed_password = passwordHasher.HashPassword(newUser, newUser.hashed_password);
-
-                _moviesContext.Users.Add(newUser);
-                await _moviesContext.SaveChangesAsync();
-
-                return CreatedAtAction(nameof(GetUserById), new { id = newUser.user_id }, newUser);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("ERROR during CreateUser:");
-                Console.WriteLine(ex.ToString());
-                return StatusCode(500, "An error occurred while creating the user.");
-            }
-        }
-[HttpPost("LoginUser")]
-public async Task<IActionResult> LoginUser([FromBody] LoginDto loginDto)
+        // 🔐 Admin only: Add a new movie
+        // [Authorize(Roles = "Admin")]
+        [HttpPost("AddMovie")]
+public async Task<IActionResult> AddMovie([FromBody] Movie movie)
 {
-    if (string.IsNullOrWhiteSpace(loginDto.email) || string.IsNullOrWhiteSpace(loginDto.password))
-    {
-        return BadRequest("Email and password are required.");
-    }
+    Console.WriteLine("🎬 AddMovie called. Incoming show_id: " + movie.show_id);
 
-    var user = await _moviesContext.Users.FirstOrDefaultAsync(u => u.email == loginDto.email);
+    if (!ModelState.IsValid)
+        return BadRequest(ModelState);
 
-    if (user == null)
-    {
-        return Unauthorized("Invalid email or password.");
-    }
-
-    var passwordHasher = new PasswordHasher<User>();
-    var result = passwordHasher.VerifyHashedPassword(user, user.hashed_password, loginDto.password);
-
-    if (result == PasswordVerificationResult.Failed)
-    {
-        return Unauthorized("Invalid email or password.");
-    }
-
-    // ✅ Generate and store 2FA code
-    var code = new Random().Next(100000, 999999).ToString();
-    user.TwoFactorCode = code;
-    user.TwoFactorExpiry = DateTime.UtcNow.AddMinutes(5);
-    await _moviesContext.SaveChangesAsync();
-
-    // ✅ Send 2FA code to user's email
     try
     {
-        var smtpClient = new SmtpClient("smtp.gmail.com")
-        {
-            Port = 587,
-            Credentials = new NetworkCredential("byuisteam415@gmail.com", "ykseicgpponggsdf"), // <- NO spaces
-            EnableSsl = true,
-        };
-
-        var mailMessage = new MailMessage
-        {
-            From = new MailAddress("byuisteam415@gmail.com", "CineNiche"),
-            Subject = "Your CineNiche 2FA Code",
-            Body = $"Hi {user.name},\n\nYour 2FA verification code is: {code}\n\nThis code will expire in 5 minutes.",
-            IsBodyHtml = false,
-        };
-
-        mailMessage.To.Add(user.email);
-        smtpClient.Send(mailMessage);
-        Console.WriteLine($"📬 Sent 2FA code to: {user.email}");
+        _moviesContext.Movies.Add(movie);
+        await _moviesContext.SaveChangesAsync();
+        Console.WriteLine("✅ Movie saved. Generated show_id: " + movie.show_id);
+        return Ok(new { message = "Movie added successfully", movie });
     }
     catch (Exception ex)
     {
-        Console.WriteLine("❌ Failed to send email:");
-        Console.WriteLine(ex.Message);
-        return StatusCode(500, "Failed to send verification email. Please try again later.");
+        Console.WriteLine("❌ Error adding movie: " + ex.Message);
+        return StatusCode(500, "Internal server error");
     }
-
-    return Ok(new
-    {
-        step = "2fa",
-        message = "A verification code has been sent to your email.",
-        user_id = user.user_id
-    });
-
 }
- 
-        [HttpPost("VerifyCode")]
-        public async Task<IActionResult> VerifyCode([FromBody] VerifyDto dto)
+
+        // 🔐 Admin only: Update a movie
+        // [Authorize(Roles = "Admin")]
+        [HttpPut("UpdateMovie/{id}")]
+        public async Task<IActionResult> UpdateMovie(int id, [FromBody] Movie updatedMovie)
         {
-            var user = await _moviesContext.Users.FindAsync(dto.user_id);
+            if (id != updatedMovie.show_id)
+                return BadRequest("Movie ID mismatch.");
+
+            var existingMovie = await _moviesContext.Movies.FindAsync(id);
+            if (existingMovie == null)
+                return NotFound("Movie not found.");
+
+            // Copy over updated properties
+            _moviesContext.Entry(existingMovie).CurrentValues.SetValues(updatedMovie);
+
+            try
+            {
+                await _moviesContext.SaveChangesAsync();
+                return Ok(new { message = "Movie updated successfully", movie = existingMovie });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Failed to update movie: {ex.Message}");
+            }
+        }
+
+        // 🔐 Admin only: Delete movie by ID
+        // [Authorize(Roles = "Admin")]
+        [HttpDelete("DeleteMovie/{id}")]
+        public async Task<IActionResult> DeleteMovie(int id)
+        {
+            var movie = await _moviesContext.Movies.FindAsync(id);
+            if (movie == null)
+                return NotFound(new { message = "Movie not found" });
+
+            try
+            {
+                _moviesContext.Movies.Remove(movie);
+                await _moviesContext.SaveChangesAsync();
+                return Ok(new { message = "Movie deleted successfully" });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"❌ Error deleting movie: {ex.Message}");
+                return StatusCode(500, "An error occurred while deleting the movie.");
+            }
+        }
+        // 🔐 Admin only: Add a new user
+        // [Authorize(Roles = "Admin")]
+        [HttpPost("AddUser")]
+        public async Task<IActionResult> AddUser([FromBody] User user)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            try
+            {
+                _moviesContext.Users.Add(user);
+                await _moviesContext.SaveChangesAsync();
+                return Ok(new { message = "User added successfully", user });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"❌ Error adding User: {ex.Message}");
+                return StatusCode(500, "An error occurred while adding the user.");
+            }
+        }
+        [HttpDelete("DeleteUser/{id}")]
+        public async Task<IActionResult> DeleteUser(int id)
+        {
+            var user = await _moviesContext.Users.FindAsync(id);
+            if (user == null)
+                return NotFound(new { message = "User not found" });
+
+            try
+            {
+                _moviesContext.Users.Remove(user);
+                await _moviesContext.SaveChangesAsync();
+                return Ok(new { message = "User deleted successfully" });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"❌ Error deleting user: {ex.Message}");
+                return StatusCode(500, "An error occurred while deleting the user.");
+            }
+        }
+
+        [HttpPut("UpdateUser/{id}")]
+        public async Task<IActionResult> UpdateUser(int id, [FromBody] User updatedUser)
+        {
+            if (id != updatedUser.user_id)
+                return BadRequest(new { message = "User ID mismatch" });
+
+            var user = await _moviesContext.Users.FindAsync(id);
+            if (user == null)
+                return NotFound(new { message = "User not found" });
+
+            try
+            {
+                // Update all fields
+                _moviesContext.Entry(user).CurrentValues.SetValues(updatedUser);
+                await _moviesContext.SaveChangesAsync();
+
+                return Ok(new { message = "User updated successfully", updatedUser });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"❌ Error updating user: {ex.Message}");
+                return StatusCode(500, "An error occurred while updating the user.");
+            }
+        }
+
+
+
+        // 🔐 2FA verification (non-admin)
+        [HttpPost("VerifyCode")]
+        public async Task<IActionResult> VerifyCode([FromBody] MovieVerifyDto dto)
+        {
+            var user = await _moviesContext.MovieUsers
+                .FirstOrDefaultAsync(u => u.email == dto.Email); // ✅ query by email instead of PK
+
             if (user == null)
                 return Unauthorized("Invalid user.");
 
-            if (user.TwoFactorCode != dto.code || user.TwoFactorExpiry < DateTime.UtcNow)
+            if (user.TwoFactorCode != dto.Code || user.TwoFactorExpiry < DateTime.UtcNow)
                 return Unauthorized("Invalid or expired verification code.");
 
             user.TwoFactorCode = null;
@@ -305,6 +353,40 @@ public async Task<IActionResult> LoginUser([FromBody] LoginDto loginDto)
 
 
     }
+    
+[HttpPut("UpdateProfile/{email}")]
+public async Task<IActionResult> UpdateUserProfile(string email, [FromBody] User updatedData)
+{
+    var user = await _moviesContext.Users.FirstOrDefaultAsync(u => u.email == email);
+    if (user == null)
+        return NotFound(new { message = "User not found" });
+
+    // Update allowed fields
+    user.name = updatedData.name;
+    user.phone = updatedData.phone;
+    user.gender = updatedData.gender;
+    user.city = updatedData.city;
+    user.state = updatedData.state;
+    user.age = updatedData.age;
+    user.zip = updatedData.zip;
+
+    user.Netflix = updatedData.Netflix;
+    user.Amazon_Prime = updatedData.Amazon_Prime;
+    user.DisneyPlus = updatedData.DisneyPlus;
+    user.ParamountPlus = updatedData.ParamountPlus;
+    user.Max = updatedData.Max;
+    user.Hulu = updatedData.Hulu;
+    user.AppleTVPlus = updatedData.AppleTVPlus;
+    user.Peacock = updatedData.Peacock;
+
+    await _moviesContext.SaveChangesAsync();
+
+    return Ok(new { message = "Profile updated successfully" });
 }
-
-
+ // ✅ Local DTO to avoid conflict
+    public class MovieVerifyDto
+    {
+        public string Email { get; set; } = string.Empty;
+        public string Code { get; set; } = string.Empty;
+    }
+}

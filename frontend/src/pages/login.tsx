@@ -1,18 +1,18 @@
-// src/pages/LoginPage.tsx
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './login.css';
 import logo from '../images/logo.png'
+import { AUTH_URL } from '../api/config';
 
 const moviePosters = [
-  'https://image.tmdb.org/t/p/original/qtfMr08KQsWXnCHY0a96N8NpQ2l.jpg', // Sonic 2
-  'https://image.tmdb.org/t/p/original/6DrHO1jr3qVrViUO6s6kFiAGM7.jpg', // Batman
-  'https://image.tmdb.org/t/p/original/3bhkrj58Vtu7enYsRolD1fZdja1.jpg', // The Godfather
-  'https://image.tmdb.org/t/p/original/hZkgoQYus5vegHoetLkCJzb17zJ.jpg', // Fight Club
-  'https://image.tmdb.org/t/p/original/kdPMUMJzyYAc4roD52qavX0nLIC.jpg', // The Matrix
-  'https://image.tmdb.org/t/p/original/d5NXSklXo0qyIYkgV94XAgMIckC.jpg', // Interstellar
-  'https://image.tmdb.org/t/p/original/vBZ0qvaRxqEhZwl6LWmruJqWE8Z.jpg', // Dune
-  'https://image.tmdb.org/t/p/original/jTNYlTEijZ6c8Mn4gvINOeB2HWM.jpg', // Spider-Man: No Way Home
+  'https://image.tmdb.org/t/p/original/qtfMr08KQsWXnCHY0a96N8NpQ2l.jpg',
+  'https://image.tmdb.org/t/p/original/6DrHO1jr3qVrViUO6s6kFiAGM7.jpg',
+  'https://image.tmdb.org/t/p/original/3bhkrj58Vtu7enYsRolD1fZdja1.jpg',
+  'https://image.tmdb.org/t/p/original/hZkgoQYus5vegHoetLkCJzb17zJ.jpg',
+  'https://image.tmdb.org/t/p/original/kdPMUMJzyYAc4roD52qavX0nLIC.jpg',
+  'https://image.tmdb.org/t/p/original/d5NXSklXo0qyIYkgV94XAgMIckC.jpg',
+  'https://image.tmdb.org/t/p/original/vBZ0qvaRxqEhZwl6LWmruJqWE8Z.jpg',
+  'https://image.tmdb.org/t/p/original/jTNYlTEijZ6c8Mn4gvINOeB2HWM.jpg',
 ];
 
 const LoginPage: React.FC = () => {
@@ -40,43 +40,40 @@ const LoginPage: React.FC = () => {
   useEffect(() => {
     const popupTimer = setTimeout(() => {
       setShowPopup(true);
-    }, 20000); // Show popup after 20 seconds
+    }, 20000);
 
     return () => clearTimeout(popupTimer);
   }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-  
+
     try {
-      const response = await fetch('https://localhost:5000/Movies/LoginUser', {
+      const response = await fetch(AUTH_URL+'/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ email, password }),
       });
-  
-      const responseText = await response.text();
-  
+
+      const text = await response.text();
+
       if (!response.ok) {
-        console.error("Login failed:", response.status, responseText);
-        alert(`Login failed: ${responseText}`);
+        alert(`Login failed: ${text}`);
         return;
       }
-  
-      const data = JSON.parse(responseText);
+
+      const data = JSON.parse(text);
       console.log('Login response:', data);
-  
+
       if (data.step === '2fa') {
-        // Redirect to verify page with user_id
-        navigate('/verify', { state: { user_id: data.user_id } });
+        navigate('/verify', { state: { email } });
       } else {
-        // Normal login success (no 2FA step)
         localStorage.setItem('user', JSON.stringify(data));
         navigate('/movies');
       }
-    } catch (err) {
+    } catch (err: any) {
       console.error('Login error:', err);
       if (err instanceof TypeError && err.message.includes("Failed to fetch")) {
         alert("Couldn't connect to the backend. Is it running and using HTTPS?");
@@ -85,8 +82,6 @@ const LoginPage: React.FC = () => {
       }
     }
   };
-  
-  
 
   return (
     <div className="login-background">

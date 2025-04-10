@@ -31,7 +31,7 @@ const EditMovieForm = ({ movie, onSuccess, onCancel }: EditMovieFormProps) => {
       <div className="form-grid">
         <label>
           Show ID (read-only):
-          <input type="text" name="show_id" value={formData.show_id} readOnly />
+          <input type="number" name="show_id" value={formData.show_id} readOnly />
         </label>
         <label>
           Title:

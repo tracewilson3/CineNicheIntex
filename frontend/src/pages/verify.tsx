@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import './verify.css';
+import { AUTH_URL } from '../api/config';
 
 const VerifyPage = () => {
   const [code, setCode] = useState('');
@@ -8,9 +9,9 @@ const VerifyPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const user_id = location.state?.user_id;
+  const email = location.state?.email;
 
-  if (!user_id) {
+  if (!email) {
     return (
       <div className="verify-container">
         <div className="verify-box">
@@ -28,19 +29,20 @@ const VerifyPage = () => {
     e.preventDefault();
 
     try {
-      const response = await fetch('https://localhost:5000/Movies/VerifyCode', {
+      const response = await fetch(AUTH_URL+'/verify-2fa', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ user_id, code }),
+        body: JSON.stringify({ email, code }),
       });
 
-      const data = await response.json();
+      const text = await response.text();
 
       if (!response.ok) {
-        setError(data);
+        setError(text);
         return;
       }
 
+      const data = JSON.parse(text);
       localStorage.setItem('user', JSON.stringify(data));
       navigate('/movies');
     } catch (err) {

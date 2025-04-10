@@ -8,9 +8,13 @@ namespace CineNicheIntex.API.Data;
 public class Movie
 {
     [Key]
+    [Column("show_id")] 
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+
     public int show_id { get; set; }
     [Column("type")]
     public string? type { get; set; }
+    [Required]
     public string title { get; set; }
     public string? director { get; set; }
     [Column("cast")]
