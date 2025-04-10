@@ -33,13 +33,12 @@ namespace CineNicheIntex.API.Controllers
         public IActionResult GetMovies([FromQuery] int pageSize = 20, [FromQuery] int pageNumber = 1, [FromQuery] string? genre = null)
         {
             HttpContext.Response.Cookies.Append("FavoriteGenre", "Action", new CookieOptions
-            {
-                HttpOnly = true,
-                Secure = true, //this means that the cookie will only be used over HTTPS
-                SameSite = SameSiteMode.Strict,
-                Expires = DateTime.Now.AddDays(1)
-            });
-
+          {
+              HttpOnly = true,
+              Secure = true, //this means that the cookie will only be used over HTTPS
+              SameSite = SameSiteMode.Strict,
+              Expires = DateTime.Now.AddDays(1)
+          });
             try
             {
                 IQueryable<Movie> query = _moviesContext.Movies;
