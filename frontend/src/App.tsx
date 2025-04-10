@@ -13,6 +13,7 @@ import MovieDetails from "./pages/MovieDetails";
 import HomePage from "./pages/HomePage";
 import SearchResultsPage from "./pages/SearchResultsPage";
 
+
 function App() {
   return (
     <Routes>
@@ -28,6 +29,7 @@ function App() {
       <Route path="/MovieDetails/:show_id" element={<MovieDetails />} />
       <Route path="/" element={<HomePage />} />
       <Route path="/search" element={<SearchResultsPage />} />
+      
     </Routes>
   );
 }

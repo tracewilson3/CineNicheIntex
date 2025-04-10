@@ -8,6 +8,7 @@ interface FetchMoviesResponse {
   totalNumMovies?: number; // Optional unless your API sends this
 }
 
+
 export const fetchMovies = async (
   pageSize: number = 50,
   pageNumber: number = 1,
@@ -32,6 +33,12 @@ export const fetchMovies = async (
     throw error;
   }
 };
+
+
+
+
+
+
 
 export const fetchTopRated = async (): Promise<Movie[]> => {
   try {

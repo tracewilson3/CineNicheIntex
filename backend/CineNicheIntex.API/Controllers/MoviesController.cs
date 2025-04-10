@@ -104,24 +104,18 @@ namespace CineNicheIntex.API.Controllers
             return Ok(users);
         }
 
-        // 🔐 Admin only
-        // [Authorize(Roles = "Admin")]
+
         [HttpGet("AllRatings")]
-        public IActionResult GetAllRatings()
+        public IActionResult GetRatings()
         {
-            var ratings = _moviesContext.Ratings.ToList();
-            Console.WriteLine($"📊 Retrieved {ratings.Count} ratings");
-
-            // Optional: Dump first few for debugging
-            foreach (var r in ratings.Take(5))
-                Console.WriteLine($"🧾 user_id={r.user_id}, show_id={r.show_id}, rating={r.rating}");
-
+            var ratings = _moviesContext.Ratings.Take(20).ToList();
             return Ok(ratings);
-}
+        }
+       
+    
 
 
-        // ✅ Public: get user by ID
-        [HttpGet("User/{id}")]
+        [HttpGet("{id}")]
         public async Task<ActionResult<User>> GetUserById(int id)
         {
             var user = await _moviesContext.MovieUsers.FindAsync(id);
@@ -288,10 +282,46 @@ public async Task<IActionResult> AddMovie([FromBody] Movie movie)
 
             return Ok(new
             {
-                message = "Verification successful",
-                user_id = user.user_id
+                message = "2FA verified",
+                user_id = user.user_id,
+                name = user.name,
+                email = user.email
             });
         }
+        
+        [HttpGet("TopRated")]
+        public IActionResult GetTopRatedMovies()
+        {
+            try
+            {
+                var topRated = _moviesContext.Movies
+                    .Join(_moviesContext.Ratings,
+                        movie => movie.show_id,
+                        rating => rating.show_id,
+                        (movie, rating) => new { movie, rating })
+                    .GroupBy(m => m.movie)
+                    .Select(g => new
+                    {
+                        movie = g.Key,
+                        averageRating = g.Average(x => x.rating.rating)
+                    })
+                    .OrderByDescending(x => x.averageRating)
+                    .Take(10)
+                    .ToList();
+
+                return Ok(topRated);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("🔥 ERROR in GetTopRatedMovies: " + ex.Message);
+                Console.WriteLine("🔥 STACKTRACE: " + ex.StackTrace);
+                return StatusCode(500, new { error = ex.Message });
+            }
+        }
+
+
+
+
     
     
 [HttpPut("UpdateProfile/{email}")]
@@ -331,35 +361,7 @@ public async Task<IActionResult> UpdateUserProfile(string email, [FromBody] User
     }
 
 
-     [HttpGet("TopRated")]
-        public IActionResult GetTopRatedMovies()
-        {
-            try
-            {
-                var topRated = _moviesContext.Movies
-                    .Join(_moviesContext.Ratings,
-                        movie => movie.show_id,
-                        rating => rating.show_id,
-                        (movie, rating) => new { movie, rating })
-                    .GroupBy(m => m.movie)
-                    .Select(g => new RatedMovieDto
-                    {
-                        movie = g.Key,
-                        averageRating = g.Average(x => x.rating.rating)
-                    })
-                    .OrderByDescending(x => x.averageRating)
-                    .Take(10)
-                    .ToList();
-
-                return Ok(topRated);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("🔥 ERROR in GetTopRatedMovies: " + ex.Message);
-                Console.WriteLine("🔥 STACKTRACE: " + ex.StackTrace);
-                return StatusCode(500, new { error = ex.Message });
-            }
-        }
+     
 
         [HttpGet("MostReviewed")]
         public IActionResult GetMostReviewedMovies()
@@ -410,5 +412,6 @@ public async Task<IActionResult> UpdateUserProfile(string email, [FromBody] User
             return Ok(results);
         }
 
-}}
+}
 
+}

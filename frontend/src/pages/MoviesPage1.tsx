@@ -51,14 +51,20 @@ const MoviesPage1 = () => {
         {movieList.map((m, i) => {
           const movie = m.movie || m;
           const sanitized = sanitizeTitle(movie.title);
-
+          const rankNumberLeft = i + 1 >= 10 ? "-4rem" : "-2.5rem"; // ⬅️ Shift left for double digits
+  
           return (
             <div
               className="ranked-card"
               key={movie.show_id}
               onClick={() => navigate(`/MovieDetails/${movie.show_id}`)}
             >
-              <div className="rank-number">{i + 1}</div>
+              <div
+                className="rank-number"
+                style={{ left: rankNumberLeft }} // 🛠 dynamic left shift
+              >
+                {i + 1}
+              </div>
               <div
                 className="poster"
                 style={{
@@ -71,41 +77,45 @@ const MoviesPage1 = () => {
       </div>
     </div>
   );
+  
 
   const genreList = [
     "Action",
-    "Adventure",
-    "Anime Series / International TV Shows",
-    "British TV Shows / Docuseries / International TV Shows",
-    "Children",
     "Comedies",
-    "Comedies / Dramas / International Movies",
-    "Comedies / International Movies",
-    "Comedies / Romantic Movies",
-    "Crime TV Shows / Docuseries",
-    "Documentaries",
-    "Documentaries / International Movies",
-    "Docuseries",
     "Dramas",
-    "Dramas / International Movies",
-    "Dramas / Romantic Movies",
+    "Thrillers",
     "Family Movies",
-    "Fantasy",
+    "Kids TV",
     "Horror Movies",
+    "Fantasy",
+    "Crime TV Shows / Docuseries",
+    "TV Dramas",
+    "TV Action",
+    "Comedies / Romantic Movies",
+    "Dramas / Romantic Movies",
+    "Adventure",
+    "Comedies / International Movies",
+    "Dramas / International Movies",
+    "Documentaries",
+    "Docuseries",
+    "Reality TV",
+    "Comedies / Dramas / International Movies",
+    "Documentaries / International Movies",
     "International Movies / Thrillers",
     "International TV Shows / Romantic TV Shows / TV Dramas",
-    "Kids TV",
-    "Language TV Shows",
-    "Musicals",
-    "Nature TV",
-    "Reality TV",
-    "Spirituality",
-    "TV Action",
+    "Anime Series / International TV Shows",
+    "British TV Shows / Docuseries / International TV Shows",
     "TV Comedies",
-    "TV Dramas",
     "Talk Shows / TV Comedies",
-    "Thrillers",
+    "Musicals",
+    "Language TV Shows",
+    "Children",
+    "Nature TV",
+    "Spirituality",
   ];
+  
+  
+  
 
   return (
     <div className="app dark-background">
@@ -121,7 +131,7 @@ const MoviesPage1 = () => {
       </CookieConsent>
 
       {renderRankedCarousel("Popular Movies", mostReviewedMovies)}
-
+      
       <div className="section">
         <h2>Recommended For You</h2>
         <div className="carousel">
@@ -141,14 +151,17 @@ const MoviesPage1 = () => {
         </div>
       </div>
 
-      {renderRankedCarousel("High Rated Movies", topRatedMovies)}
+      {renderRankedCarousel("Top 10 Highest Ratings", topRatedMovies)}
 
       {genreList.map((genre, index) => (
         <PaginatedMovieRow key={index} genreTitle={genre} />
       ))}
 
-      <InfiniteScrollGrid />
       <FloatingFooter />
+      <br />
+      <br />
+      <br />
+      <br />
     </div>
   );
 };
