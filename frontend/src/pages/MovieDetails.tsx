@@ -6,9 +6,10 @@ import CineNicheHeader from "../components/CineNicheHeader";
 import { Movie } from "../types/movie";
 import { fetchMovieDetails } from "../api/MovieAPI";
 import { useParams } from "react-router-dom";
+import FloatingFooter from "../components/FloatingFooter";
 
 const MovieDetails: React.FC = () => {
-  const { show_id } = useParams<{ show_id: string }>(); // get it from the URL
+  const { show_id } = useParams<{ show_id: string }>();
   const [movie, setMovie] = useState<Movie>();
   const [error, setError] = useState<string | null>(null);
   const placeholderImage = "https://placehold.co/150x225?text=Movie";
@@ -81,51 +82,57 @@ const MovieDetails: React.FC = () => {
   return (
     <>
       <CineNicheHeader />
-      <div className="container-fluid w-100 app dark-background text-white min-vh-100">
-        <div className="row align-items-center">
+      <div className="container-fluid w-100 app dark-background text-white min-vh-100 p-5">
+        <div className="row">
           <div className="col-md-4 text-center mb-4">
             <img
               src={`${ImageURL}/${encodeURIComponent(sanitized)}.jpg`}
               alt={movie.title}
               className="img-fluid rounded shadow"
-              style={{ width: "300px", height: "450px" }}
+              style={{ width: "330px", height: "440px" }}
             />
+            
           </div>
-          <div className="col-md-8">
-            <h1 className="display-4">{movie.title}</h1>
-            <p className="lead mt-3">{movie.rating}</p>
-            <p className="lead mt-3">{movie.description}</p>
+          <div className="col-md-8 d-flex flex-column justify-content-center">
+          <div className="d-flex justify-content-end mb-3">
+  <StarRating onRate={(value) => console.log(`Rated: ${value} stars`)} />
+</div>
 
-            {/* get the genres */}
+            <h1 className="display-3 fw-bold" style={{ fontFamily: "'Bebas Neue', sans-serif" }}>
+              {movie.title}
+            </h1>
+
+            <h3 style={{ fontFamily: "'Bebas Neue', sans-serif" }}>{movie.rating}</h3>
+            <p className="fs-5 lh-base">{movie.description}</p>
+
+            <p className="fs-5 mt-2">
+            <strong>Starring:</strong>{" "}
+            {movie.cast
+              ?.split(" ")
+              .reduce((acc: string[], curr, i, arr) => {
+                if (i % 2 === 0) acc.push(curr + " " + (arr[i + 1] || ""));
+                return acc;
+              }, [])
+              .join(" - ")}
+          </p>
+
+            <p className="fs-5 mt-3">
+              <strong>Director:</strong> {movie.director} &nbsp;&mdash;&nbsp;
+              <strong>Duration:</strong> {movie.duration} &nbsp;&mdash;&nbsp;
+              <strong>Released:</strong> {movie.release_year}
+            </p>
+
             {genres.length > 0 && (
-              <p className="lead mt-3">
+              <p className="fs-5 mt-3">
                 <strong>Genres:</strong> {genres.join(", ")}
               </p>
             )}
 
-            <p className="lead mt-3">
-              <strong>Cast:</strong> {movie.cast}
-            </p>
-            <p className="lead mt-3">
-              <strong>Director:</strong> {movie.director}
-            </p>
-            <p className="lead mt-3">
-              <strong>Duration:</strong> {movie.duration}
-            </p>
-            <p className="lead mt-3">
-              <strong>Released: </strong>
-              {movie.release_year}
-            </p>
-            {}
           </div>
         </div>
 
-        <div className="text-center my-4">
-          <StarRating onRate={(value) => console.log(`Rated: ${value} stars`)} />
-        </div>
-
         <div className="section">
-          <h2>You Might Also Like...</h2>
+          <h2 className="mb-3">You Might Also Like...</h2>
           <div className="carousel">
             {[...Array(20)].map((_, i) => (
               <div
@@ -137,6 +144,7 @@ const MovieDetails: React.FC = () => {
           </div>
         </div>
       </div>
+      <FloatingFooter/>
     </>
   );
 };
