@@ -8,7 +8,7 @@ import CineNicheHeader from "../components/CineNicheHeader";
 import { fetchMostReviewed, fetchTopRated } from "../api/MovieAPI.ts";
 import { Movie } from "../types/movie.ts";
 import { useNavigate } from "react-router-dom";
-import CookieConsent, { Cookies } from "react-cookie-consent";
+import { CookieConsent }from "react-cookie-consent";
 
 const MoviesPage1 = () => {
   const [movies] = useState<Movie[]>([]);
@@ -121,8 +121,8 @@ const MoviesPage1 = () => {
     <div className="app dark-background">
       <CineNicheHeader />
 
-      {/* Cookie consent notification */}
-      <CookieConsent
+            {/* Cookie consent notification */}
+            <CookieConsent
         location="top"
         style={{ background: "black" }}
         buttonStyle={{ background: "white", color: "black", fontSize: "13px" }}
