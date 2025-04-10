@@ -8,6 +8,7 @@ import CineNicheHeader from "../components/CineNicheHeader";
 import { fetchMostReviewed, fetchTopRated } from "../api/MovieAPI.ts";
 import { Movie } from "../types/movie.ts";
 import { useNavigate } from "react-router-dom";
+import CookieConsent, { Cookies } from "react-cookie-consent";
 
 const MoviesPage1 = () => {
   const [movies, setMovies] = useState<Movie[]>([]);
@@ -109,6 +110,15 @@ const MoviesPage1 = () => {
   return (
     <div className="app dark-background">
       <CineNicheHeader />
+
+      {/* Cookie consent notification */}
+      <CookieConsent
+        location="top"
+        style={{ background: "black" }}
+        buttonStyle={{ background: "white", color: "black", fontSize: "13px" }}
+      >
+        This website uses cookies to enhance the user experience.
+      </CookieConsent>
 
       {renderRankedCarousel("Popular Movies", mostReviewedMovies)}
 
