@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { REC_URL } from './config';
+import { API_URL } from './config';
 
 export async function fetchUserRecommendations(user_id: number): Promise<string[]> {
   try {
@@ -15,3 +16,15 @@ export async function fetchUserRecommendations(user_id: number): Promise<string[
     return [];
   }
 }
+
+export async function fetchUserIdByEmail(email: string): Promise<number | null> {
+    try {
+      const response = await axios.get(`${API_URL}/id-by-email`, {
+        params: { email },
+      });
+      return response.data.userId ?? null;
+    } catch (err) {
+      console.error("Failed to get user ID for email:", err);
+      return null;
+    }
+  }

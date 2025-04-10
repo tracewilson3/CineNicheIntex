@@ -279,7 +279,18 @@ public async Task<IActionResult> AddMovie([FromBody] Movie movie)
             }
         }
 
+        [HttpGet("id-by-email")]
+            public async Task<IActionResult> GetUserIdByEmail([FromQuery] string email)
+            {
+                var user = await _moviesContext.MovieUsers
+                    .Where(u => u.email == email)
+                    .FirstOrDefaultAsync();
 
+                if (user == null)
+                    return NotFound();
+
+                return Ok(new { userId = user.user_id }); // or whatever your PK is named
+            }
 
         // 🔐 2FA verification (non-admin)
         [HttpPost("VerifyCode")]

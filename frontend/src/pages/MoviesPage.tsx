@@ -29,6 +29,12 @@ function MoviesPage() {
         >
           Real Movies Page
         </button>
+        <button
+          className="btn btn-primary w-100"
+          onClick={() => navigate(`/recommendations`)}
+        >
+          Recommendations
+        </button>
       </div>
 
       <div className="row">
