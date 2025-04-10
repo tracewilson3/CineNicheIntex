@@ -23,6 +23,12 @@ function MoviesPage() {
         >
           Admin Page
         </button>
+        <button
+          className="btn btn-primary w-100"
+          onClick={() => navigate(`/movies1`)}
+        >
+          Real Movies Page
+        </button>
       </div>
 
       <div className="row">

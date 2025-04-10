@@ -13,26 +13,40 @@ export const fetchMovies = async (
   pageSize: number = 50,
   pageNumber: number = 1,
   genre?: string
-): Promise<Movie[]> => {
+): Promise<FetchMoviesResponse> => {
   try {
-    const response = await fetch(
-      `${API_URL}/AllMovies?pageSize=${pageSize}&pageNumber=${pageNumber}&genre=${genre}`,
-      {
-        credentials: "include",
-      }
-    );
+
+    const url = new URL(`${API_URL}/AllMovies`);
+    url.searchParams.append("pageSize", pageSize.toString());
+    url.searchParams.append("pageNumber", pageNumber.toString());
+    if (genre) {
+      url.searchParams.append("genre", genre);
+    }
+
+    const response = await fetch(url.toString(), {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
 
     if (!response.ok) {
       throw new Error("Failed to fetch movies");
     }
 
-    const movies = await response.json();
-    return movies;
+    const movies: Movie[] = await response.json();
+    return {
+      movies,
+      totalNumMovies: undefined // 👈 you can calculate or request this from backend if needed
+    };
   } catch (error) {
     console.error("Error fetching movies:", error);
     throw error;
   }
 };
+
+
 
 
 
@@ -83,7 +97,7 @@ export const fetchMostReviewed = async (): Promise<Movie[]> => {
 };
 
 // this is to get just one movie for the movie details page
-export const fetchMovieDetails = async (movie_id: string): Promise<Movie> => {
+export const fetchMovieDetails = async (movie_id: number): Promise<Movie> => {
   try {
     const response = await fetch(`${API_URL}/MovieDetails/${movie_id}`, {
       method: "GET",
@@ -104,7 +118,7 @@ export const fetchMovieDetails = async (movie_id: string): Promise<Movie> => {
   }
 };
 
-export const addMovie = async (newMovie: Movie): Promise<Movie> => {
+export const addMovie = async (newMovie: Omit<Movie, 'show_id'>): Promise<Movie> => {
   try {
     const response = await fetch(`${API_URL}/AddMovie`, {
       method: "POST",
@@ -125,7 +139,7 @@ export const addMovie = async (newMovie: Movie): Promise<Movie> => {
   }
 };
 
-export const updateMovie = async (showId: string, updatedMovie: Movie): Promise<Movie> => {
+export const updateMovie = async (showId: number, updatedMovie: Movie): Promise<Movie> => {
   try {
     const response = await fetch(`${API_URL}/UpdateMovie/${showId}`, {
       method: "PUT",
@@ -146,7 +160,7 @@ export const updateMovie = async (showId: string, updatedMovie: Movie): Promise<
   }
 };
 
-export const deleteMovie = async (showId: string): Promise<void> => {
+export const deleteMovie = async (showId: number): Promise<void> => {
   try {
     const response = await fetch(`${API_URL}/DeleteMovie/${showId}`, {
       method: "DELETE",

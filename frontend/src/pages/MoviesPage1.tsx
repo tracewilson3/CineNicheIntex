@@ -2,7 +2,7 @@ import "../components/MovieRow.css";
 import { useEffect, useState } from "react";
 import "./MoviesPage1.css";
 import PaginatedMovieRow from "../components/PaginatedMovieRow";
-import InfiniteScrollGrid from "../components/InfiniteScrollRows";
+// import InfiniteScrollGrid from "../components/InfiniteScrollRows";
 import FloatingFooter from "../components/FloatingFooter";
 import CineNicheHeader from "../components/CineNicheHeader";
 import { fetchMostReviewed, fetchTopRated } from "../api/MovieAPI.ts";
@@ -11,7 +11,7 @@ import { useNavigate } from "react-router-dom";
 import CookieConsent, { Cookies } from "react-cookie-consent";
 
 const MoviesPage1 = () => {
-  const [movies, setMovies] = useState<Movie[]>([]);
+  const [movies] = useState<Movie[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [topRatedMovies, setTopRatedMovies] = useState<any[]>([]);
   const [mostReviewedMovies, setMostReviewedMovies] = useState<any[]>([]);
