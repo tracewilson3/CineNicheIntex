@@ -16,6 +16,10 @@ string moviesDbPath = builder.Environment.IsDevelopment()
     ? Path.Combine(Directory.GetCurrentDirectory(), "Movies.db")
     : Path.Combine("D:\\home\\data", "Movies.db");
 
+
+builder.Services.AddSingleton(new UserRecommendationService("Data/splash_collab.csv"));
+
+
 // 🔧 Configure EF Core contexts
 try
 {

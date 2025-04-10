@@ -8,5 +8,10 @@ window.location.hostname === "localhost"
     ? "https://localhost:5000/auth"
     : "https://cineniche415backend.azurewebsites.net/auth";
 
+export const REC_URL =
+window.location.hostname === "localhost"
+    ? "https://localhost:5000/api"
+    : "https://cineniche415backend.azurewebsites.net/api";
+
 
     
