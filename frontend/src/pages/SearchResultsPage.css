@@ -4,7 +4,6 @@
   gap: 1rem;
   padding: 1rem 2rem;
 }
-
 .movie-grid-card {
   background-size: cover;
   background-position: center;
@@ -15,11 +14,9 @@
   position: relative;
   transition: transform 0.2s ease;
 }
-
 .movie-grid-card:hover {
   transform: scale(1.05);
 }
-
 .movie-title-overlay {
   position: absolute;
   bottom: 0;
@@ -27,8 +24,15 @@
   background: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent);
   color: white;
   text-align: center;
-  padding: 0.3rem;
+  padding: 0.4rem 0.6rem;
   font-size: 0.9rem;
+  font-weight: 500;
   border-bottom-left-radius: 8px;
   border-bottom-right-radius: 8px;
+  z-index: 2;
+  opacity: 0; /* :point_left: start invisible */
+  transition: opacity 0.3s ease;
+}
+.movie-grid-card:hover .movie-title-overlay {
+  opacity: 1; /* :point_left: fade in on hover */
 }

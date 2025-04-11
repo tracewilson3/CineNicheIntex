@@ -3,11 +3,10 @@ import { Movie } from "../types/movie";
 import { fetchMovies } from "../api/MovieAPI";
 import { useNavigate } from "react-router-dom";
 import "./PaginatedMovieRow.css";
-
+import "../pages/SearchResultsPage.css";
 interface PaginatedMovieRowProps {
   genreTitle: string;
 }
-
 const PaginatedMovieRow: React.FC<PaginatedMovieRowProps> = ({ genreTitle }) => {
   const [movies, setMovies] = useState<Movie[]>([]);
   const [page, setPage] = useState(1);
@@ -15,7 +14,6 @@ const PaginatedMovieRow: React.FC<PaginatedMovieRowProps> = ({ genreTitle }) => 
   const [hasMore, setHasMore] = useState(true);
   const loader = useRef<HTMLDivElement | null>(null);
   const navigate = useNavigate();
-
   const genreFieldMap: Record<string, string> = {
     Action: "action",
     Adventure: "adventure",
@@ -52,60 +50,49 @@ const PaginatedMovieRow: React.FC<PaginatedMovieRowProps> = ({ genreTitle }) => 
     "Talk Shows / TV Comedies": "talk_Shows_TV_Comedies",
     Thrillers: "thrillers",
   };
-
   const genreKey = genreFieldMap[genreTitle];
   const ImageURL = "https://cinenichemovieposters.blob.core.windows.net/movieposters";
-
   const sanitizeTitle = (title: string) => {
     return title.replace(/[#().:'`!&"?-]/g, "");
   };
-
   const pageSize = 30;
-
   const loadMore = async (nextPage: number) => {
     if (!hasMore || loading || !genreKey) return;
-
     setLoading(true);
     try {
       const data = await fetchMovies(pageSize, nextPage, genreKey);
-
       setMovies((prev) => {
         const seen = new Set(prev.map((m) => m.show_id));
         const unique = data.movies.filter((m) => !seen.has(m.show_id));
         return [...prev, ...unique];
       });
-
       if (data.movies.length < pageSize) setHasMore(false);
-      setPage(nextPage + 1); // 👈 now we explicitly control the next page
+      setPage(nextPage + 1); // :point_left: now we explicitly control the next page
     } catch (err) {
       console.error(err);
     } finally {
       setLoading(false);
     }
   };
-
-  // 👇 ONLY run the first load once on mount
+  // :point_down: ONLY run the first load once on mount
   useEffect(() => {
     loadMore(1);
   }, []);
-
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting && !loading && hasMore) {
-          loadMore(page); // 👈 now it fetches *current page only once*
+          loadMore(page); // :point_left: now it fetches *current page only once*
         }
       },
       { threshold: 1.0 }
     );
-
     const current = loader.current;
     if (current) observer.observe(current);
     return () => {
       if (current) observer.unobserve(current);
     };
   }, [loader.current, loading, hasMore, page]);
-
   return (
     <div className="section">
       <h2>{genreTitle}</h2>
@@ -120,7 +107,10 @@ const PaginatedMovieRow: React.FC<PaginatedMovieRowProps> = ({ genreTitle }) => 
                 backgroundImage: `url(${ImageURL}/${encodeURIComponent(sanitized)}.jpg)`,
               }}
               onClick={() => navigate(`/MovieDetails/${movie.show_id}`)}
-            />
+            >
+              {" "}
+              <div className="movie-title-overlay">{movie.title}</div>
+            </div>
           );
         })}
         <div ref={loader} className="movie-row-card loader-sentinel" />
@@ -128,5 +118,4 @@ const PaginatedMovieRow: React.FC<PaginatedMovieRowProps> = ({ genreTitle }) => 
     </div>
   );
 };
-
 export default PaginatedMovieRow;
