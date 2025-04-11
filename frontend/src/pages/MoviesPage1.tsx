@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 import "./SearchResultsPage.css";
 import { fetchUserIdByEmail, fetchUserRecommendations } from "../api/RecommendationAPI.ts";
 import { fetchMultipleMovieDetails } from "../api/MovieAPI.ts";
+import CookieConsent from "react-cookie-consent";
 
 const MoviesPage1 = () => {
   
@@ -169,6 +170,17 @@ const MoviesPage1 = () => {
   return (
     <div className="app dark-background">
       <CineNicheHeader />
+
+      {/* Cookie consent notification */}
+      <CookieConsent
+        location="top"
+        style={{ background: "black" }}
+        buttonStyle={{ background: "white", color: "black", fontSize: "13px" }}
+      >
+        This website uses cookies to enhance the user experience.
+      </CookieConsent>
+
+
       {renderRankedCarousel("Top 10 Most Popular", mostReviewedMovies)}
       
       {recommendedMovies.length > 0 && (

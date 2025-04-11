@@ -36,3 +36,7 @@
 .movie-grid-card:hover .movie-title-overlay {
   opacity: 1; /* :point_left: fade in on hover */
 }
+
+.movie-row-card:hover .movie-title-overlay {
+  opacity: 1; /* :point_left: fade in on hover */
+}

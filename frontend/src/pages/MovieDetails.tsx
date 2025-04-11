@@ -10,7 +10,7 @@ import FloatingFooter from "../components/FloatingFooter";
 import { fetchShowRecommendations } from "../api/RecommendationAPI";
 import { useNavigate } from "react-router-dom";
 import { fetchUserIdByEmail } from "../api/RecommendationAPI";
-
+import"./SearchResultsPage.css"
 
 const MovieDetails: React.FC = () => {
   const { show_id } = useParams<{ show_id: string }>();
@@ -145,7 +145,9 @@ const MovieDetails: React.FC = () => {
                 style={{
                   backgroundImage: `url(${ImageURL}/${encodeURIComponent(sanitized)}.jpg)`,
                 }}
-              ></div>
+                
+              ><div className="movie-title-overlay">{movie.title}</div>
+              </div>
             </div>
           );
         })}
