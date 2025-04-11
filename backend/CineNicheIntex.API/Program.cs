@@ -3,13 +3,25 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using CineNicheIntex.API.Data;
 
+try
+{
+    var logPath = Path.Combine(AppContext.BaseDirectory, "startup.txt");
+    File.AppendAllText(logPath, $"✅ App hit Program.cs at {DateTime.UtcNow}\n");
+}
+catch (Exception ex)
+{
+    File.AppendAllText("C:\\home\\site\\wwwroot\\startup-error.txt", ex.ToString());
+}
+
 var builder = WebApplication.CreateBuilder(args);
 builder.Logging.AddConsole();
 
+var env = builder.Environment;
+
 // 🌐 Configure Identity DB path
-string identityDbPath = builder.Environment.IsDevelopment()
-    ? Path.Combine(Directory.GetCurrentDirectory(), "identity.db")
-    : Path.Combine("D:\\home\\data", "identity.db");
+var identityDbPath = Path.Combine(env.ContentRootPath, "identity.db");
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseSqlite($"Data Source={identityDbPath}"));
 
 // 🌐 Configure Movies DB path
 string moviesDbPath = builder.Environment.IsDevelopment()
@@ -18,7 +30,7 @@ string moviesDbPath = builder.Environment.IsDevelopment()
 
 
 
-var env = builder.Environment;
+
 var csvPath = Path.Combine(env.ContentRootPath, "Data", "splash_collab.csv");
 builder.Services.AddSingleton(new UserRecommendationService(csvPath));
 
@@ -210,7 +222,9 @@ try
     File.AppendAllText(startupLogPath, $"App started at {DateTime.UtcNow}\n");
     var size = new FileInfo(moviesDbPath).Length;
     File.AppendAllText(startupLogPath, $"🎞️ Movies.db size: {size} bytes\n");
+    
     File.AppendAllText(startupLogPath, $"📍 Movies path: {moviesDbPath}\n");
+    File.AppendAllText(startupLogPath, $"📍 Identity path: {identityDbPath}\n");
     File.AppendAllText(startupLogPath, $"📍 CSV path: {showcsvPath}\n");
     
     
