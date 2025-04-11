@@ -34,13 +34,12 @@ namespace CineNicheIntex.API.Controllers
         public IActionResult GetMovies([FromQuery] int pageSize = 20, [FromQuery] int pageNumber = 1, [FromQuery] string? genre = null)
         {
             HttpContext.Response.Cookies.Append("FavoriteGenre", "Action", new CookieOptions
-            {
-                HttpOnly = true,
-                Secure = true, //this means that the cookie will only be used over HTTPS
-                SameSite = SameSiteMode.Strict,
-                Expires = DateTime.Now.AddDays(1)
-            });
-
+          {
+              HttpOnly = true,
+              Secure = true, //this means that the cookie will only be used over HTTPS
+              SameSite = SameSiteMode.Strict,
+              Expires = DateTime.Now.AddDays(1)
+          });
             try
             {
                 IQueryable<Movie> query = _moviesContext.Movies;
@@ -216,7 +215,7 @@ public async Task<IActionResult> AddMovie([FromBody] Movie movie)
             }
         }
         // 🔐 Admin only: Add a new user
-        // [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         [HttpPost("AddUser")]
         public async Task<IActionResult> AddUser([FromBody] User user)
         {
@@ -280,7 +279,18 @@ public async Task<IActionResult> AddMovie([FromBody] Movie movie)
             }
         }
 
+        [HttpGet("id-by-email")]
+            public async Task<IActionResult> GetUserIdByEmail([FromQuery] string email)
+            {
+                var user = await _moviesContext.MovieUsers
+                    .Where(u => u.email == email)
+                    .FirstOrDefaultAsync();
 
+                if (user == null)
+                    return NotFound();
+
+                return Ok(new { userId = user.user_id }); // or whatever your PK is named
+            }
 
         // 🔐 2FA verification (non-admin)
         [HttpPost("VerifyCode")]

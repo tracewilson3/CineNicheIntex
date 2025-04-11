@@ -13,6 +13,11 @@ const MoviesPage1 = () => {
   const [error, setError] = useState<string | null>(null);
   const [topRatedMovies, setTopRatedMovies] = useState<any[]>([]);
   const [mostReviewedMovies, setMostReviewedMovies] = useState<any[]>([]);
+  const [recommendedMovies, setRecommendedMovies] = useState<any[]>([]);
+  const user = JSON.parse(localStorage.getItem("user") || "{}");
+  const userEmail = user.email;
+  const [recs, setRecs] = useState<string[]>([]);
+
   const navigate = useNavigate();
   const ImageURL = "https://cinenichemovieposters.blob.core.windows.net/movieposters";
   useEffect(() => {
