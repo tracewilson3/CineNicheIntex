@@ -211,8 +211,6 @@ try
     var size = new FileInfo(moviesDbPath).Length;
     File.AppendAllText(startupLogPath, $"🎞️ Movies.db size: {size} bytes\n");
     File.AppendAllText(startupLogPath, $"📍 Movies path: {moviesDbPath}\n");
-    File.AppendAllText(startupLogPath, $"📍 Identity pathoijoeihpoaihgpaeoighpeoighepoigh[weopgih]: {identityDbPath}\n");
-    File.AppendAllText(startupLogPath, $"TRESTETESTETSTTETSETSETE");
     File.AppendAllText(startupLogPath, $"📍 CSV path: {showcsvPath}\n");
     
     
