@@ -3,10 +3,10 @@
 import { Movie } from "../types/movie";
 import { API_URL } from "./config";
 
-interface FetchMoviesResponse {
-  movies: Movie[];
-  totalNumMovies?: number; // Optional unless your API sends this
-}
+// interface FetchMoviesResponse {
+//   movies: Movie[];
+//   totalNumMovies?: number; // Optional unless your API sends this
+// }
 
 export const fetchMovies = async (
   pageSize: number = 50,
@@ -162,4 +162,9 @@ export const deleteMovie = async (showId: number): Promise<void> => {
     console.error("Error deleting movie:", error);
     throw error;
   }
+  
 };
+export async function fetchMultipleMovieDetails(ids: string[]): Promise<Movie[]> {
+  const moviePromises = ids.map(id => fetchMovieDetails(parseInt(id)));
+  return Promise.all(moviePromises);
+}

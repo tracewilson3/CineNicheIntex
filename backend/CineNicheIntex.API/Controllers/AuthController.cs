@@ -122,6 +122,7 @@ namespace CineNicheIntex.API.Controllers
                 return StatusCode(500, $"Failed to send 2FA email: {ex.Message}");
             }
 
+
             var roles = await _userManager.GetRolesAsync(user);
             var roleName = roles.FirstOrDefault(); //assuming one role per user
 
@@ -133,6 +134,7 @@ namespace CineNicheIntex.API.Controllers
                 role=roleName,
 
             });
+
         }
 
         [HttpPost("verify-2fa")]
@@ -149,13 +151,16 @@ namespace CineNicheIntex.API.Controllers
             await _signInManager.SignInAsync(user, isPersistent: false);
 
             var roles = await _userManager.GetRolesAsync(user);
+
             var roleName = roles.FirstOrDefault(); //assuming one role per user
 
             return Ok(new
             {
                 message = "2FA verified. Login successful.",
                 email = user.Email,
+
                 role = roleName,
+
             });
         }
     }

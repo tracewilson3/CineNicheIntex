@@ -12,8 +12,12 @@ import PrivacyPage from "./pages/PrivacyPage";
 import MovieDetails from "./pages/MovieDetails";
 import HomePage from "./pages/HomePage";
 import SearchResultsPage from "./pages/SearchResultsPage";
+
 import ProtectedRoute from "./components/ProtectedRoute";
 import UnauthorizedPage from "./pages/UnauthorizedPage";
+
+import RecommendationsPage from "./pages/RecommendationsPage";
+
 
 function App() {
   return (
@@ -57,6 +61,7 @@ function App() {
         }
       />
       <Route path="/" element={<HomePage />} />
+
       <Route
         path="/search"
         element={
@@ -66,6 +71,9 @@ function App() {
         }
       />
       <Route path="/unauthorized" element={<UnauthorizedPage />} />
+
+      <Route path="/recommendations" element={<RecommendationsPage />} />
+      
     </Routes>
   );
 }

@@ -5,20 +5,57 @@ import PaginatedMovieRow from "../components/PaginatedMovieRow";
 // import InfiniteScrollGrid from "../components/InfiniteScrollRows";
 import FloatingFooter from "../components/FloatingFooter";
 import CineNicheHeader from "../components/CineNicheHeader";
-import { fetchMostReviewed, fetchTopRated } from "../api/MovieAPI.ts";
-import { Movie } from "../types/movie.ts";
+import { fetchMostReviewed, fetchMultipleMovieDetails, fetchTopRated } from "../api/MovieAPI.ts";
+
 import { useNavigate } from "react-router-dom";
-import CookieConsent, { Cookies } from "react-cookie-consent";
+import { CookieConsent }from "react-cookie-consent";
+import { fetchUserRecommendations, fetchUserIdByEmail } from "../api/RecommendationAPI.ts";
 
 const MoviesPage1 = () => {
-  const [movies] = useState<Movie[]>([]);
+  
   const [error, setError] = useState<string | null>(null);
   const [topRatedMovies, setTopRatedMovies] = useState<any[]>([]);
   const [mostReviewedMovies, setMostReviewedMovies] = useState<any[]>([]);
+  const [recommendedMovies, setRecommendedMovies] = useState<any[]>([])
+  const user = JSON.parse(localStorage.getItem('user') || '{}');
+  const userEmail = user.email;
+  const [recs, setRecs] = useState<string[]>([]);
+  
+  
   const navigate = useNavigate();
 
   const ImageURL = "https://cinenichemovieposters.blob.core.windows.net/movieposters";
+  useEffect(() => {
+    async function loadUserData() {
+      const id = await fetchUserIdByEmail(userEmail);
+      
 
+      if (id !== null) {
+        const recs = await fetchUserRecommendations(id);
+        setRecs(recs);
+      }
+    }
+
+    loadUserData();
+  }, [userEmail]);
+
+
+  useEffect(() => {
+    const loadRecommendedMovies = async () => {
+      if (recs.length === 0) return; // skip until you actually have recs
+  
+      try {
+        const movieList = await fetchMultipleMovieDetails(recs);
+        setRecommendedMovies(movieList);
+      } catch (error) {
+        console.error("Error loading recommended movies:", error);
+      }
+    };
+  
+    loadRecommendedMovies();
+  }, [recs]); // 👈 run this only when recs changes
+  
+  
   useEffect(() => {
     const loadAllMovies = async () => {
       try {
@@ -30,6 +67,8 @@ const MoviesPage1 = () => {
 
         const mostReviewedData = await fetchMostReviewed();
         setMostReviewedMovies(mostReviewedData);
+
+
       } catch (error) {
         setError((error as Error).message);
       }
@@ -121,8 +160,8 @@ const MoviesPage1 = () => {
     <div className="app dark-background">
       <CineNicheHeader />
 
-      {/* Cookie consent notification */}
-      <CookieConsent
+            {/* Cookie consent notification */}
+            <CookieConsent
         location="top"
         style={{ background: "black" }}
         buttonStyle={{ background: "white", color: "black", fontSize: "13px" }}
@@ -132,24 +171,10 @@ const MoviesPage1 = () => {
 
       {renderRankedCarousel("Popular Movies", mostReviewedMovies)}
       
-      <div className="section">
-        <h2>Recommended For You</h2>
-        <div className="carousel">
-          {movies.map((m, i) => {
-            const sanitized = sanitizeTitle(m.title);
-            return (
-              <div
-                key={i}
-                className="movie-row-card"
-                style={{
-                  backgroundImage: `url(${ImageURL}/${encodeURIComponent(sanitized)}.jpg)`,
-                }}
-                onClick={() => navigate(`/MovieDetails/${m.show_id}`)}
-              ></div>
-            );
-          })}
-        </div>
-      </div>
+      
+      {recommendedMovies.length > 0 && (
+  renderRankedCarousel("Recommended For You", recommendedMovies)
+)}
 
       {renderRankedCarousel("Top 10 Highest Ratings", topRatedMovies)}
 
@@ -167,3 +192,5 @@ const MoviesPage1 = () => {
 };
 
 export default MoviesPage1;
+
+
