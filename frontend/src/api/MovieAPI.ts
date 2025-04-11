@@ -3,10 +3,10 @@
 import { Movie } from "../types/movie";
 import { API_URL } from "./config";
 
-interface FetchMoviesResponse {
-  movies: Movie[];
-  totalNumMovies?: number; // Optional unless your API sends this
-}
+// interface FetchMoviesResponse {
+//   movies: Movie[];
+//   totalNumMovies?: number; // Optional unless your API sends this
+// }
 
 export const fetchMovies = async (
   pageSize: number = 50,
