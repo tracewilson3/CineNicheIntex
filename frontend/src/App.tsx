@@ -12,6 +12,10 @@ import PrivacyPage from "./pages/PrivacyPage";
 import MovieDetails from "./pages/MovieDetails";
 import HomePage from "./pages/HomePage";
 import SearchResultsPage from "./pages/SearchResultsPage";
+
+import ProtectedRoute from "./components/ProtectedRoute";
+import UnauthorizedPage from "./pages/UnauthorizedPage";
+
 import RecommendationsPage from "./pages/RecommendationsPage";
 
 
@@ -22,14 +26,52 @@ function App() {
       <Route path="/signup" element={<SignupPage />} />
       <Route path="/idol" element={<TempleScene />} />
       <Route path="/movies" element={<MoviesPage />} />
-      <Route path="/AdminPage" element={<AdminMoviePage />} />
-      <Route path="/movies1" element={<MoviesPage1 />} />
-      <Route path="/AdminUsers" element={<AdminUsersPage />} />
+      <Route
+        path="/AdminPage"
+        element={
+          <ProtectedRoute requiredRoles={["Administrator"]}>
+            <AdminMoviePage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/movies1"
+        element={
+          <ProtectedRoute requiredRoles={["Administrator", "User"]}>
+            <MoviesPage1 />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/AdminUsers"
+        element={
+          <ProtectedRoute requiredRoles={["Administrator"]}>
+            <AdminUsersPage />
+          </ProtectedRoute>
+        }
+      />
       <Route path="/verify" element={<VerifyPage />} /> {/* ✅ added this line */}
       <Route path="/privacy" element={<PrivacyPage />} />
-      <Route path="/MovieDetails/:show_id" element={<MovieDetails />} />
+      <Route
+        path="/MovieDetails/:show_id"
+        element={
+          <ProtectedRoute requiredRoles={["Administrator", "User"]}>
+            <MovieDetails />
+          </ProtectedRoute>
+        }
+      />
       <Route path="/" element={<HomePage />} />
-      <Route path="/search" element={<SearchResultsPage />} />
+
+      <Route
+        path="/search"
+        element={
+          <ProtectedRoute requiredRoles={["Administrator", "User"]}>
+            <SearchResultsPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route path="/unauthorized" element={<UnauthorizedPage />} />
+
       <Route path="/recommendations" element={<RecommendationsPage />} />
       
     </Routes>

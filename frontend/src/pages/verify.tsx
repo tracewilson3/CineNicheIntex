@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
-import './verify.css';
-import { AUTH_URL } from '../api/config';
+import React, { useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+import "./verify.css";
+import { AUTH_URL } from "../api/config";
 
 const VerifyPage = () => {
-  const [code, setCode] = useState('');
-  const [error, setError] = useState('');
+  const [code, setCode] = useState("");
+  const [error, setError] = useState("");
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -17,7 +17,7 @@ const VerifyPage = () => {
         <div className="verify-box">
           <h2>Missing Login Info</h2>
           <p>Please return to login and try again.</p>
-          <button className="verify-button" onClick={() => navigate('/')}>
+          <button className="verify-button" onClick={() => navigate("/")}>
             Back to Login
           </button>
         </div>
@@ -29,9 +29,9 @@ const VerifyPage = () => {
     e.preventDefault();
 
     try {
-      const response = await fetch(AUTH_URL+'/verify-2fa', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const response = await fetch(AUTH_URL + "/verify-2fa", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, code }),
       });
 
@@ -43,11 +43,14 @@ const VerifyPage = () => {
       }
 
       const data = JSON.parse(text);
-      localStorage.setItem('user', JSON.stringify(data));
-      navigate('/movies');
+      localStorage.setItem("user", JSON.stringify(data));
+      localStorage.setItem("loggedIn", "true");
+      localStorage.setItem("email", data.email);
+      localStorage.setItem("role", data.role);
+      navigate("/movies1");
     } catch (err) {
-      console.error('Verification error:', err);
-      setError('Could not verify code. Please try again.');
+      console.error("Verification error:", err);
+      setError("Could not verify code. Please try again.");
     }
   };
 
