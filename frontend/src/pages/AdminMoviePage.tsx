@@ -1,3 +1,4 @@
+// src/pages/AdminMoviePage.tsx
 import { useEffect, useState } from "react";
 import { Movie } from "../types/movie";
 import { fetchMovies, deleteMovie } from "../api/MovieAPI";
@@ -5,7 +6,7 @@ import Pagination from "../components/Pagination";
 import NewMovieForm from "../components/NewMovieForm";
 import EditMovieForm from "../components/EditMovieForm";
 import AdminNavbar from "../components/AdminNavBar";
-
+import "./AdminMoviePage.css";
 const AdminMoviePage = () => {
   const [movies, setMovies] = useState<Movie[]>([]);
   const [error, setError] = useState<string | null>(null);
@@ -14,8 +15,7 @@ const AdminMoviePage = () => {
   const [pageNum, setPageNum] = useState<number>(1);
   const [totalPages, setTotalPages] = useState<number>(0);
   const [showForm, setShowForm] = useState(false);
-  const [editingMovie, setEditingMovie] = useState<Movie | null>(null);
-
+  const [editingMovieId, setEditingMovieId] = useState<number | null>(null);
   useEffect(() => {
     const loadMovies = async () => {
       try {
@@ -32,11 +32,9 @@ const AdminMoviePage = () => {
     };
     loadMovies();
   }, [pageSize, pageNum]);
-
   const handleDelete = async (show_id: number) => {
     const confirmDelete = window.confirm("Are you sure you want to delete this movie?");
     if (!confirmDelete) return;
-
     try {
       await deleteMovie(show_id);
       setMovies(movies.filter((m) => m.show_id !== show_id));
@@ -44,87 +42,93 @@ const AdminMoviePage = () => {
       alert("Failed to delete movie");
     }
   };
-
-  if (loading) return <p>Loading Movies...</p>;
-  if (error) return <p className="text-red-500">Error: {error}</p>;
-
+  const handleEditSuccess = async () => {
+    setEditingMovieId(null);
+    const data = await fetchMovies(pageSize, pageNum);
+    setMovies(data.movies);
+  };
+  if (loading) return <p className="admin-loading">Loading Movies...</p>;
+  if (error) return <p className="admin-error">Error: {error}</p>;
   return (
-    <div className="container">
+    <div className="admin-page">
       <AdminNavbar />
-      <h1 className="mb-3">Admin - Movies</h1>
-
-      {!showForm && (
-        <button className="btn btn-success mb-3" onClick={() => setShowForm(true)}>
-          Add Movie
-        </button>
-      )}
-      {showForm && (
-        <NewMovieForm
-          onSuccess={() => {
-            setShowForm(false);
-            fetchMovies(pageSize, pageNum).then((data) => setMovies(data.movies));
-          }}
-          onCancel={() => setShowForm(false)}
-        />
-      )}
-
-      {editingMovie && (
-        <EditMovieForm
-          movie={editingMovie}
-          onSuccess={() => {
-            setEditingMovie(null);
-            fetchMovies(pageSize, pageNum).then((data) => setMovies(data.movies));
-          }}
-          onCancel={() => setEditingMovie(null)}
-        />
-      )}
-
-      <table className="table table-bordered table-striped">
-        <thead className="thead-dark">
-          <tr>
-            <th>ID</th>
-            <th>Title</th>
-            <th>Director</th>
-            <th>Release Year</th>
-            <th>Rating</th>
-            <th>Duration</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {movies.map((m) => (
-            <tr key={m.show_id}>
-              <td>{m.show_id}</td>
-              <td>{m.title}</td>
-              <td>{m.director}</td>
-              <td>{m.release_year}</td>
-              <td>{m.rating}</td>
-              <td>{m.duration}</td>
-              <td>
-                <button className="btn btn-warning btn-sm me-2" onClick={() => setEditingMovie(m)}>
-                  Edit
-                </button>
-                <button className="btn btn-danger btn-sm" onClick={() => handleDelete(m.show_id)}>
-                  Delete
-                </button>
-              </td>
+      <div className="admin-content">
+        <h1>Manage Movies</h1>
+        {!showForm && (
+          <button className="admin-add-btn" onClick={() => setShowForm(true)}>
+            Add Movie
+          </button>
+        )}
+        {showForm && (
+          <NewMovieForm
+            onSuccess={async () => {
+              setShowForm(false);
+              const data = await fetchMovies(pageSize, pageNum);
+              setMovies(data.movies);
+            }}
+            onCancel={() => setShowForm(false)}
+          />
+        )}
+        <table className="admin-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Title</th>
+              <th>Director</th>
+              <th>Release Year</th>
+              <th>Rating</th>
+              <th>Duration</th>
+              <th>Actions</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
-
-      <Pagination
-        currentPage={pageNum}
-        totalPages={totalPages}
-        pageSize={pageSize}
-        onPageChange={setPageNum}
-        onPageSizeChange={(newSize) => {
-          setPageSize(newSize);
-          setPageNum(1);
-        }}
-      />
+          </thead>
+          <tbody>
+            {movies.map((m) => (
+              <tr key={m.show_id}>
+                {editingMovieId === m.show_id ? (
+                  <td colSpan={7}>
+                    <EditMovieForm
+                      movie={m}
+                      onSuccess={handleEditSuccess}
+                      onCancel={() => setEditingMovieId(null)}
+                    />
+                  </td>
+                ) : (
+                  <>
+                    <td>{m.show_id}</td>
+                    <td>{m.title}</td>
+                    <td>{m.director}</td>
+                    <td>{m.release_year}</td>
+                    <td>{m.rating}</td>
+                    <td>{m.duration}</td>
+                    <td>
+                      <button
+                        className="admin-btn edit"
+                        onClick={() => setEditingMovieId(m.show_id)}
+                      >
+                        Edit
+                      </button>
+                      <button className="admin-btn delete" onClick={() => handleDelete(m.show_id)}>
+                        Delete
+                      </button>
+                    </td>
+                  </>
+                )}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        <Pagination
+          currentPage={pageNum}
+          totalPages={totalPages}
+          pageSize={pageSize}
+          onPageChange={setPageNum}
+          onPageSizeChange={(newSize) => {
+            setPageSize(newSize);
+            setPageNum(1);
+          }}
+        />
+      </div>
     </div>
   );
 };
-
 export default AdminMoviePage;

@@ -2,87 +2,45 @@ import "../components/MovieRow.css";
 import { useEffect, useState } from "react";
 import "./MoviesPage1.css";
 import PaginatedMovieRow from "../components/PaginatedMovieRow";
-// import InfiniteScrollGrid from "../components/InfiniteScrollRows";
 import FloatingFooter from "../components/FloatingFooter";
 import CineNicheHeader from "../components/CineNicheHeader";
-import { fetchMostReviewed, fetchMultipleMovieDetails, fetchTopRated } from "../api/MovieAPI.ts";
-
+import { fetchMostReviewed, fetchMovies, fetchTopRated } from "../api/MovieAPI.ts";
+import { Movie } from "../types/movie.ts";
 import { useNavigate } from "react-router-dom";
-import { CookieConsent }from "react-cookie-consent";
-import { fetchUserRecommendations, fetchUserIdByEmail } from "../api/RecommendationAPI.ts";
-
+import "./SearchResultsPage.css";
 const MoviesPage1 = () => {
-  
+  const [movies, setMovies] = useState<Movie[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [topRatedMovies, setTopRatedMovies] = useState<any[]>([]);
   const [mostReviewedMovies, setMostReviewedMovies] = useState<any[]>([]);
-  const [recommendedMovies, setRecommendedMovies] = useState<any[]>([])
-  const user = JSON.parse(localStorage.getItem('user') || '{}');
+  const [recommendedMovies, setRecommendedMovies] = useState<any[]>([]);
+  const user = JSON.parse(localStorage.getItem("user") || "{}");
   const userEmail = user.email;
   const [recs, setRecs] = useState<string[]>([]);
-  
-  
+
   const navigate = useNavigate();
-
   const ImageURL = "https://cinenichemovieposters.blob.core.windows.net/movieposters";
-  useEffect(() => {
-    async function loadUserData() {
-      const id = await fetchUserIdByEmail(userEmail);
-      
-
-      if (id !== null) {
-        const recs = await fetchUserRecommendations(id);
-        setRecs(recs);
-      }
-    }
-
-    loadUserData();
-  }, [userEmail]);
-
-
-  useEffect(() => {
-    const loadRecommendedMovies = async () => {
-      if (recs.length === 0) return; // skip until you actually have recs
-  
-      try {
-        const movieList = await fetchMultipleMovieDetails(recs);
-        setRecommendedMovies(movieList);
-      } catch (error) {
-        console.error("Error loading recommended movies:", error);
-      }
-    };
-  
-    loadRecommendedMovies();
-  }, [recs]); // 👈 run this only when recs changes
-  
-  
   useEffect(() => {
     const loadAllMovies = async () => {
       try {
         // const data = await fetchMovies(100, 1);
         // setMovies(data);
-
-        const topRatedData = await fetchTopRated();
+        const topRatedRes = await fetchTopRated();
+        const topRatedData = await topRatedRes;
         setTopRatedMovies(topRatedData);
-
-        const mostReviewedData = await fetchMostReviewed();
+        const mostReviewedRes = await fetchMostReviewed();
+        const mostReviewedData = await mostReviewedRes;
         setMostReviewedMovies(mostReviewedData);
-
-
       } catch (error) {
         setError((error as Error).message);
       }
     };
-
     loadAllMovies();
   }, []);
-
   if (error) return <p>Error: {error}</p>;
-
   const sanitizeTitle = (title: string) => {
     return title.replace(/[#().:'!&"?-]/g, "");
   };
-
   const renderRankedCarousel = (title: string, movieList: any[]) => (
     <div className="section">
       <h2>{title}</h2>
@@ -90,8 +48,7 @@ const MoviesPage1 = () => {
         {movieList.map((m, i) => {
           const movie = m.movie || m;
           const sanitized = sanitizeTitle(movie.title);
-          const rankNumberLeft = i + 1 >= 10 ? "-4rem" : "-2.5rem"; // ⬅️ Shift left for double digits
-  
+          const rankNumberLeft = i + 1 >= 10 ? "-4rem" : "-2.5rem"; // :arrow_left: Shift left for double digits
           return (
             <div
               className="ranked-card"
@@ -109,15 +66,16 @@ const MoviesPage1 = () => {
                 style={{
                   backgroundImage: `url(${ImageURL}/${encodeURIComponent(sanitized)}.jpg)`,
                 }}
-              ></div>
+              >
+                {" "}
+                <div className="movie-title-overlay">{movie.title}</div>
+              </div>
             </div>
           );
         })}
       </div>
     </div>
   );
-  
-
   const genreList = [
     "Action",
     "Comedies",
@@ -152,36 +110,32 @@ const MoviesPage1 = () => {
     "Nature TV",
     "Spirituality",
   ];
-  
-  
-  
-
   return (
     <div className="app dark-background">
       <CineNicheHeader />
-
-            {/* Cookie consent notification */}
-            <CookieConsent
-        location="top"
-        style={{ background: "black" }}
-        buttonStyle={{ background: "white", color: "black", fontSize: "13px" }}
-      >
-        This website uses cookies to enhance the user experience.
-      </CookieConsent>
-
-      {renderRankedCarousel("Popular Movies", mostReviewedMovies)}
-      
-      
-      {recommendedMovies.length > 0 && (
-  renderRankedCarousel("Recommended For You", recommendedMovies)
-)}
-
+      {renderRankedCarousel("Top 10 Most Popular", mostReviewedMovies)}
+      <div className="section">
+        <h2>Recommended For You</h2>
+        <div className="carousel">
+          {movies.map((m, i) => {
+            const sanitized = sanitizeTitle(m.title);
+            return (
+              <div
+                key={i}
+                className="movie-row-card"
+                style={{
+                  backgroundImage: `url(${ImageURL}/${encodeURIComponent(sanitized)}.jpg)`,
+                }}
+                onClick={() => navigate(`/MovieDetails/${m.show_id}`)}
+              ></div>
+            );
+          })}
+        </div>
+      </div>
       {renderRankedCarousel("Top 10 Highest Ratings", topRatedMovies)}
-
       {genreList.map((genre, index) => (
         <PaginatedMovieRow key={index} genreTitle={genre} />
       ))}
-
       <FloatingFooter />
       <br />
       <br />
@@ -190,7 +144,4 @@ const MoviesPage1 = () => {
     </div>
   );
 };
-
 export default MoviesPage1;
-
-
