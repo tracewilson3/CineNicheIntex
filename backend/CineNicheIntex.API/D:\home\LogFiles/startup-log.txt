@@ -120,3 +120,27 @@ App started at 4/11/2025 2:23:31 PM
 📍 Identity path: /Users/tracewilson/Desktop/Intex2/CineNicheIntex/backend/CineNicheIntex.API/identity.db
 📍 CSV path: /Users/tracewilson/Desktop/Intex2/CineNicheIntex/backend/CineNicheIntex.API/Data/movie_details_req.csv
 🎬 First movie title: Dick Johnson Is Dead, ID: 1
+App started at 4/11/2025 2:53:46 PM
+🎞️ Movies.db size: 6799360 bytes
+📍 Movies path: /Users/tracewilson/Desktop/Intex2/CineNicheIntex/backend/CineNicheIntex.API/Movies.db
+📍 Identity path: /Users/tracewilson/Desktop/Intex2/CineNicheIntex/backend/CineNicheIntex.API/identity.db
+📍 CSV path: /Users/tracewilson/Desktop/Intex2/CineNicheIntex/backend/CineNicheIntex.API/Data/movie_details_req.csv
+🎬 First movie title: Dick Johnson Is Dead, ID: 1
+App started at 4/11/2025 2:55:45 PM
+🎞️ Movies.db size: 6799360 bytes
+📍 Movies path: /Users/tracewilson/Desktop/Intex2/CineNicheIntex/backend/CineNicheIntex.API/Movies.db
+📍 Identity path: /Users/tracewilson/Desktop/Intex2/CineNicheIntex/backend/CineNicheIntex.API/identity.db
+📍 CSV path: /Users/tracewilson/Desktop/Intex2/CineNicheIntex/backend/CineNicheIntex.API/Data/movie_details_req.csv
+🎬 First movie title: Dick Johnson Is Dead, ID: 1
+App started at 4/11/2025 2:59:31 PM
+🎞️ Movies.db size: 6799360 bytes
+📍 Movies path: /Users/tracewilson/Desktop/Intex2/CineNicheIntex/backend/CineNicheIntex.API/Movies.db
+📍 Identity path: /Users/tracewilson/Desktop/Intex2/CineNicheIntex/backend/CineNicheIntex.API/identity.db
+📍 CSV path: /Users/tracewilson/Desktop/Intex2/CineNicheIntex/backend/CineNicheIntex.API/Data/movie_details_req.csv
+🎬 First movie title: Dick Johnson Is Dead, ID: 1
+App started at 4/11/2025 3:04:46 PM
+🎞️ Movies.db size: 6799360 bytes
+📍 Movies path: /Users/tracewilson/Desktop/Intex2/CineNicheIntex/backend/CineNicheIntex.API/Movies.db
+📍 Identity path: /Users/tracewilson/Desktop/Intex2/CineNicheIntex/backend/CineNicheIntex.API/identity.db
+📍 CSV path: /Users/tracewilson/Desktop/Intex2/CineNicheIntex/backend/CineNicheIntex.API/Data/movie_details_req.csv
+🎬 First movie title: Dick Johnson Is Dead, ID: 1
