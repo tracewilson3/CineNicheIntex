@@ -45,8 +45,8 @@ try
    
         options.UseSqlite($"Data Source={moviesDbPath}")
             .LogTo(Console.WriteLine, LogLevel.Information) // 👈 EF SQL logs
-            .EnableSensitiveDataLogging(); // 👈 Optional, for parameter values
-    });
+            .EnableSensitiveDataLogging() // 👈 Optional, for parameter values
+    );
 
 }
 catch (Exception ex)

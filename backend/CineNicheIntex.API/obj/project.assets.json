@@ -4084,31 +4084,25 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Cooper\\.nuget\\packages\\": {},
-    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
+    "/Users/tracewilson/.nuget/packages/": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Cooper\\Desktop\\IS CORE\\INTEX 2\\CineNicheIntex\\backend\\CineNicheIntex.API\\CineNicheIntex.API.csproj",
+      "projectUniqueName": "/Users/tracewilson/Desktop/Intex2/CineNicheIntex/backend/CineNicheIntex.API/CineNicheIntex.API.csproj",
       "projectName": "CineNicheIntex.API",
-      "projectPath": "C:\\Users\\Cooper\\Desktop\\IS CORE\\INTEX 2\\CineNicheIntex\\backend\\CineNicheIntex.API\\CineNicheIntex.API.csproj",
-      "packagesPath": "C:\\Users\\Cooper\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Cooper\\Desktop\\IS CORE\\INTEX 2\\CineNicheIntex\\backend\\CineNicheIntex.API\\obj\\",
+      "projectPath": "/Users/tracewilson/Desktop/Intex2/CineNicheIntex/backend/CineNicheIntex.API/CineNicheIntex.API.csproj",
+      "packagesPath": "/Users/tracewilson/.nuget/packages/",
+      "outputPath": "/Users/tracewilson/Desktop/Intex2/CineNicheIntex/backend/CineNicheIntex.API/obj/",
       "projectStyle": "PackageReference",
-      "fallbackFolders": [
-        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-      ],
       "configFilePaths": [
-        "C:\\Users\\Cooper\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        "/Users/tracewilson/Desktop/Intex2/CineNicheIntex/NuGet.Config",
+        "/Users/tracewilson/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net8.0"
       ],
       "sources": {
-        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -4182,7 +4176,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.311/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/8.0.311/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

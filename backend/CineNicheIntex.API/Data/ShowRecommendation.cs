@@ -20,8 +20,23 @@ public class ShowRecommendation
     [Name("Recommendation 5")]
     public string Rec5 { get; set; }
 
+    [Name("Recommendation 6")]
+    public string Rec6 { get; set; }
+
+    [Name("Recommendation 7")]
+    public string Rec7 { get; set; }
+
+    [Name("Recommendation 8")]
+    public string Rec8 { get; set; }
+
+    [Name("Recommendation 9")]
+    public string Rec9 { get; set; }
+
+    [Name("Recommendation 10")]
+    public string Rec10 { get; set; }
+
     public List<string> GetRecommendations()
     {
-        return new List<string> { Rec1, Rec2, Rec3, Rec4, Rec5 };
+        return new List<string> { Rec1, Rec2, Rec3, Rec4, Rec5,Rec6,Rec7,Rec8,Rec9,Rec10 };
     }
 }
