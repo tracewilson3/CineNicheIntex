@@ -31,6 +31,14 @@ const AdminNavbar = () => {
                 Manage Users
               </Link>
             </li>
+            <li className="nav-item">
+              <Link
+                className={`nav-link ${location.pathname === "/Movies1" ? "active" : ""}`}
+                to="/Movies1"
+              >
+                Browse Movies
+              </Link>
+            </li>
           </ul>
         </div>
         {

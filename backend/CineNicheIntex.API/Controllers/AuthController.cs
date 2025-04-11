@@ -95,45 +95,49 @@ namespace CineNicheIntex.API.Controllers
             if (!isValid)
                 return Unauthorized(new { error = "Invalid email or password." });
 
-            var code = await _userManager.GenerateTwoFactorTokenAsync(user, TokenOptions.DefaultEmailProvider);
-
-            try
-            {
-                var smtpClient = new SmtpClient("smtp.gmail.com")
-                {
-                    Port = 587,
-                    Credentials = new NetworkCredential("byuisteam415@gmail.com", "ykseicgpponggsdf"),
-                    EnableSsl = true,
-                };
-
-                var mailMessage = new MailMessage
-                {
-                    From = new MailAddress("byuisteam415@gmail.com", "CineNiche"),
-                    Subject = "Your CineNiche 2FA Code",
-                    Body = $"Hi,\n\nYour verification code is: {code}\n\nThis code will expire shortly.",
-                    IsBodyHtml = false,
-                };
-
-                mailMessage.To.Add(dto.email);
-                smtpClient.Send(mailMessage);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Failed to send 2FA email: {ex.Message}");
-            }
-
-
             var roles = await _userManager.GetRolesAsync(user);
-            var roleName = roles.FirstOrDefault(); //assuming one role per user
+var isAdmin = roles.Contains("Administrator");
+var code = await _userManager.GenerateTwoFactorTokenAsync(user, TokenOptions.DefaultEmailProvider);
 
-            return Ok(new
-            {
-                step = "2fa",
-                message = "Verification code sent to your email.",
-                email = user.Email,
-                role=roleName,
+if (isAdmin)
+{
+    Console.WriteLine($":closed_lock_with_key: Admin 2FA code for {user.Email}: {code}");
+}
+else
+{
+    try
+    {
+        var smtpClient = new SmtpClient("smtp.gmail.com")
+        {
+            Port = 587,
+            Credentials = new NetworkCredential("byuisteam415@gmail.com", "ykseicgpponggsdf"),
+            EnableSsl = true,
+        };
+        var mailMessage = new MailMessage
+        {
+            From = new MailAddress("byuisteam415@gmail.com", "CineNiche"),
+            Subject = "Your CineNiche 2FA Code",
+            Body = $"Hi,\n\nYour verification code is: {code}\n\nThis code will expire shortly.",
+            IsBodyHtml = false,
+        };
+        mailMessage.To.Add(dto.email);
+        smtpClient.Send(mailMessage);
+    }
+    catch (Exception ex)
+    {
+        return StatusCode(500, $"Failed to send 2FA email: {ex.Message}");
+    }
+}
+return Ok(new
+{
+    step = "2fa",
+    message = isAdmin ? "Admin code printed to console." : "Verification code sent to your email.",
+    email = user.Email,
+    role = roles.FirstOrDefault(),
 
-            });
+    code=isAdmin ? code: null 
+});
+
 
         }
 

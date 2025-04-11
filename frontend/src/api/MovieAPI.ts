@@ -168,3 +168,17 @@ export async function fetchMultipleMovieDetails(ids: string[]): Promise<Movie[]>
   const moviePromises = ids.map(id => fetchMovieDetails(parseInt(id)));
   return Promise.all(moviePromises);
 }
+
+export async function addRating(user_id: number, show_id: number, rating: number) {
+  const res = await fetch(`${API_URL}/AddRating`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ user_id, show_id, rating }),
+  });
+
+  if (!res.ok) {
+    throw new Error("Failed to save rating");
+  }
+
+  return await res.json();
+}

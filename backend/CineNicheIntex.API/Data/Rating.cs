@@ -9,7 +9,7 @@ namespace CineNicheIntex.API.Data
         [Key]
         public int user_id { get; set; }
         public int show_id { get; set; }
-        public int rating { get; set; }
+        public double rating { get; set; }
 
     }
 

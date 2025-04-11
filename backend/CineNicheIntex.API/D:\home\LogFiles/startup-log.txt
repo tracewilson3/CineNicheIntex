@@ -3,3 +3,86 @@ App started at 4/11/2025 4:19:26 PM
 📍 Movies path: /Users/tracewilson/Desktop/Intex2/CineNicheIntex/backend/CineNicheIntex.API/Movies.db
 📍 Identity path: /Users/tracewilson/Desktop/Intex2/CineNicheIntex/backend/CineNicheIntex.API/identity.db
 🎬 First movie title: Dick Johnson Is Dead, ID: 1
+App started at 4/11/2025 4:20:05 AM
+🎞️ Movies.db size: 6799360 bytes
+📍 Movies path: /Users/tracewilson/Desktop/Intex2/CineNicheIntex/backend/CineNicheIntex.API/Movies.db
+📍 Identity path: /Users/tracewilson/Desktop/Intex2/CineNicheIntex/backend/CineNicheIntex.API/identity.db
+🎬 First movie title: Dick Johnson Is Dead, ID: 1
+App started at 4/11/2025 5:33:41 AM
+🎞️ Movies.db size: 6799360 bytes
+📍 Movies path: /Users/tracewilson/Desktop/Intex2/CineNicheIntex/backend/CineNicheIntex.API/Movies.db
+📍 Identity pathoijoeihpoaihgpaeoighpeoighepoigh[weopgih]: /Users/tracewilson/Desktop/Intex2/CineNicheIntex/backend/CineNicheIntex.API/identity.db
+TRESTETESTETSTTETSETSETE📍 CSV path: /Users/tracewilson/Desktop/Intex2/CineNicheIntex/backend/CineNicheIntex.API/Data/movie_details_req.csv
+🎬 First movie title: Dick Johnson Is Dead, ID: 1
+App started at 4/11/2025 5:43:51 AM
+🎞️ Movies.db size: 6799360 bytes
+📍 Movies path: /Users/tracewilson/Desktop/Intex2/CineNicheIntex/backend/CineNicheIntex.API/Movies.db
+📍 Identity pathoijoeihpoaihgpaeoighpeoighepoigh[weopgih]: /Users/tracewilson/Desktop/Intex2/CineNicheIntex/backend/CineNicheIntex.API/identity.db
+TRESTETESTETSTTETSETSETE📍 CSV path: /Users/tracewilson/Desktop/Intex2/CineNicheIntex/backend/CineNicheIntex.API/Data/movie_details_req.csv
+🎬 First movie title: Dick Johnson Is Dead, ID: 1
+App started at 4/11/2025 5:47:08 AM
+🎞️ Movies.db size: 6799360 bytes
+📍 Movies path: /Users/tracewilson/Desktop/Intex2/CineNicheIntex/backend/CineNicheIntex.API/Movies.db
+📍 Identity pathoijoeihpoaihgpaeoighpeoighepoigh[weopgih]: /Users/tracewilson/Desktop/Intex2/CineNicheIntex/backend/CineNicheIntex.API/identity.db
+TRESTETESTETSTTETSETSETE📍 CSV path: /Users/tracewilson/Desktop/Intex2/CineNicheIntex/backend/CineNicheIntex.API/Data/movie_details_req.csv
+🎬 First movie title: Dick Johnson Is Dead, ID: 1
+App started at 4/11/2025 6:22:05 AM
+🎞️ Movies.db size: 6799360 bytes
+📍 Movies path: /Users/tracewilson/Desktop/Intex2/CineNicheIntex/backend/CineNicheIntex.API/Movies.db
+📍 Identity pathoijoeihpoaihgpaeoighpeoighepoigh[weopgih]: /Users/tracewilson/Desktop/Intex2/CineNicheIntex/backend/CineNicheIntex.API/identity.db
+TRESTETESTETSTTETSETSETE📍 CSV path: /Users/tracewilson/Desktop/Intex2/CineNicheIntex/backend/CineNicheIntex.API/Data/movie_details_req.csv
+🎬 First movie title: Dick Johnson Is Dead, ID: 1
+App started at 4/11/2025 6:25:36 AM
+🎞️ Movies.db size: 6799360 bytes
+📍 Movies path: /Users/tracewilson/Desktop/Intex2/CineNicheIntex/backend/CineNicheIntex.API/Movies.db
+📍 Identity pathoijoeihpoaihgpaeoighpeoighepoigh[weopgih]: /Users/tracewilson/Desktop/Intex2/CineNicheIntex/backend/CineNicheIntex.API/identity.db
+TRESTETESTETSTTETSETSETE📍 CSV path: /Users/tracewilson/Desktop/Intex2/CineNicheIntex/backend/CineNicheIntex.API/Data/movie_details_req.csv
+🎬 First movie title: Dick Johnson Is Dead, ID: 1
+App started at 4/11/2025 2:13:34 PM
+🎞️ Movies.db size: 6799360 bytes
+📍 Movies path: /Users/tracewilson/Desktop/Intex2/CineNicheIntex/backend/CineNicheIntex.API/Movies.db
+📍 Identity path: /Users/tracewilson/Desktop/Intex2/CineNicheIntex/backend/CineNicheIntex.API/identity.db
+📍 CSV path: /Users/tracewilson/Desktop/Intex2/CineNicheIntex/backend/CineNicheIntex.API/Data/movie_details_req.csv
+🎬 First movie title: Dick Johnson Is Dead, ID: 1
+App started at 4/11/2025 2:23:31 PM
+🎞️ Movies.db size: 6799360 bytes
+📍 Movies path: /Users/tracewilson/Desktop/Intex2/CineNicheIntex/backend/CineNicheIntex.API/Movies.db
+📍 Identity path: /Users/tracewilson/Desktop/Intex2/CineNicheIntex/backend/CineNicheIntex.API/identity.db
+📍 CSV path: /Users/tracewilson/Desktop/Intex2/CineNicheIntex/backend/CineNicheIntex.API/Data/movie_details_req.csv
+🎬 First movie title: Dick Johnson Is Dead, ID: 1
+App started at 4/11/2025 2:53:46 PM
+🎞️ Movies.db size: 6799360 bytes
+📍 Movies path: /Users/tracewilson/Desktop/Intex2/CineNicheIntex/backend/CineNicheIntex.API/Movies.db
+📍 Identity path: /Users/tracewilson/Desktop/Intex2/CineNicheIntex/backend/CineNicheIntex.API/identity.db
+📍 CSV path: /Users/tracewilson/Desktop/Intex2/CineNicheIntex/backend/CineNicheIntex.API/Data/movie_details_req.csv
+🎬 First movie title: Dick Johnson Is Dead, ID: 1
+App started at 4/11/2025 2:55:45 PM
+🎞️ Movies.db size: 6799360 bytes
+📍 Movies path: /Users/tracewilson/Desktop/Intex2/CineNicheIntex/backend/CineNicheIntex.API/Movies.db
+📍 Identity path: /Users/tracewilson/Desktop/Intex2/CineNicheIntex/backend/CineNicheIntex.API/identity.db
+📍 CSV path: /Users/tracewilson/Desktop/Intex2/CineNicheIntex/backend/CineNicheIntex.API/Data/movie_details_req.csv
+🎬 First movie title: Dick Johnson Is Dead, ID: 1
+App started at 4/11/2025 2:59:31 PM
+🎞️ Movies.db size: 6799360 bytes
+📍 Movies path: /Users/tracewilson/Desktop/Intex2/CineNicheIntex/backend/CineNicheIntex.API/Movies.db
+📍 Identity path: /Users/tracewilson/Desktop/Intex2/CineNicheIntex/backend/CineNicheIntex.API/identity.db
+📍 CSV path: /Users/tracewilson/Desktop/Intex2/CineNicheIntex/backend/CineNicheIntex.API/Data/movie_details_req.csv
+🎬 First movie title: Dick Johnson Is Dead, ID: 1
+App started at 4/11/2025 3:04:46 PM
+🎞️ Movies.db size: 6799360 bytes
+📍 Movies path: /Users/tracewilson/Desktop/Intex2/CineNicheIntex/backend/CineNicheIntex.API/Movies.db
+📍 Identity path: /Users/tracewilson/Desktop/Intex2/CineNicheIntex/backend/CineNicheIntex.API/identity.db
+📍 CSV path: /Users/tracewilson/Desktop/Intex2/CineNicheIntex/backend/CineNicheIntex.API/Data/movie_details_req.csv
+🎬 First movie title: Dick Johnson Is Dead, ID: 1
+App started at 4/11/2025 3:14:04 PM
+🎞️ Movies.db size: 6799360 bytes
+📍 Movies path: /Users/tracewilson/Desktop/Intex2/CineNicheIntex/backend/CineNicheIntex.API/Movies.db
+📍 Identity path: /Users/tracewilson/Desktop/Intex2/CineNicheIntex/backend/CineNicheIntex.API/identity.db
+📍 CSV path: /Users/tracewilson/Desktop/Intex2/CineNicheIntex/backend/CineNicheIntex.API/Data/movie_details_req.csv
+🎬 First movie title: Dick Johnson Is Dead, ID: 1
+App started at 4/11/2025 3:18:45 PM
+🎞️ Movies.db size: 6799360 bytes
+📍 Movies path: /Users/tracewilson/Desktop/Intex2/CineNicheIntex/backend/CineNicheIntex.API/Movies.db
+📍 Identity path: /Users/tracewilson/Desktop/Intex2/CineNicheIntex/backend/CineNicheIntex.API/identity.db
+📍 CSV path: /Users/tracewilson/Desktop/Intex2/CineNicheIntex/backend/CineNicheIntex.API/Data/movie_details_req.csv
+🎬 First movie title: Dick Johnson Is Dead, ID: 1
