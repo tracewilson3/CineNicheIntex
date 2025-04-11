@@ -441,6 +441,37 @@ public async Task<IActionResult> UpdateUserProfile(string email, [FromBody] User
             return Ok(results);
         }
 
+        [HttpPost("AddRating")]
+public async Task<IActionResult> AddRating([FromBody] Rating rating)
+{
+    if (!ModelState.IsValid)
+        return BadRequest(ModelState);
+
+    try
+    {
+        var existing = await _moviesContext.Ratings
+            .FirstOrDefaultAsync(r => r.user_id == rating.user_id && r.show_id == rating.show_id);
+
+        if (existing != null)
+        {
+            existing.rating = rating.rating; // Update existing rating
+        }
+        else
+        {
+            _moviesContext.Ratings.Add(rating); // Add new rating
+        }
+
+        await _moviesContext.SaveChangesAsync();
+        return Ok(new { message = "Rating saved" });
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"❌ Error saving rating: {ex.Message}");
+        return StatusCode(500, "An error occurred while saving the rating.");
+    }
+}
+
+
 }
 
 }

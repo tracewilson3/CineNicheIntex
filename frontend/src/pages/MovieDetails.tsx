@@ -4,12 +4,12 @@ import "../components/MovieRow.css";
 import StarRating from "../components/StarRating";
 import CineNicheHeader from "../components/CineNicheHeader";
 import { Movie } from "../types/movie";
-import { fetchMovieDetails, fetchMultipleMovieDetails } from "../api/MovieAPI";
+import { fetchMovieDetails, fetchMultipleMovieDetails, addRating } from "../api/MovieAPI";
 import { useParams } from "react-router-dom";
 import FloatingFooter from "../components/FloatingFooter";
 import { fetchShowRecommendations } from "../api/RecommendationAPI";
 import { useNavigate } from "react-router-dom";
-
+import { fetchUserIdByEmail } from "../api/RecommendationAPI";
 
 
 const MovieDetails: React.FC = () => {
@@ -18,10 +18,23 @@ const MovieDetails: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [recommended, setRecommended] = useState<Movie[]>([]);
   const navigate = useNavigate();
+  const user = JSON.parse(localStorage.getItem('user') || '{}');
+  const [userId, setUserId] = useState<number | null>(null);
+  
+
+  
+  const userEmail = user.email;
 
   // const placeholderImage = "https://placehold.co/150x225?text=Movie";
   const ImageURL = "https://cinenichemovieposters.blob.core.windows.net/movieposters";
+  useEffect(() => {
+    async function loadUserData() {
+      const id = await fetchUserIdByEmail(userEmail);
+      setUserId(id);
+    }
 
+    loadUserData();
+  }, [userEmail]);
   useEffect(() => {
     if (!show_id) return;
   
@@ -156,7 +169,19 @@ const MovieDetails: React.FC = () => {
           </div>
           <div className="col-md-8 d-flex flex-column justify-content-center">
           <div className="d-flex justify-content-end mb-3">
-  <StarRating onRate={(value) => console.log(`Rated: ${value} stars`)} />
+          <StarRating
+  onRate={async (value) => {
+    try {
+      
+      if (!userId || !show_id) return;
+
+      await addRating(userId, parseInt(show_id), value);
+      console.log(`✅ Saved ${value} star rating`);
+    } catch (err) {
+      console.error("❌ Error saving rating:", err);
+    }
+  }}
+/>
 </div>
 
             <h1 className="display-3 fw-bold" style={{ fontFamily: "'Bebas Neue', sans-serif" }}>
