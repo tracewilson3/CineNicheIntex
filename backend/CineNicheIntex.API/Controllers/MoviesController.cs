@@ -196,7 +196,7 @@ public async Task<IActionResult> AddMovie([FromBody] Movie movie)
             }
         }
         // 🔐 Admin only: Add a new user
-        // [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         [HttpPost("AddUser")]
         public async Task<IActionResult> AddUser([FromBody] User user)
         {
