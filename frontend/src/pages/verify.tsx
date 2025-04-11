@@ -75,7 +75,7 @@ const VerifyPage = () => {
             value={code}
             onChange={(e) => setCode(e.target.value)}
             required
-            placeholder="123456"
+            placeholder="000000"
           />
           <button type="submit" className="verify-button">
             Verify
