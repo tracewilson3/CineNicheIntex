@@ -31,7 +31,8 @@ catch (Exception ex)
 try
 {
     builder.Services.AddDbContext<MoviesDbContext>(options =>
-    {
+   
+   
         options.UseSqlite($"Data Source={moviesDbPath}")
             .LogTo(Console.WriteLine, LogLevel.Information) // 👈 EF SQL logs
             .EnableSensitiveDataLogging(); // 👈 Optional, for parameter values
