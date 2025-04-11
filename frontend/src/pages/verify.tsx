@@ -27,32 +27,39 @@ const VerifyPage = () => {
 
   const handleVerify = async (e: React.FormEvent) => {
     e.preventDefault();
-
+  
     try {
       const response = await fetch(AUTH_URL + "/verify-2fa", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, code }),
       });
-
+  
       const text = await response.text();
-
+  
       if (!response.ok) {
         setError(text);
         return;
       }
-
+  
       const data = JSON.parse(text);
       localStorage.setItem("user", JSON.stringify(data));
       localStorage.setItem("loggedIn", "true");
       localStorage.setItem("email", data.email);
       localStorage.setItem("role", data.role);
-      navigate("/movies1");
+  
+      // 👇 Navigate based on role
+      if (data.role === "Administrator") {
+        navigate("/AdminPage");
+      } else {
+        navigate("/movies1");
+      }
     } catch (err) {
       console.error("Verification error:", err);
       setError("Could not verify code. Please try again.");
     }
   };
+  
 
   return (
     <div className="verify-container">
