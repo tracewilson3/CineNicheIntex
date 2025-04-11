@@ -28,3 +28,18 @@ export async function fetchUserIdByEmail(email: string): Promise<number | null> 
       return null;
     }
   }
+
+  export async function fetchShowRecommendations(showId: string): Promise<string[]> {
+    try {
+      const response = await axios.get(`${REC_URL}/recommendation/show/${showId}`);
+      if (Array.isArray(response.data)) {
+        return response.data;
+      } else {
+        console.warn("Expected an array, got:", response.data);
+        return [];
+      }
+    } catch (err) {
+      console.error("Failed to fetch show recommendations:", err);
+      return [];
+    }
+  }
