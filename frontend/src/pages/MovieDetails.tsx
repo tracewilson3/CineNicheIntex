@@ -4,15 +4,22 @@ import "../components/MovieRow.css";
 import StarRating from "../components/StarRating";
 import CineNicheHeader from "../components/CineNicheHeader";
 import { Movie } from "../types/movie";
-import { fetchMovieDetails } from "../api/MovieAPI";
+import { fetchMovieDetails, fetchMultipleMovieDetails } from "../api/MovieAPI";
 import { useParams } from "react-router-dom";
 import FloatingFooter from "../components/FloatingFooter";
+import { fetchShowRecommendations } from "../api/RecommendationAPI";
+import { useNavigate } from "react-router-dom";
+
+
 
 const MovieDetails: React.FC = () => {
   const { show_id } = useParams<{ show_id: string }>();
   const [movie, setMovie] = useState<Movie>();
   const [error, setError] = useState<string | null>(null);
-  const placeholderImage = "https://placehold.co/150x225?text=Movie";
+  const [recommended, setRecommended] = useState<Movie[]>([]);
+  const navigate = useNavigate();
+
+  // const placeholderImage = "https://placehold.co/150x225?text=Movie";
   const ImageURL = "https://cinenichemovieposters.blob.core.windows.net/movieposters";
 
   useEffect(() => {
@@ -33,6 +40,22 @@ const MovieDetails: React.FC = () => {
     };
   
     loadMovie();
+  }, [show_id]);
+
+  useEffect(() => {
+    const loadRecommendations = async () => {
+      if (!show_id) return;
+  
+      try {
+        const ids = await fetchShowRecommendations(show_id);
+        const movies = await fetchMultipleMovieDetails(ids); // You'll write this
+        setRecommended(movies);
+      } catch (err) {
+        console.error("Failed to load recommendations:", err);
+      }
+    };
+  
+    loadRecommendations();
   }, [show_id]);
   
 
@@ -74,7 +97,7 @@ const MovieDetails: React.FC = () => {
       talk_Shows_TV_Comedies: "Talk Shows / Comedies",
       thrillers: "Thrillers",
     };
-
+    
     return Object.entries(genreMap)
       .filter(([key]) => (movie as any)[key] === 1)
       .map(([_, label]) => label);
@@ -86,6 +109,36 @@ const MovieDetails: React.FC = () => {
 
   const sanitized = sanitizeTitle(movie.title);
   const genres = getGenres(movie);
+
+  const renderRankedCarousel = (title: string, movieList: Movie[]) => (
+    <div className="section">
+      <h2>{title}</h2>
+      <div className="ranked-carousel">
+        {movieList.map((movie, i) => {
+          const sanitized = sanitizeTitle(movie.title);
+          const rankNumberLeft = i + 1 >= 10 ? "-4rem" : "-2.5rem";
+  
+          return (
+            <div
+              className="ranked-card"
+              key={movie.show_id}
+              onClick={() => navigate(`/MovieDetails/${movie.show_id}`)}
+            >
+              <div className="rank-number" style={{ left: rankNumberLeft }}>
+                {i + 1}
+              </div>
+              <div
+                className="poster"
+                style={{
+                  backgroundImage: `url(${ImageURL}/${encodeURIComponent(sanitized)}.jpg)`,
+                }}
+              ></div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
 
   return (
     <>
@@ -139,18 +192,8 @@ const MovieDetails: React.FC = () => {
           </div>
         </div>
 
-        <div className="section">
-          <h2 className="mb-3">You Might Also Like...</h2>
-          <div className="carousel">
-            {[...Array(20)].map((_, i) => (
-              <div
-                key={i}
-                className="movie-row-card"
-                style={{ backgroundImage: `url(${placeholderImage})` }}
-              ></div>
-            ))}
-          </div>
-        </div>
+        {recommended.length > 0 && renderRankedCarousel("You Might Also Like...", recommended)}
+
       </div>
       <FloatingFooter/>
     </>
@@ -158,3 +201,5 @@ const MovieDetails: React.FC = () => {
 };
 
 export default MovieDetails;
+
+
