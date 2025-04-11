@@ -75,6 +75,8 @@ namespace CineNicheIntex.API.Controllers
                 // Optionally return a soft error
             }
 
+            await _userManager.AddToRoleAsync(user, "User");
+
             Console.WriteLine("✅ Registration successful for: " + dto.Email);
             return Ok(new { message = "User registered successfully." });
         }
@@ -120,11 +122,16 @@ namespace CineNicheIntex.API.Controllers
                 return StatusCode(500, $"Failed to send 2FA email: {ex.Message}");
             }
 
+            var roles = await _userManager.GetRolesAsync(user);
+            var roleName = roles.FirstOrDefault(); //assuming one role per user
+
             return Ok(new
             {
                 step = "2fa",
                 message = "Verification code sent to your email.",
-                email = user.Email
+                email = user.Email,
+                role=roleName,
+
             });
         }
 
@@ -141,10 +148,14 @@ namespace CineNicheIntex.API.Controllers
 
             await _signInManager.SignInAsync(user, isPersistent: false);
 
+            var roles = await _userManager.GetRolesAsync(user);
+            var roleName = roles.FirstOrDefault(); //assuming one role per user
+
             return Ok(new
             {
                 message = "2FA verified. Login successful.",
-                email = user.Email
+                email = user.Email,
+                role = roleName,
             });
         }
     }

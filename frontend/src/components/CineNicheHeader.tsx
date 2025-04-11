@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import logo from "../images/logo.png";
 import "./CineNicheHeader.css"; // make sure your styles support the layout
+import Logout from "./Logout";
 
 const CineNicheHeader = () => {
   const [query, setQuery] = useState("");
@@ -30,15 +31,19 @@ const CineNicheHeader = () => {
           className="search-input"
         />
       </form>
-
-      <div className="icons">
-        <span role="img" aria-label="search">
-          🔍
-        </span>
-        <span role="img" aria-label="profile">
-          🦚
-        </span>
-      </div>
+      {
+        <p
+          style={{
+            fontFamily: "Bebas Neue, sans-serif",
+            color: "white",
+            paddingRight: "15px",
+            paddingTop: "18px",
+          }}
+        >
+          {localStorage.getItem("email")}
+        </p>
+      }
+      <Logout />
     </header>
   );
 };

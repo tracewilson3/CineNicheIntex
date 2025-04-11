@@ -1,218 +1,141 @@
-/* src/pages/login.css */
-
-html, body, #root {
-    height: 100%;
-    margin: 0;
-    padding: 0;
-  }
-  
-  .login-background {
-    position: fixed;
-    inset: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    overflow: hidden;
-    padding: 1rem;
-  }
-  
-  .react-carousel {
-    position: absolute;
-    inset: 0;
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    filter: blur(4px);
-    z-index: 0;
-    transition: opacity 0.5s ease-in-out;
-    opacity: 1;
-  }
-  
-  .fade-out {
-    opacity: 0;
-  }
-  
-  .fade-in {
-    opacity: 1;
-  }
-  
-  .login-overlay {
-    position: absolute;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.7);
-    z-index: 1;
-  }
-  
-  .login-box {
-    position: relative;
-    z-index: 2;
-    width: 90%;
-    max-width: 380px;
-    padding: 2.5rem 2rem;
-    background: rgba(0, 0, 0, 0.55);
-    border-radius: 12px;
-    color: white;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
-    text-align: center;
-    animation: popUp 0.5s ease-out;
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-  }
-  
-  @keyframes popUp {
-    from {
-      transform: scale(0.95) translateY(-50%);
-      opacity: 0;
-    }
-    to {
-      transform: scale(1) translateY(0);
-      opacity: 1;
-    }
-  }
-  
-  .login-logo {
-    width: 100px;
-    margin-bottom: 1rem;
-    border-radius: 12px;
-    box-shadow: 0 0 12px rgba(255, 255, 255, 0.1);
-  }
-  
-  .login-title {
-    font-size: 1.4rem;
-    margin-bottom: 1.5rem;
-  }
-  
-  .login-input {
-    width: 100%;
-    padding: 12px 14px;
-    margin-bottom: 1rem;
-    border: none;
-    border-radius: 6px;
-    background: #333;
-    color: white;
-    font-size: 1rem;
-    transition: background 0.2s;
-  }
-  
-  .login-input::placeholder {
-    color: #aaa;
-  }
-  
-  .login-input:focus {
-    background: #444;
-    outline: none;
-    box-shadow: 0 0 5px #e50914;
-  }
-  
-  .show-password {
-    display: flex;
-    align-items: center;
-    font-size: 0.9rem;
-    color: #ccc;
-    margin-bottom: 1.2rem;
-    gap: 0.5rem;
-    justify-content: flex-start;
-  }
-  
-  .show-password input[type="checkbox"] {
-    transform: scale(1.2);
-  }
-  
-  .login-button {
-    width: 100%;
-    padding: 12px;
-    background: #e50914;
-    border: none;
-    border-radius: 6px;
-    color: white;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: background 0.3s;
-    font-weight: bold;
-  }
-  
-  .login-button:hover {
-    background: #f6121d;
-  }
-  
-  .login-footer {
-    margin-top: 1.5rem;
-    font-size: 0.9rem;
-    color: #bbb;
-  }
-  
-  .signup-link {
-    color: white;
-    font-weight: bold;
-    cursor: pointer;
-  }
-  
-  .signup-link:hover {
-    text-decoration: underline;
-  }
-  
-  .premium-popup {
-    position: fixed;
-    bottom: 30px;
-    right: 30px;
-    background: rgba(0, 0, 0, 0.85);
-    padding: 1.5rem 2rem;
-    border-radius: 10px;
-    color: white;
-    z-index: 999;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.6);
-    animation: slideUp 0.5s ease-out;
-    max-width: 300px;
-    backdrop-filter: blur(10px);
-  }
-  
-  .popup-content h3 {
-    margin: 0 0 0.5rem;
-    font-size: 1.2rem;
-    color: #e50914;
-  }
-  
-  .popup-content p {
-    margin: 0 0 1rem;
-    font-size: 0.95rem;
-    color: #ddd;
-  }
-  
-  .popup-button {
-    padding: 8px 16px;
-    background: #e50914;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: background 0.2s ease;
-  }
-  
-  .popup-button:hover {
-    background: #f6121d;
-  }
-  
-  @keyframes slideUp {
-    from {
-      transform: translateY(100%);
-      opacity: 0;
-    }
-    to {
-      transform: translateY(0%);
-      opacity: 1;
-    }
-  }
-  
-  @media (max-width: 500px) {
-    .login-box {
-      padding: 2rem 1.5rem;
-    }
-  
-    .login-title {
-      font-size: 1.2rem;
-    }
-  }
-  
+/* ===== Option A: Clean, Sleek Dark Theme ===== */
+.dark-mode {
+  background-color: #000;
+  color: white;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+.refined-shadow {
+  background-color: #111;
+  padding: 2.5rem;
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(255, 255, 255, 0.05);
+  width: 100%;
+  max-width: 380px;
+  text-align: center;
+}
+.login-logo.prominent {
+  width: 120px;
+  margin-bottom: 1rem;
+  filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.2));
+}
+.login-title {
+  font-size: 1.6rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+}
+.login-input.refined {
+  width: 100%;
+  padding: 0.8rem;
+  margin-bottom: 1rem;
+  border: none;
+  border-radius: 6px;
+  background: #222;
+  color: white;
+  font-size: 1rem;
+  outline: none;
+  transition: box-shadow 0.2s;
+}
+.login-input.refined:focus {
+  box-shadow: 0 0 5px #e50914;
+  background: #2a2a2a;
+}
+.show-password.refined-row {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.9rem;
+  color: #bbb;
+  justify-content: flex-start;
+  margin-bottom: 1.2rem;
+}
+.login-button.red-primary {
+  width: 100%;
+  padding: 0.9rem;
+  background: #e50914;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+.login-button.red-primary:hover {
+  background: #f6121d;
+}
+.login-footer {
+  margin-top: 1.5rem;
+  font-size: 0.9rem;
+  color: #aaa;
+}
+.signup-link {
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+}
+.signup-link:hover {
+  text-decoration: underline;
+}
+/* ===== Option B: Bold Neon Glow Variant ===== */
+.dark-mode.neon {
+  background-color: #000;
+  color: white;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: "Bebas Neue", sans-serif;
+  letter-spacing: 1px;
+}
+.refined-shadow.neon-box {
+  background-color: #111;
+  padding: 2.5rem;
+  border-radius: 12px;
+  box-shadow: 0 0 40px #ffffff;
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+.login-logo.neon-glow {
+  width: 140px;
+  margin-bottom: 1rem;
+  filter: drop-shadow(0 0 8px #ffffff);
+}
+.login-input.glow {
+  background: #000;
+  border: 1px solid #ffffff;
+  color: white;
+  padding: 0.8rem;
+  margin-bottom: 1rem;
+  width: 100%;
+  border-radius: 4px;
+  font-size: 1rem;
+  transition:
+    border 0.3s,
+    box-shadow 0.3s;
+}
+.login-input.glow:focus {
+  outline: none;
+  border-color: #ffffff;
+  box-shadow: 0 0 8px #ffffff;
+}
+.login-button.neon-red {
+  background: #ffffff;
+  border: none;
+  color: rgb(0, 0, 0);
+  font-weight: bold;
+  width: 100%;
+  padding: 0.9rem;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+.login-button.neon-red:hover {
+  box-shadow: 0 0 5px #ffffff;
+}
